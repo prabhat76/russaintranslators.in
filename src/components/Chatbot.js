@@ -318,14 +318,11 @@ const Chatbot = () => {
           }
           
           .chat-window {
-            width: 100vw;
-            height: 100vh;
-            right: 0;
-            bottom: 0;
-            border-radius: 0;
-            position: fixed;
-            top: 0;
-            left: 0;
+            width: 90vw;
+            height: 70vh;
+            right: 5vw;
+            bottom: 80px;
+            border-radius: 15px;
           }
           
           .chat-header {

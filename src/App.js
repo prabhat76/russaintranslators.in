@@ -45,6 +45,31 @@ function App() {
         page_location: window.location.href
       });
     }
+
+    // Auto slideshow for mobile gallery only
+    const checkMobile = () => window.innerWidth <= 768;
+    if (checkMobile()) {
+      const galleryGrid = document.querySelector('.gallery-grid');
+      if (galleryGrid) {
+        let scrollPosition = 0;
+        const cardWidth = window.innerWidth <= 480 ? 250 : 280;
+        const gap = window.innerWidth <= 480 ? 12 : 15;
+        
+        const interval = setInterval(() => {
+          if (!checkMobile()) {
+            clearInterval(interval);
+            return;
+          }
+          scrollPosition += cardWidth + gap;
+          if (scrollPosition >= galleryGrid.scrollWidth - galleryGrid.clientWidth) {
+            scrollPosition = 0;
+          }
+          galleryGrid.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+        }, 3000);
+
+        return () => clearInterval(interval);
+      }
+    }
   }, []);
 
   return (
@@ -61,11 +86,11 @@ function App() {
           </div>
           
           <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#services">Services</a>
-            <a href="#contact">Contact Us</a>
-            <a href="tel:+918789389223" className="nav-cta">📞 Call Now</a>
+            <a href="#home" onClick={() => setIsMenuOpen(false)}>Home</a>
+            <a href="#about" onClick={() => setIsMenuOpen(false)}>About</a>
+            <a href="#services" onClick={() => setIsMenuOpen(false)}>Services</a>
+            <a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact Us</a>
+            <a href="tel:+918789389223" className="nav-cta" onClick={() => setIsMenuOpen(false)}>📞 Call Now</a>
           </div>
           
           <button 
@@ -208,14 +233,57 @@ function App() {
       {/* Appointments Section */}
       <section className="appointments">
         <div className="container">
-          <h2>Online Appointments</h2>
-          <div className="appointment-card">
-            <h3>Senior Translator and Interpreter</h3>
-            <div className="service-item">
-              <h4>Consultation</h4>
-              <p>30 mins | Free</p>
-              <p>Get consultation from our certified translators and discuss about your requirement in details. All our Russian translators in India are Russian Native...</p>
-              <button className="book-btn">BOOK</button>
+          <h2>Book Your Consultation</h2>
+          <div className="appointments-grid">
+            <div className="appointment-card">
+              <div className="appointment-icon">📞</div>
+              <h3>Free Consultation</h3>
+              <div className="appointment-details">
+                <span className="duration">30 minutes</span>
+                <span className="price">FREE</span>
+              </div>
+              <p>Get expert consultation from our certified Russian translator. Discuss your requirements and get personalized solutions.</p>
+              <ul className="appointment-features">
+                <li>✓ Requirement analysis</li>
+                <li>✓ Cost estimation</li>
+                <li>✓ Timeline discussion</li>
+                <li>✓ Service recommendations</li>
+              </ul>
+              <button className="book-btn" onClick={() => window.open('tel:+918789389223')}>Book Free Call</button>
+            </div>
+            
+            <div className="appointment-card">
+              <div className="appointment-icon">💼</div>
+              <h3>Business Meeting</h3>
+              <div className="appointment-details">
+                <span className="duration">1-2 hours</span>
+                <span className="price">₹2000+</span>
+              </div>
+              <p>Professional interpretation services for your business meetings with Russian clients or partners.</p>
+              <ul className="appointment-features">
+                <li>✓ Live interpretation</li>
+                <li>✓ Document translation</li>
+                <li>✓ Cultural guidance</li>
+                <li>✓ Follow-up support</li>
+              </ul>
+              <button className="book-btn" onClick={() => window.open('mailto:sabrina@languageliberty.com?subject=Business Meeting Booking')}>Schedule Meeting</button>
+            </div>
+            
+            <div className="appointment-card">
+              <div className="appointment-icon">🎓</div>
+              <h3>Language Training</h3>
+              <div className="appointment-details">
+                <span className="duration">1 hour</span>
+                <span className="price">₹1500+</span>
+              </div>
+              <p>Personal Russian language classes and cultural etiquette training for professionals.</p>
+              <ul className="appointment-features">
+                <li>✓ Customized curriculum</li>
+                <li>✓ Business Russian focus</li>
+                <li>✓ Cultural training</li>
+                <li>✓ Flexible scheduling</li>
+              </ul>
+              <button className="book-btn" onClick={() => window.open('https://wa.me/918789389223?text=Hi, I want to book Russian language training')}>Start Learning</button>
             </div>
           </div>
         </div>
