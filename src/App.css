@@ -106,6 +106,37 @@ body {
   transform: translateY(-1px) !important;
 }
 
+.language-toggle {
+  display: flex;
+  background: #f1f5f9;
+  border-radius: 20px;
+  padding: 4px;
+  margin-left: 20px;
+}
+
+.lang-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #64748b;
+}
+
+.lang-btn.active {
+  background: #667eea;
+  color: white;
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+.lang-btn:hover:not(.active) {
+  background: #e2e8f0;
+  color: #475569;
+}
+
 .nav-menu a {
   text-decoration: none;
   color: rgb(130, 108, 108);
@@ -1093,6 +1124,22 @@ body {
   .nav {
     justify-content: space-between;
     padding: 0 16px;
+    flex-wrap: wrap;
+  }
+  
+  .language-toggle {
+    position: absolute;
+    top: 10px;
+    right: 60px;
+    margin-left: 0;
+    margin-top: 0;
+    width: auto;
+    z-index: 1002;
+  }
+  
+  .lang-btn {
+    padding: 4px 8px;
+    font-size: 11px;
   }
   
   .nav-brand {

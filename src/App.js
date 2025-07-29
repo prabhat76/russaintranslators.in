@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Chatbot from './components/Chatbot';
+import SEO from './components/SEO';
+import { contentEN } from './data/content-en';
+import { contentRU } from './data/content-ru';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [language, setLanguage] = useState('en');
+  const content = language === 'en' ? contentEN : contentRU;
 
   const galleryImages = [
     {src: '/images/sabrina-work-1.jpeg', title: 'Corporate Meeting', desc: 'Russian-English interpretation for business negotiations'},
@@ -74,23 +79,39 @@ function App() {
 
   return (
     <div className="App">
+      <SEO />
       {/* Header */}
       <header className="header">
         <nav className="nav">
           <div className="nav-brand">
             <img src="/images/download.webp" alt="Language Liberty Logo" className="logo" />
             <div className="brand-text">
-              <h3>LANGUAGE LIBERTY</h3>
-              <span>Your Russian Translator & Interpreter</span>
+              <h3>{language === 'en' ? 'LANGUAGE LIBERTY' : 'LANGUAGE LIBERTY'}</h3>
+              <span>{language === 'en' ? 'Your Russian Translator & Interpreter' : 'Ваш русский переводчик и интерпретатор'}</span>
             </div>
           </div>
           
           <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-            <a href="#home" onClick={() => setIsMenuOpen(false)}>Home</a>
-            <a href="#about" onClick={() => setIsMenuOpen(false)}>About</a>
-            <a href="#services" onClick={() => setIsMenuOpen(false)}>Services</a>
-            <a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact Us</a>
-            <a href="tel:+918789389223" className="nav-cta" onClick={() => setIsMenuOpen(false)}>📞 Call Now</a>
+            <a href="#home" onClick={() => setIsMenuOpen(false)}>{content.nav.home}</a>
+            <a href="#about" onClick={() => setIsMenuOpen(false)}>{content.nav.about}</a>
+            <a href="#services" onClick={() => setIsMenuOpen(false)}>{content.nav.services}</a>
+            <a href="#contact" onClick={() => setIsMenuOpen(false)}>{content.nav.contact}</a>
+            <a href="tel:+918789389223" className="nav-cta" onClick={() => setIsMenuOpen(false)}>📞 {language === 'en' ? 'Call Now' : 'Звонить'}</a>
+          </div>
+          
+          <div className="language-toggle">
+            <button 
+              className={`lang-btn ${language === 'en' ? 'active' : ''}`}
+              onClick={() => setLanguage('en')}
+            >
+              EN
+            </button>
+            <button 
+              className={`lang-btn ${language === 'ru' ? 'active' : ''}`}
+              onClick={() => setLanguage('ru')}
+            >
+              RU
+            </button>
           </div>
           
           <button 
@@ -116,15 +137,12 @@ function App() {
         <div className="container">
           <div className="about-content">
             <div className="about-text">
-              <h1>About me</h1>
+              <h1>{content.about.title}</h1>
               <h4>SABRINA BHATT</h4>
-              <p>Born to a Russian mother and an Indian father, she always enjoyed burning the communicational bridges between Russian speaking countries and the rest of the world. She was born in Russia and has done her schooling in parts of Russia and Uzbekistan. She is now here, providing Russian Translation and Interpretation service to help various companies grow.</p>
+              <p>{content.about.description}</p>
               
-              <h4>Language Proficiency</h4>
-              <p>As her higher education and college was done in India, her proficiency in Hindi, English and Russian is now helping corporate companies in having easy and efficient communication with countries like Russia, Ukraine, Belarus, Uzbekistan, Kazakhstan etc., So if you need russian translator in Mumbai or interpreter in Mumbai please feel free to contact us.</p>
-              
-              <h4>Experience</h4>
-              <p>Having an experience of more than 6 years of working with different companies who are into pharmaceuticals, chemicals, mining and export/import businesses she is currently working with Enrika Trades and Services Pvt. Ltd. She regularly attends meeting at a ministerial level with several companies like Coal India, Belaz, Artek Surfin Chemical Ltd and many more.</p>
+              <h4>{content.about.proficiency}</h4>
+              <p>{content.about.experienceText}</p>
             </div>
             
             <div className="about-image">
@@ -137,7 +155,7 @@ function App() {
       {/* Gallery Section */}
       <section className="gallery">
         <div className="container">
-          <h2>Professional Work Gallery</h2>
+          <h2>{language === 'en' ? 'Professional Work Gallery' : 'Галерея профессиональных работ'}</h2>
           <div className="gallery-grid">
             {galleryImages.map((image, index) => (
               <div key={index} className="gallery-item" onClick={() => openModal(index)}>
@@ -155,60 +173,60 @@ function App() {
       {/* Services Section */}
       <section id="services" className="services">
         <div className="container">
-          <h2>Services Offered</h2>
+          <h2>{content.services.title}</h2>
           <div className="services-grid">
             <div className="service-card">
               <div className="service-icon">💻</div>
-              <h3>Online Meetings</h3>
-              <p>Interpretation/translation service for online meetings.</p>
+              <h3>{content.services.items[0].title}</h3>
+              <p>{language === 'en' ? content.services.items[0].description : 'Профессиональный перевод в реальном времени с английского и хинди на русский для конференций Zoom, Teams и WebEx'}</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">🤝</div>
-              <h3>Offline Meetings</h3>
-              <p>Interpretation/translation service for offline meetings.</p>
+              <h3>{content.services.items[1].title}</h3>
+              <p>{language === 'en' ? content.services.items[1].description : 'Устный перевод с английского и хинди на русский для важных деловых переговоров и дипломатических встреч'}</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">📄</div>
-              <h3>Documentation</h3>
-              <p>Translation service for official/unofficial letters, documents, emails etc.</p>
+              <h3>{content.services.items[2].title}</h3>
+              <p>{language === 'en' ? content.services.items[2].description : 'Сертифицированный перевод документов с английского и хинди на русский: юридические контракты, технические руководства, медицинские отчеты'}</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">🎓</div>
-              <h3>Survival Russian Course/Etiquette Training</h3>
-              <p>Survival Russian course, greetings and basic etiquettes courses for employees visiting Russian speaking countries</p>
+              <h3>{content.services.items[3].title}</h3>
+              <p>{language === 'en' ? content.services.items[3].description : 'Обучение русскому языку для англо- и хиндиговорящих: от базового до делового уровня (A1-C1) с культурным этикетом'}</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">✈️</div>
-              <h3>Official Travel</h3>
-              <p>Travel with the senior team of a company for meetings held within the country and abroad</p>
+              <h3>{content.services.items[4].title}</h3>
+              <p>{language === 'en' ? content.services.items[4].description : 'Личный переводчик с английского/хинди на русский для руководителей во время международных деловых поездок'}</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">🗣️</div>
-              <h3>Communicational Assistance</h3>
-              <p>Communicational assistance to Russian clients while their stay in India and Indian clients while their stay in Russia</p>
+              <h3>{language === 'en' ? 'Communicational Assistance' : 'Коммуникационная помощь'}</h3>
+              <p>{language === 'en' ? 'Communicational assistance to Russian clients while their stay in India and Indian clients while their stay in Russia' : 'Переводческая помощь с английского/хинди на русский для российских клиентов в Индии и индийских клиентов в России'}</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">📱</div>
-              <h3>Online Communicational Assistance</h3>
-              <p>Communicational assistance to Russian/Indian clients though emails, WhatsApp, and other social media platforms.</p>
+              <h3>{language === 'en' ? 'Online Communicational Assistance' : 'Онлайн коммуникационная помощь'}</h3>
+              <p>{language === 'en' ? 'Communicational assistance to Russian/Indian clients though emails, WhatsApp, and other social media platforms.' : 'Переводческая помощь с английского/хинди на русский через электронную почту, WhatsApp и другие платформы.'}</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">🎭</div>
-              <h3>Artists Training And Assistance</h3>
-              <p>Communicational assistance to Russian models, actors, and other artists during their stay in India (including shoots, auditions, script readings and dealing with agencies)</p>
+              <h3>{content.services.items[5].title}</h3>
+              <p>{content.services.items[5].description}</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">👨‍🏫</div>
-              <h3>Personal Classes</h3>
-              <p>Personal Russian classes – level A-1, A-2, A-3 (speaking, reading ,talking)</p>
+              <h3>{language === 'en' ? 'Personal Classes' : 'Персональные занятия'}</h3>
+              <p>{language === 'en' ? 'Personal Russian classes – level A-1, A-2, A-3 (speaking, reading, talking)' : 'Персональные уроки русского языка для англо- и хиндиговорящих – уровни A-1, A-2, A-3 (говорение, чтение, разговор)'}</p>
             </div>
           </div>
         </div>
@@ -219,12 +237,51 @@ function App() {
         <div className="container">
           <div className="contact-content">
             <div className="contact-info">
-              <h6>Contact Us (+91)-8789389223 (+91)-7304876702</h6>
-              <p>Book your Russian Interpreter in Mumbai now.</p>
-              <p>Get 20% OFF on your first booking. Russian translation and interpretation service is now providing 24 hours of communicational assistance.</p>
+              <h6>{language === 'en' ? 'Contact Us' : 'Связаться с нами'}</h6>
+              <p>{language === 'en' ? 'Book your Russian Interpreter in Mumbai now.' : 'Забронируйте русского переводчика в Мумбаи прямо сейчас.'}</p>
+              <p>{language === 'en' ? 'Get 20% OFF on your first booking. Russian translation and interpretation service is now providing 24 hours of communicational assistance.' : 'Получите скидку 20% на первый заказ. Услуги русского перевода и интерпретации теперь предоставляют круглосуточную коммуникационную поддержку.'}</p>
             </div>
-            <div className="contact-image">
-              <img src="/images/contact-image.jpg" alt="Contact Us" />
+            <div className="contact-card">
+              <div className="contact-card-header">
+                <div className="contact-avatar">🇷🇺</div>
+                <div className="contact-details">
+                  <h3>Sabrina Bhatt</h3>
+                  <p>{language === 'en' ? 'Russian Translation Expert' : 'Эксперт по русскому переводу'}</p>
+                </div>
+              </div>
+              <div className="contact-methods">
+                <a href="tel:+918789389223" className="contact-method">
+                  <span className="contact-icon">📞</span>
+                  <div>
+                    <strong>+91-8789389223</strong>
+                    <small>{language === 'en' ? 'Primary' : 'Основной'}</small>
+                  </div>
+                </a>
+                <a href="tel:+917304876702" className="contact-method">
+                  <span className="contact-icon">📱</span>
+                  <div>
+                    <strong>+91-7304876702</strong>
+                    <small>{language === 'en' ? 'Secondary' : 'Дополнительный'}</small>
+                  </div>
+                </a>
+                <a href="mailto:sabrina@languageliberty.com" className="contact-method">
+                  <span className="contact-icon">✉️</span>
+                  <div>
+                    <strong>sabrina@languageliberty.com</strong>
+                    <small>{language === 'en' ? 'Email' : 'Электронная почта'}</small>
+                  </div>
+                </a>
+                <a href="https://wa.me/918789389223" className="contact-method whatsapp">
+                  <span className="contact-icon">💬</span>
+                  <div>
+                    <strong>WhatsApp</strong>
+                    <small>{language === 'en' ? 'Instant messaging' : 'Мгновенные сообщения'}</small>
+                  </div>
+                </a>
+              </div>
+              <div className="contact-card-footer">
+                <span className="availability">🟢 {language === 'en' ? '24/7 Available' : 'Доступно 24/7'}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -233,57 +290,57 @@ function App() {
       {/* Appointments Section */}
       <section className="appointments">
         <div className="container">
-          <h2>Book Your Consultation</h2>
+          <h2>{language === 'en' ? 'Book Your Consultation' : 'Забронировать консультацию'}</h2>
           <div className="appointments-grid">
             <div className="appointment-card">
               <div className="appointment-icon">📞</div>
-              <h3>Free Consultation</h3>
+              <h3>{language === 'en' ? 'Free Consultation' : 'Бесплатная консультация'}</h3>
               <div className="appointment-details">
-                <span className="duration">30 minutes</span>
-                <span className="price">FREE</span>
+                <span className="duration">{language === 'en' ? '30 minutes' : '30 минут'}</span>
+                <span className="price">{language === 'en' ? 'FREE' : 'БЕСПЛАТНО'}</span>
               </div>
-              <p>Get expert consultation from our certified Russian translator. Discuss your requirements and get personalized solutions.</p>
+              <p>{language === 'en' ? 'Get expert consultation from our certified Russian translator. Discuss your requirements and get personalized solutions.' : 'Получите экспертную консультацию от нашего сертифицированного переводчика. Обсудите ваши требования и получите индивидуальные решения.'}</p>
               <ul className="appointment-features">
-                <li>✓ Requirement analysis</li>
-                <li>✓ Cost estimation</li>
-                <li>✓ Timeline discussion</li>
-                <li>✓ Service recommendations</li>
+                <li>✓ {language === 'en' ? 'Requirement analysis' : 'Анализ требований'}</li>
+                <li>✓ {language === 'en' ? 'Cost estimation' : 'Оценка стоимости'}</li>
+                <li>✓ {language === 'en' ? 'Timeline discussion' : 'Обсуждение сроков'}</li>
+                <li>✓ {language === 'en' ? 'Service recommendations' : 'Рекомендации по услугам'}</li>
               </ul>
-              <button className="book-btn" onClick={() => window.open('tel:+918789389223')}>Book Free Call</button>
+              <button className="book-btn" onClick={() => window.open('tel:+918789389223')}>{language === 'en' ? 'Book Free Call' : 'Забронировать бесплатный звонок'}</button>
             </div>
             
             <div className="appointment-card">
               <div className="appointment-icon">💼</div>
-              <h3>Business Meeting</h3>
+              <h3>{language === 'en' ? 'Business Meeting' : 'Деловая встреча'}</h3>
               <div className="appointment-details">
-                <span className="duration">1-2 hours</span>
+                <span className="duration">{language === 'en' ? '1-2 hours' : '1-2 часа'}</span>
                 <span className="price">₹2000+</span>
               </div>
-              <p>Professional interpretation services for your business meetings with Russian clients or partners.</p>
+              <p>{language === 'en' ? 'Professional interpretation services for your business meetings with Russian clients or partners.' : 'Профессиональные услуги перевода для ваших деловых встреч с русскими клиентами или партнерами.'}</p>
               <ul className="appointment-features">
-                <li>✓ Live interpretation</li>
-                <li>✓ Document translation</li>
-                <li>✓ Cultural guidance</li>
-                <li>✓ Follow-up support</li>
+                <li>✓ {language === 'en' ? 'Live interpretation' : 'Перевод в реальном времени'}</li>
+                <li>✓ {language === 'en' ? 'Document translation' : 'Перевод документов'}</li>
+                <li>✓ {language === 'en' ? 'Cultural guidance' : 'Культурное консультирование'}</li>
+                <li>✓ {language === 'en' ? 'Follow-up support' : 'Последующая поддержка'}</li>
               </ul>
-              <button className="book-btn" onClick={() => window.open('mailto:sabrina@languageliberty.com?subject=Business Meeting Booking')}>Schedule Meeting</button>
+              <button className="book-btn" onClick={() => window.open('mailto:sabrina@languageliberty.com?subject=Business Meeting Booking')}>{language === 'en' ? 'Schedule Meeting' : 'Запланировать встречу'}</button>
             </div>
             
             <div className="appointment-card">
               <div className="appointment-icon">🎓</div>
-              <h3>Language Training</h3>
+              <h3>{language === 'en' ? 'Language Training' : 'Языковое обучение'}</h3>
               <div className="appointment-details">
-                <span className="duration">1 hour</span>
+                <span className="duration">{language === 'en' ? '1 hour' : '1 час'}</span>
                 <span className="price">₹1500+</span>
               </div>
-              <p>Personal Russian language classes and cultural etiquette training for professionals.</p>
+              <p>{language === 'en' ? 'Personal Russian language classes and cultural etiquette training for professionals.' : 'Персональные уроки русского языка и обучение культурному этикету для профессионалов.'}</p>
               <ul className="appointment-features">
-                <li>✓ Customized curriculum</li>
-                <li>✓ Business Russian focus</li>
-                <li>✓ Cultural training</li>
-                <li>✓ Flexible scheduling</li>
+                <li>✓ {language === 'en' ? 'Customized curriculum' : 'Индивидуальная программа'}</li>
+                <li>✓ {language === 'en' ? 'Business Russian focus' : 'Фокус на деловом русском'}</li>
+                <li>✓ {language === 'en' ? 'Cultural training' : 'Культурное обучение'}</li>
+                <li>✓ {language === 'en' ? 'Flexible scheduling' : 'Гибкое расписание'}</li>
               </ul>
-              <button className="book-btn" onClick={() => window.open('https://wa.me/918789389223?text=Hi, I want to book Russian language training')}>Start Learning</button>
+              <button className="book-btn" onClick={() => window.open('https://wa.me/918789389223?text=Hi, I want to book Russian language training')}>{language === 'en' ? 'Start Learning' : 'Начать обучение'}</button>
             </div>
           </div>
         </div>
@@ -293,28 +350,28 @@ function App() {
       <footer className="footer">
         <div className="container">
           <div className="footer-content">
-            <p><strong>Language Liberty - Russian Translation & Interpretation Services</strong></p>
-            <p>Professional Russian translation services in Mumbai with 6+ years of experience. Expert Russian-English translator for businesses and individuals.</p>
+            <p><strong>{language === 'en' ? 'Language Liberty - Russian Translation & Interpretation Services' : 'Language Liberty - Услуги русского перевода и интерпретации'}</strong></p>
+            <p>{language === 'en' ? 'Professional Russian translation services in Mumbai with 6+ years of experience. Expert Russian-English translator for businesses and individuals.' : 'Профессиональные услуги русского перевода в Мумбаи с опытом работы 6+ лет. Экспертный переводчик русский-английский для бизнеса и частных лиц.'}</p>
             
             <div className="services-list">
-              <h4>Our Services</h4>
+              <h4>{language === 'en' ? 'Our Services' : 'Наши услуги'}</h4>
               <ul>
-                <li><strong>Online/Offline Meetings:</strong> Real-time Russian interpretation</li>
-                <li><strong>Document Translation:</strong> Official documents and technical content</li>
-                <li><strong>Russian Language Course:</strong> Professional training and etiquette</li>
-                <li><strong>Travel Support:</strong> Linguistic aid for business meetings</li>
-                <li><strong>Communication Assistance:</strong> 24/7 support via multiple channels</li>
-                <li><strong>Artist Support:</strong> Assistance for Russian artists in India</li>
+                <li><strong>{language === 'en' ? 'Online/Offline Meetings:' : 'Онлайн/Офлайн встречи:'}</strong> {language === 'en' ? 'Real-time Russian interpretation' : 'Перевод в реальном времени на русский'}</li>
+                <li><strong>{language === 'en' ? 'Document Translation:' : 'Перевод документов:'}</strong> {language === 'en' ? 'Official documents and technical content' : 'Официальные документы и технический контент'}</li>
+                <li><strong>{language === 'en' ? 'Russian Language Course:' : 'Курс русского языка:'}</strong> {language === 'en' ? 'Professional training and etiquette' : 'Профессиональное обучение и этикет'}</li>
+                <li><strong>{language === 'en' ? 'Travel Support:' : 'Поддержка в поездках:'}</strong> {language === 'en' ? 'Linguistic aid for business meetings' : 'Языковая помощь для деловых встреч'}</li>
+                <li><strong>{language === 'en' ? 'Communication Assistance:' : 'Коммуникационная помощь:'}</strong> {language === 'en' ? '24/7 support via multiple channels' : 'Поддержка 24/7 через различные каналы'}</li>
+                <li><strong>{language === 'en' ? 'Artist Support:' : 'Поддержка артистов:'}</strong> {language === 'en' ? 'Assistance for Russian artists in India' : 'Помощь русским артистам в Индии'}</li>
               </ul>
             </div>
             
             <div className="why-choose">
-              <h4>Why Choose Us?</h4>
+              <h4>{language === 'en' ? 'Why Choose Us?' : 'Почему выбирают нас?'}</h4>
               <ul>
-                <li><strong>Expert Translator:</strong> Native Russian speaker with Indian education</li>
-                <li><strong>Proven Experience:</strong> 6+ years working with top companies</li>
-                <li><strong>24/7 Availability:</strong> Round-the-clock support</li>
-                <li><strong>Special Offer:</strong> 20% OFF on first booking</li>
+                <li><strong>{language === 'en' ? 'Expert Translator:' : 'Эксперт-переводчик:'}</strong> {language === 'en' ? 'Native Russian speaker with Indian education' : 'Носитель русского языка с индийским образованием'}</li>
+                <li><strong>{language === 'en' ? 'Proven Experience:' : 'Проверенный опыт:'}</strong> {language === 'en' ? '6+ years working with top companies' : '6+ лет работы с ведущими компаниями'}</li>
+                <li><strong>{language === 'en' ? '24/7 Availability:' : 'Доступность 24/7:'}</strong> {language === 'en' ? 'Round-the-clock support' : 'Круглосуточная поддержка'}</li>
+                <li><strong>{language === 'en' ? 'Special Offer:' : 'Специальное предложение:'}</strong> {language === 'en' ? '20% OFF on first booking' : 'Скидка 20% на первый заказ'}</li>
               </ul>
             </div>
             
@@ -322,13 +379,13 @@ function App() {
             <p><strong>Email: sabrina@languageliberty.com</strong></p>
             
             <div className="footer-bottom">
-              <p>Copyright © 2025 Language Liberty - All Rights Reserved.</p>
+              <p>{language === 'en' ? 'Copyright © 2025 Language Liberty - All Rights Reserved.' : 'Авторские права © 2025 Language Liberty - Все права защищены.'}</p>
             </div>
           </div>
         </div>
       </footer>
       
-      <Chatbot />
+      <Chatbot language={language} />
       
       {/* Image Modal */}
       {selectedImage && (
