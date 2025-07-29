@@ -132,6 +132,13 @@ const Analytics = () => {
 
   useEffect(() => {
     const updateData = () => {
+      const seoData = JSON.parse(localStorage.getItem('seoData') || '[]');
+      const seoEvents = JSON.parse(localStorage.getItem('seoEvents') || '[]');
+      
+      // Log current data state
+      console.log('📄 Analytics Update - SEO Data:', seoData);
+      console.log('📄 Analytics Update - Events:', seoEvents);
+      
       setData(generateDynamicData());
       setChartData(generateChartData());
       setTopPages(generateTopPages());
@@ -141,7 +148,7 @@ const Analytics = () => {
     };
 
     updateData();
-    const interval = setInterval(updateData, 10000); // Update every 10 seconds
+    const interval = setInterval(updateData, 5000); // Update every 5 seconds
     
     return () => clearInterval(interval);
   }, [dateRange]);
@@ -302,7 +309,7 @@ const Analytics = () => {
       <style jsx>{`
         .analytics-page {
           min-height: 100vh;
-          background: #f8fafc;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           padding: 20px;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
@@ -312,10 +319,12 @@ const Analytics = () => {
           justify-content: space-between;
           align-items: center;
           margin-bottom: 30px;
-          background: white;
-          padding: 20px;
-          border-radius: 12px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          padding: 25px;
+          border-radius: 20px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .header-left {
@@ -327,10 +336,12 @@ const Analytics = () => {
         .last-update {
           font-size: 12px;
           color: #64748b;
-          background: #f1f5f9;
-          padding: 4px 8px;
-          border-radius: 4px;
+          background: rgba(255, 255, 255, 0.8);
+          padding: 6px 12px;
+          border-radius: 20px;
           width: fit-content;
+          backdrop-filter: blur(5px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .loading-state {
@@ -358,8 +369,11 @@ const Analytics = () => {
 
         .analytics-header h1 {
           margin: 0;
-          color: #1a202c;
-          font-size: 28px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-size: 32px;
+          font-weight: 800;
         }
 
         .header-controls {
@@ -376,9 +390,16 @@ const Analytics = () => {
         }
 
         .export-btn {
-          background: #667eea;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
           border: none;
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+          transition: all 0.3s ease;
+        }
+        
+        .export-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
 
         .metrics-overview {
@@ -389,10 +410,30 @@ const Analytics = () => {
         }
 
         .metric-card {
-          background: white;
-          padding: 24px;
-          border-radius: 12px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          padding: 28px;
+          border-radius: 20px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .metric-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .metric-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 40px rgba(0,0,0,0.15);
         }
 
         .metric-card h3 {
@@ -431,10 +472,18 @@ const Analytics = () => {
         }
 
         .chart-card {
-          background: white;
-          padding: 24px;
-          border-radius: 12px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          padding: 28px;
+          border-radius: 20px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
+        }
+        
+        .chart-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 40px rgba(0,0,0,0.15);
         }
 
         .chart-header {
@@ -490,8 +539,9 @@ const Analytics = () => {
 
         .progress-fill {
           height: 100%;
-          background: #667eea;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           transition: width 0.3s ease;
+          border-radius: 4px;
         }
 
         .percentage {
@@ -507,10 +557,18 @@ const Analytics = () => {
         }
 
         .table-card {
-          background: white;
-          padding: 24px;
-          border-radius: 12px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          padding: 28px;
+          border-radius: 20px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
+        }
+        
+        .table-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 40px rgba(0,0,0,0.15);
         }
 
         .table-card h3 {

@@ -140,7 +140,7 @@ const Chatbot = () => {
         .chat-button {
           position: fixed;
           bottom: 20px;
-          right: 20px;
+          right: 30px;
           width: 60px;
           height: 60px;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -168,7 +168,7 @@ const Chatbot = () => {
         .chat-window {
           position: fixed;
           bottom: 90px;
-          right: 20px;
+          right: 30px;
           width: 350px;
           height: 500px;
           background: white;
@@ -306,11 +306,78 @@ const Chatbot = () => {
           background: #5a67d8;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
+          .chat-button {
+            width: 55px;
+            height: 55px;
+            bottom: 20px;
+            right: 15px;
+            font-size: 22px;
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+            z-index: 1001;
+          }
+          
           .chat-window {
-            width: calc(100vw - 40px);
-            height: 400px;
-            right: 20px;
+            width: 100vw;
+            height: 100vh;
+            right: 0;
+            bottom: 0;
+            border-radius: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+          }
+          
+          .chat-header {
+            padding: 12px;
+          }
+          
+          .chat-avatar {
+            width: 35px;
+            height: 35px;
+            font-size: 18px;
+          }
+          
+          .chat-info h4 {
+            font-size: 13px;
+          }
+          
+          .online-status {
+            font-size: 11px;
+          }
+          
+          .chat-messages {
+            padding: 12px;
+          }
+          
+          .message-bubble {
+            font-size: 13px;
+            padding: 8px 12px;
+          }
+          
+          .quick-replies {
+            padding: 8px 12px;
+            gap: 6px;
+          }
+          
+          .quick-reply-btn {
+            padding: 5px 10px;
+            font-size: 11px;
+          }
+          
+          .chat-input {
+            padding: 12px;
+            gap: 8px;
+          }
+          
+          .chat-input input {
+            padding: 8px;
+            font-size: 13px;
+          }
+          
+          .chat-input button {
+            padding: 8px 16px;
+            font-size: 13px;
           }
         }
       `}</style>

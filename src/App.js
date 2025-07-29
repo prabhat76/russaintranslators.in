@@ -1,97 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import SEO from './components/SEO';
 import Chatbot from './components/Chatbot';
-import SEODashboard from './components/SEODashboard';
-import Analytics from './pages/Analytics';
-import { contentEN } from './data/content-en';
-import { contentRU } from './data/content-ru';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [analytics, setAnalytics] = useState({ visitors: 0, translations: 0, satisfaction: 0 });
-  const [language, setLanguage] = useState('en');
-  const content = language === 'en' ? contentEN : contentRU;
-  
-  // Check if analytics page is requested
-  const isAnalyticsPage = window.location.pathname === '/analytics' || window.location.search.includes('page=analytics');
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // SEO Analytics tracking
+  const galleryImages = [
+    {src: '/images/sabrina-work-1.jpeg', title: 'Corporate Meeting', desc: 'Russian-English interpretation for business negotiations'},
+    {src: '/images/sabrina-work-2.jpeg', title: 'International Conference', desc: 'Simultaneous translation services'},
+    {src: '/images/sabrina-work-3.jpeg', title: 'Document Translation', desc: 'Official document certification and translation'},
+    {src: '/images/sabrina-work-4.jpeg', title: 'Ministerial Level Meeting', desc: 'High-level diplomatic interpretation'},
+    {src: '/images/sabrina-work-5.jpeg', title: 'Trade Negotiations', desc: 'Export-import business interpretation'},
+    {src: '/images/sabrina-work-6.jpeg', title: 'Professional Consultation', desc: 'Technical translation and advisory services'},
+    {src: '/images/sabrina-work-7.jpeg', title: 'Client Consultation', desc: 'Personalized translation service planning'},
+    {src: '/images/sabrina-work-8.jpeg', title: 'Language Training', desc: 'Russian language course and etiquette training'},
+    {src: '/images/sabrina-work-9.jpeg', title: 'Virtual Interpretation', desc: 'Online meeting translation services'},
+    {src: '/images/sabrina-work-10.jpeg', title: 'Industry Expertise', desc: 'Specialized translation for various sectors'}
+  ];
+
+  const openModal = (index) => {
+    setCurrentImageIndex(index);
+    setSelectedImage(galleryImages[index]);
+  };
+
+  const nextImage = () => {
+    const nextIndex = (currentImageIndex + 1) % galleryImages.length;
+    setCurrentImageIndex(nextIndex);
+    setSelectedImage(galleryImages[nextIndex]);
+  };
+
+  const prevImage = () => {
+    const prevIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+    setCurrentImageIndex(prevIndex);
+    setSelectedImage(galleryImages[prevIndex]);
+  };
+
   useEffect(() => {
-    const trackVisit = () => {
-      const visits = localStorage.getItem('visits') || 0;
-      const newVisits = parseInt(visits) + 1;
-      localStorage.setItem('visits', newVisits);
-      
-      setAnalytics({
-        visitors: newVisits + 1247,
-        translations: Math.floor(newVisits * 2.3) + 856,
-        satisfaction: 98.5
-      });
-    };
-    
-    trackVisit();
-    
-    if (typeof window.gtag !== 'undefined') {
+    // SEO Analytics
+    if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('config', 'GA_MEASUREMENT_ID', {
-        page_title: document.title,
+        page_title: 'Russian Translation Services - Language Liberty',
         page_location: window.location.href
       });
     }
   }, []);
 
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMenuOpen(false);
-    }
-  };
-  
-  if (isAnalyticsPage) {
-    return <Analytics />;
-  }
-
   return (
     <div className="App">
-      <SEO />
       {/* Header */}
       <header className="header">
         <nav className="nav">
           <div className="nav-brand">
-            <span className="flag">🇷🇺</span>
-            <span className="brand-text">Language Liberty</span>
-          </div>
-          
-          <div className="language-toggle">
-            <button 
-              className={`lang-btn ${language === 'en' ? 'active' : ''}`}
-              onClick={() => setLanguage('en')}
-            >
-              EN
-            </button>
-            <button 
-              className={`lang-btn ${language === 'ru' ? 'active' : ''}`}
-              onClick={() => setLanguage('ru')}
-            >
-              RU
-            </button>
+            <img src="/images/download.webp" alt="Language Liberty Logo" className="logo" />
+            <div className="brand-text">
+              <h3>LANGUAGE LIBERTY</h3>
+              <span>Your Russian Translator & Interpreter</span>
+            </div>
           </div>
           
           <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-            <a href="#home" onClick={() => scrollToSection('home')}>{content.nav.home}</a>
-            <a href="#about" onClick={() => scrollToSection('about')}>{content.nav.about}</a>
-            <a href="#how-it-works" onClick={() => scrollToSection('how-it-works')}>{content.nav.howItWorks}</a>
-            <a href="#services" onClick={() => scrollToSection('services')}>{content.nav.services}</a>
-            <a href="#linkedin" onClick={() => scrollToSection('linkedin')}>{content.nav.linkedin}</a>
-            <a href="#testimonials" onClick={() => scrollToSection('testimonials')}>{content.nav.testimonials}</a>
-            <a href="#contact" onClick={() => scrollToSection('contact')}>{content.nav.contact}</a>
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact Us</a>
+            <a href="tel:+918789389223" className="nav-cta">📞 Call Now</a>
           </div>
           
           <button 
             className="menu-toggle"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
           >
             <span></span>
             <span></span>
@@ -102,31 +81,8 @@ function App() {
 
       {/* Hero Section */}
       <section id="home" className="hero">
-        <div className="hero-content">
-          <h1>{content.hero.title}</h1>
-          <p>{content.hero.subtitle}</p>
-          <div className="hero-cta">
-            <button onClick={() => scrollToSection('contact')} className="cta-primary">
-              {content.hero.cta1}
-            </button>
-            <button onClick={() => scrollToSection('services')} className="cta-secondary">
-              {content.hero.cta2}
-            </button>
-          </div>
-          <div className="hero-stats">
-            <div className="stat">
-              <span className="stat-number">6+</span>
-              <span className="stat-label">{content.hero.stats.experience}</span>
-            </div>
-            <div className="stat">
-              <span className="stat-number">24/7</span>
-              <span className="stat-label">{content.hero.stats.support}</span>
-            </div>
-            <div className="stat">
-              <span className="stat-number">{analytics.satisfaction}%</span>
-              <span className="stat-label">{content.hero.stats.satisfaction}</span>
-            </div>
-          </div>
+        <div className="hero-image">
+          <img src="/images/sabrina-profile.jpeg" alt="Russian Translation Services" />
         </div>
       </section>
 
@@ -135,234 +91,99 @@ function App() {
         <div className="container">
           <div className="about-content">
             <div className="about-text">
-              <h2>{content.about.title}</h2>
-              <h3>{content.about.subtitle}</h3>
-              <p>{content.about.description}</p>
+              <h1>About me</h1>
+              <h4>SABRINA BHATT</h4>
+              <p>Born to a Russian mother and an Indian father, she always enjoyed burning the communicational bridges between Russian speaking countries and the rest of the world. She was born in Russia and has done her schooling in parts of Russia and Uzbekistan. She is now here, providing Russian Translation and Interpretation service to help various companies grow.</p>
               
-              <div className="expertise">
-                <h4>{content.about.proficiency}</h4>
-                <div className="languages">
-                  {content.about.languages.map((lang, index) => (
-                    <span key={index} className="lang">{lang}</span>
-                  ))}
-                </div>
-              </div>
+              <h4>Language Proficiency</h4>
+              <p>As her higher education and college was done in India, her proficiency in Hindi, English and Russian is now helping corporate companies in having easy and efficient communication with countries like Russia, Ukraine, Belarus, Uzbekistan, Kazakhstan etc., So if you need russian translator in Mumbai or interpreter in Mumbai please feel free to contact us.</p>
               
-              <div className="experience">
-                <h4>{content.about.experienceTitle}</h4>
-                <p>{content.about.experienceText}</p>
-              </div>
+              <h4>Experience</h4>
+              <p>Having an experience of more than 6 years of working with different companies who are into pharmaceuticals, chemicals, mining and export/import businesses she is currently working with Enrika Trades and Services Pvt. Ltd. She regularly attends meeting at a ministerial level with several companies like Coal India, Belaz, Artek Surfin Chemical Ltd and many more.</p>
             </div>
             
             <div className="about-image">
-              <div className="profile-image">
-                <img 
-                  src="/images/sabrina-profile.jpg" 
-                  alt="Sabrina Bhatt - Professional Russian Translator"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="image-fallback" style={{display: 'none'}}>
-                  <span>👩‍💼</span>
-                  <p>Sabrina Bhatt<br/>Russian Translator</p>
-                </div>
-              </div>
+              <img src="/images/sabrina-profile.jpeg" alt="Sabrina Bhatt" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section id="how-it-works" className="how-it-works">
+      {/* Gallery Section */}
+      <section className="gallery">
         <div className="container">
-          <h2>How Our Translation Process Works</h2>
-          <div className="process-steps">
-            <div className="step">
-              <div className="step-number">1</div>
-              <div className="step-content">
-                <h3>Initial Consultation</h3>
-                <p>Share your requirements via call or WhatsApp. We analyze your document type, deadline, and specific needs.</p>
+          <h2>Professional Work Gallery</h2>
+          <div className="gallery-grid">
+            {galleryImages.map((image, index) => (
+              <div key={index} className="gallery-item" onClick={() => openModal(index)}>
+                <img src={image.src} alt={image.title} />
+                <div className="gallery-overlay">
+                  <h4>{image.title}</h4>
+                  <p>{image.desc}</p>
+                </div>
               </div>
-            </div>
-            
-            <div className="step">
-              <div className="step-number">2</div>
-              <div className="step-content">
-                <h3>Quote & Timeline</h3>
-                <p>Receive instant quote with transparent pricing. Get 20% OFF on first booking with clear delivery timeline.</p>
-              </div>
-            </div>
-            
-            <div className="step">
-              <div className="step-number">3</div>
-              <div className="step-content">
-                <h3>Professional Translation</h3>
-                <p>Native Russian speaker with cultural expertise translates your content with 99.9% accuracy guarantee.</p>
-              </div>
-            </div>
-            
-            <div className="step">
-              <div className="step-number">4</div>
-              <div className="step-content">
-                <h3>Quality Check & Delivery</h3>
-                <p>Thorough proofreading and quality assurance before secure delivery via your preferred method.</p>
-              </div>
-            </div>
+            ))}
           </div>
-          
-
         </div>
       </section>
 
       {/* Services Section */}
       <section id="services" className="services">
         <div className="container">
-          <h2>Our Services</h2>
+          <h2>Services Offered</h2>
           <div className="services-grid">
             <div className="service-card">
               <div className="service-icon">💻</div>
               <h3>Online Meetings</h3>
-              <p>Professional real-time interpretation for Zoom, Teams, and WebEx conferences with crystal-clear audio quality</p>
+              <p>Interpretation/translation service for online meetings.</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">🤝</div>
               <h3>Offline Meetings</h3>
-              <p>Executive-level in-person interpretation for high-stakes business negotiations and diplomatic meetings</p>
+              <p>Interpretation/translation service for offline meetings.</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">📄</div>
-              <h3>Document Translation</h3>
-              <p>Certified translation of legal contracts, technical manuals, medical reports, and official government documents</p>
+              <h3>Documentation</h3>
+              <p>Translation service for official/unofficial letters, documents, emails etc.</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">🎓</div>
-              <h3>Russian Language Training</h3>
-              <p>Comprehensive Russian courses from survival basics to business fluency (A1-C1 levels) with cultural etiquette</p>
+              <h3>Survival Russian Course/Etiquette Training</h3>
+              <p>Survival Russian course, greetings and basic etiquettes courses for employees visiting Russian speaking countries</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">✈️</div>
-              <h3>Executive Travel Support</h3>
-              <p>Personal interpreter companion for C-level executives during international business trips and trade missions</p>
+              <h3>Official Travel</h3>
+              <p>Travel with the senior team of a company for meetings held within the country and abroad</p>
+            </div>
+            
+            <div className="service-card">
+              <div className="service-icon">🗣️</div>
+              <h3>Communicational Assistance</h3>
+              <p>Communicational assistance to Russian clients while their stay in India and Indian clients while their stay in Russia</p>
+            </div>
+            
+            <div className="service-card">
+              <div className="service-icon">📱</div>
+              <h3>Online Communicational Assistance</h3>
+              <p>Communicational assistance to Russian/Indian clients though emails, WhatsApp, and other social media platforms.</p>
             </div>
             
             <div className="service-card">
               <div className="service-icon">🎭</div>
-              <h3>Creative Industry Support</h3>
-              <p>Specialized assistance for Russian artists, models, performers, and creative professionals working in India</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* LinkedIn Section */}
-      <section id="linkedin" className="linkedin-section">
-        <div className="container">
-          <h2>Connect with Sabrina on LinkedIn</h2>
-          <p>Follow my professional journey and get insights into Russian business culture</p>
-          
-          <div className="linkedin-container">
-            <div className="linkedin-profile-card">
-              <div className="profile-header">
-                <div className="profile-avatar">
-                  <img src="/images/sabrina-profile.jpg" alt="Sabrina Bhatt" onError={(e) => e.target.style.display = 'none'} />
-                  <div className="linkedin-icon">💼</div>
-                </div>
-                <div className="profile-info">
-                  <h3>Sabrina Bhatt</h3>
-                  <p>Professional Russian Translator & Interpreter</p>
-                  <p>📍 Mumbai, India • 🌐 Global Services</p>
-                </div>
-              </div>
-              
-              <div className="profile-stats">
-                <div className="stat-item">
-                  <strong>6+</strong>
-                  <span>Years Experience</span>
-                </div>
-                <div className="stat-item">
-                  <strong>500+</strong>
-                  <span>Connections</span>
-                </div>
-                <div className="stat-item">
-                  <strong>98.5%</strong>
-                  <span>Success Rate</span>
-                </div>
-              </div>
-              
-              <div className="profile-highlights">
-                <h4>Professional Highlights</h4>
-                <ul>
-                  <li>✅ Native Russian Speaker</li>
-                  <li>✅ Fortune 500 Experience</li>
-                  <li>✅ Ministerial-Level Meetings</li>
-                  <li>✅ 24/7 Support Available</li>
-                </ul>
-              </div>
+              <h3>Artists Training And Assistance</h3>
+              <p>Communicational assistance to Russian models, actors, and other artists during their stay in India (including shoots, auditions, script readings and dealing with agencies)</p>
             </div>
             
-            <div className="linkedin-cta">
-              <a 
-                href="https://www.linkedin.com/in/sabrina-bhatt-658aa0221/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="linkedin-btn"
-              >
-                <span className="linkedin-icon">💼</span>
-                View Full LinkedIn Profile
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="testimonials">
-        <div className="container">
-          <h2>What Our Clients Say</h2>
-          <div className="testimonials-grid">
-            <div className="testimonial-card">
-              <div className="testimonial-content">
-                <p>"Sabrina's interpretation during our Coal India negotiations was flawless. Her cultural insights helped us close a $50M deal with Russian partners."</p>
-              </div>
-              <div className="testimonial-author">
-                <img src="/images/client1.jpg" alt="Client" onError={(e) => e.target.style.display = 'none'} />
-                <div>
-                  <h4>Rajesh Kumar</h4>
-                  <span>CEO, Mining Corp India</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="testimonial-card">
-              <div className="testimonial-content">
-                <p>"Professional, punctual, and precise. Sabrina translated our pharmaceutical patents with 100% accuracy. Highly recommended!"</p>
-              </div>
-              <div className="testimonial-author">
-                <img src="/images/client2.jpg" alt="Client" onError={(e) => e.target.style.display = 'none'} />
-                <div>
-                  <h4>Dr. Priya Sharma</h4>
-                  <span>Director, PharmaTech Ltd</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="testimonial-card">
-              <div className="testimonial-content">
-                <p>"Excellent Russian language training! Sabrina's teaching helped our team successfully expand into Moscow markets."</p>
-              </div>
-              <div className="testimonial-author">
-                <img src="/images/client3.jpg" alt="Client" onError={(e) => e.target.style.display = 'none'} />
-                <div>
-                  <h4>Amit Patel</h4>
-                  <span>International Business Head</span>
-                </div>
-              </div>
+            <div className="service-card">
+              <div className="service-icon">👨‍🏫</div>
+              <h3>Personal Classes</h3>
+              <p>Personal Russian classes – level A-1, A-2, A-3 (speaking, reading ,talking)</p>
             </div>
           </div>
         </div>
@@ -371,59 +192,30 @@ function App() {
       {/* Contact Section */}
       <section id="contact" className="contact">
         <div className="container">
-          <h2>Get In Touch</h2>
           <div className="contact-content">
             <div className="contact-info">
-              <h3>Contact Information</h3>
-              <div className="contact-item">
-                <span className="contact-icon">📞</span>
-                <div>
-                  <p><strong>Primary:</strong> +91-8789389223</p>
-                  <p><strong>Secondary:</strong> +91-7304876702</p>
-                </div>
-              </div>
-              
-              <div className="contact-item">
-                <span className="contact-icon">📍</span>
-                <div>
-                  <p><strong>Location:</strong> Mumbai, India</p>
-                  <p>Serving clients globally</p>
-                </div>
-              </div>
-              
-              <div className="contact-item">
-                <span className="contact-icon">⏰</span>
-                <div>
-                  <p><strong>Availability:</strong> 24/7 Support</p>
-                  <p>Emergency translation services available</p>
-                </div>
-              </div>
-              
-              <div className="special-offer">
-                <h4>🎉 Special Offer</h4>
-                <p>Get <strong>20% OFF</strong> on your first booking!</p>
-                <p>Professional Russian translation services with cultural expertise.</p>
-              </div>
+              <h6>Contact Us (+91)-8789389223 (+91)-7304876702</h6>
+              <p>Book your Russian Interpreter in Mumbai now.</p>
+              <p>Get 20% OFF on your first booking. Russian translation and interpretation service is now providing 24 hours of communicational assistance.</p>
             </div>
-            
-            <div className="contact-form">
-              <h3>Quick Quote Request</h3>
-              <form className="quote-form">
-                <input type="text" placeholder="Your Name" required />
-                <input type="email" placeholder="Email Address" required />
-                <input type="tel" placeholder="Phone Number" />
-                <select required>
-                  <option value="">Select Service</option>
-                  <option value="online-meeting">Online Meeting Interpretation</option>
-                  <option value="offline-meeting">Offline Meeting Interpretation</option>
-                  <option value="document">Document Translation</option>
-                  <option value="course">Russian Language Course</option>
-                  <option value="travel">Travel Support</option>
-                  <option value="artist">Artist Assistance</option>
-                </select>
-                <textarea placeholder="Project Details" rows="4"></textarea>
-                <button type="submit" className="submit-btn">Get Free Quote</button>
-              </form>
+            <div className="contact-image">
+              <img src="/images/contact-image.jpg" alt="Contact Us" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Appointments Section */}
+      <section className="appointments">
+        <div className="container">
+          <h2>Online Appointments</h2>
+          <div className="appointment-card">
+            <h3>Senior Translator and Interpreter</h3>
+            <div className="service-item">
+              <h4>Consultation</h4>
+              <p>30 mins | Free</p>
+              <p>Get consultation from our certified translators and discuss about your requirement in details. All our Russian translators in India are Russian Native...</p>
+              <button className="book-btn">BOOK</button>
             </div>
           </div>
         </div>
@@ -433,41 +225,59 @@ function App() {
       <footer className="footer">
         <div className="container">
           <div className="footer-content">
-            <div className="footer-brand">
-              <h3>Language Liberty</h3>
-              <p>Professional Russian Translation & Interpretation Services</p>
+            <p><strong>Language Liberty - Russian Translation & Interpretation Services</strong></p>
+            <p>Professional Russian translation services in Mumbai with 6+ years of experience. Expert Russian-English translator for businesses and individuals.</p>
+            
+            <div className="services-list">
+              <h4>Our Services</h4>
+              <ul>
+                <li><strong>Online/Offline Meetings:</strong> Real-time Russian interpretation</li>
+                <li><strong>Document Translation:</strong> Official documents and technical content</li>
+                <li><strong>Russian Language Course:</strong> Professional training and etiquette</li>
+                <li><strong>Travel Support:</strong> Linguistic aid for business meetings</li>
+                <li><strong>Communication Assistance:</strong> 24/7 support via multiple channels</li>
+                <li><strong>Artist Support:</strong> Assistance for Russian artists in India</li>
+              </ul>
             </div>
             
-            <div className="footer-links">
-              <h4>Quick Links</h4>
-              <a href="#home">Home</a>
-              <a href="#about">About</a>
-              <a href="#how-it-works">How It Works</a>
-              <a href="#services">Services</a>
-              <a href="#linkedin">LinkedIn</a>
-              <a href="#testimonials">Reviews</a>
-              <a href="#contact">Contact</a>
+            <div className="why-choose">
+              <h4>Why Choose Us?</h4>
+              <ul>
+                <li><strong>Expert Translator:</strong> Native Russian speaker with Indian education</li>
+                <li><strong>Proven Experience:</strong> 6+ years working with top companies</li>
+                <li><strong>24/7 Availability:</strong> Round-the-clock support</li>
+                <li><strong>Special Offer:</strong> 20% OFF on first booking</li>
+              </ul>
             </div>
             
-            <div className="footer-contact">
-              <h4>Contact</h4>
-              <p>📞 +91-8789389223</p>
-              <p>📞 +91-7304876702</p>
-              <p>📍 Mumbai, India</p>
+            <p><strong>Contact: +91-8789389223 | +91-7304876702</strong></p>
+            <p><strong>Email: sabrina@languageliberty.com</strong></p>
+            
+            <div className="footer-bottom">
+              <p>Copyright © 2025 Language Liberty - All Rights Reserved.</p>
             </div>
-          </div>
-          
-          <div className="footer-bottom">
-            <p>&copy; 2024 Language Liberty. All rights reserved.</p>
-            <p>Russian Translation & Interpretation Services | Mumbai | 24/7 Support</p>
           </div>
         </div>
       </footer>
       
-      {/* Live Chatbot */}
       <Chatbot />
       
-
+      {/* Image Modal */}
+      {selectedImage && (
+        <div className="modal-overlay" onClick={() => setSelectedImage(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setSelectedImage(null)}>×</button>
+            <button className="modal-nav modal-prev" onClick={prevImage}>‹</button>
+            <button className="modal-nav modal-next" onClick={nextImage}>›</button>
+            <img src={selectedImage.src} alt={selectedImage.title} />
+            <div className="modal-info">
+              <h3>{selectedImage.title}</h3>
+              <p>{selectedImage.desc}</p>
+              <div className="modal-counter">{currentImageIndex + 1} / {galleryImages.length}</div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
