@@ -1,0 +1,140 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Professional Russian Translation Services in Mumbai",
+    "subtitle": "Expert Russian-English translator with 6+ years of experience. Serving Fortune 500 companies, government officials, and international businesses."
+  },
+  "about": {
+    "title": "Meet Sabrina Bhatt",
+    "description": "Born to a Russian mother and Indian father, I bridge communication gaps between Russian-speaking countries and the world. With education in Russia, Uzbekistan, and India, I bring authentic cultural understanding to every translation project.",
+    "proficiency": "Language Proficiency",
+    "experienceText": "6+ years of expertise working with Fortune 500 companies in pharmaceutical, chemical, mining, and export/import sectors. Trusted interpreter for ministerial-level meetings with Coal India, Belaz, Artek Surfin Chemical Ltd, and international delegations."
+  },
+  "services": {
+    "title": "Our Services",
+    "items": [
+      {
+        "title": "Online Meetings",
+        "description": "Professional real-time interpretation for Zoom, Teams, and WebEx conferences with crystal-clear audio quality"
+      },
+      {
+        "title": "Offline Meetings",
+        "description": "Executive-level in-person interpretation for high-stakes business negotiations and diplomatic meetings"
+      },
+      {
+        "title": "Document Translation",
+        "description": "Certified translation of legal contracts, technical manuals, medical reports, and official government documents"
+      },
+      {
+        "title": "Russian Language Training",
+        "description": "Comprehensive Russian courses from survival basics to business fluency (A1-C1 levels) with cultural etiquette"
+      },
+      {
+        "title": "Executive Travel Support",
+        "description": "Personal interpreter companion for C-level executives during international business trips and trade missions"
+      },
+      {
+        "title": "Creative Industry Support",
+        "description": "Specialized assistance for Russian artists, models, performers, and creative professionals working in India"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Book your Russian Interpreter in Mumbai now.",
+    "description": "Get 20% OFF on your first booking. Russian translation and interpretation service is now providing 24 hours of communicational assistance.",
+    "info": {
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "email": "Email",
+      "whatsapp": "Instant messaging",
+      "availability": "24/7 Available"
+    },
+    "details": {
+      "phone1": "+91-8789389223",
+      "phone2": "+91-7304876702",
+      "email": "sabrina@languageliberty.com",
+      "whatsappUrl": "https://wa.me/918789389223",
+      "name": "Sabrina Bhatt"
+    }
+  },
+  "appointments": {
+    "title": "Book Your Consultation",
+    "freeConsultation": {
+      "title": "Free Consultation",
+      "duration": "30 minutes",
+      "price": "Free",
+      "description": "Get expert consultation from our certified Russian translator. Discuss your requirements and get personalized solutions.",
+      "features": [
+        "Requirement analysis",
+        "Cost estimation",
+        "Timeline discussion",
+        "Service recommendations"
+      ],
+      "button": "Book Free Call",
+      "action": "tel:+918789389223"
+    },
+    "businessMeeting": {
+      "title": "Business Meeting",
+      "duration": "1-2 hours",
+      "price": "₹2000+",
+      "description": "Professional interpretation services for your business meetings with Russian clients or partners.",
+      "features": [
+        "Live interpretation",
+        "Document translation",
+        "Cultural guidance",
+        "Follow-up support"
+      ],
+      "button": "Schedule Meeting",
+      "action": "mailto:sabrina@languageliberty.com?subject=Business Meeting Booking"
+    },
+    "languageTraining": {
+      "title": "Language Training",
+      "duration": "1 hour",
+      "price": "₹1500+",
+      "description": "Personal Russian language classes and cultural etiquette training for professionals.",
+      "features": [
+        "Customized curriculum",
+        "Business Russian focus",
+        "Cultural training",
+        "Flexible scheduling"
+      ],
+      "button": "Start Learning",
+      "action": "https://wa.me/918789389223?text=Hi, I want to book Russian language training"
+    }
+  },
+  "additionalServices": {
+    "communicationalAssistance": {
+      "title": "Communicational Assistance",
+      "description": "Communicational assistance to Russian clients while their stay in India and Indian clients while their stay in Russia"
+    },
+    "onlineAssistance": {
+      "title": "Online Communicational Assistance",
+      "description": "Communicational assistance to Russian/Indian clients though emails, WhatsApp, and other social media platforms."
+    },
+    "personalClasses": {
+      "title": "Personal Classes",
+      "description": "Personal Russian classes – level A-1, A-2, A-3 (speaking, reading, talking)"
+    }
+  },
+  "footer": {
+    "companyName": "Language Liberty",
+    "tagline": {
+      "en": "Russian Translation & Interpretation Services",
+      "ru": "Услуги русского перевода и интерпретации"
+    },
+    "description": {
+      "en": "Professional Russian translation services in Mumbai with 6+ years of experience. Expert Russian-English translator for businesses and individuals.",
+      "ru": "Профессиональные услуги русского перевода в Мумбаи с опытом работы 6+ лет. Экспертный переводчик русский-английский для бизнеса и частных лиц."
+    },
+    "copyright": {
+      "en": "Copyright © 2025 Language Liberty - All Rights Reserved.",
+      "ru": "Авторские права © 2025 Language Liberty - Все права защищены."
+    }
+  }
+}
