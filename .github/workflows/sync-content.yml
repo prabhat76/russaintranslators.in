@@ -1,0 +1,141 @@
+name: Refresh Firebase Database
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'data/**' ]
+  workflow_dispatch:
+
+jobs:
+  refresh-database:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm install firebase
+        
+      - name: Debug Environment
+        run: |
+          echo "🔍 Environment Debug:"
+          echo "Node version: $(node --version)"
+          echo "NPM version: $(npm --version)"
+          echo "Current directory: $(pwd)"
+          echo "Files in data directory:"
+          ls -la data/ || echo "No data directory found"
+          echo "API Key present: ${{ secrets.FIREBASE_API_KEY != '' }}"
+          
+      - name: Refresh Firebase Database
+        run: |
+          cat > refresh-db.js << 'EOF'
+          const { initializeApp } = require('firebase/app');
+          const { getDatabase, ref, set, remove, get } = require('firebase/database');
+          const fs = require('fs');
+          
+          console.log('🚀 Script started at:', new Date().toISOString());
+          
+          const firebaseConfig = {
+            apiKey: "${{ secrets.FIREBASE_API_KEY }}",
+            authDomain: "russiantranslator-aa708.firebaseapp.com",
+            databaseURL: "https://russiantranslator-aa708-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "russiantranslator-aa708"
+          };
+          
+          console.log('🔧 Firebase config:', {
+            authDomain: firebaseConfig.authDomain,
+            databaseURL: firebaseConfig.databaseURL,
+            projectId: firebaseConfig.projectId,
+            hasApiKey: !!firebaseConfig.apiKey
+          });
+          
+          const app = initializeApp(firebaseConfig);
+          const rtdb = getDatabase(app);
+          console.log('🔥 Firebase initialized successfully');
+          
+          async function refreshDatabase() {
+            try {
+              console.log('🔄 Starting database refresh at:', new Date().toISOString());
+              
+              // Check if files exist
+              console.log('📁 Checking files...');
+              if (!fs.existsSync('data/en.json')) throw new Error('data/en.json not found');
+              if (!fs.existsSync('data/ru.json')) throw new Error('data/ru.json not found');
+              console.log('✅ Files exist');
+              
+              // Read content files
+              console.log('📖 Reading content files...');
+              const enContent = JSON.parse(fs.readFileSync('data/en.json', 'utf8'));
+              const ruContent = JSON.parse(fs.readFileSync('data/ru.json', 'utf8'));
+              
+              console.log('📊 Content loaded:');
+              console.log(`  EN sections: ${Object.keys(enContent).join(', ')}`);
+              console.log(`  RU sections: ${Object.keys(ruContent).join(', ')}`);
+              
+              // Check current database content
+              console.log('🔍 Checking current database content...');
+              const currentData = await get(ref(rtdb, 'content'));
+              console.log('Current data exists:', currentData.exists());
+              if (currentData.exists()) {
+                const current = currentData.val();
+                console.log('Current languages:', Object.keys(current));
+              }
+              
+              // Clear existing content first
+              console.log('🗑️ Clearing existing content...');
+              await remove(ref(rtdb, 'content'));
+              console.log('✅ Content cleared');
+              
+              // Upload fresh content
+              const newContent = {
+                en: enContent,
+                ru: ruContent,
+                lastUpdated: new Date().toISOString(),
+                version: Date.now(),
+                source: 'github-actions'
+              };
+              
+              console.log('📤 Uploading fresh content...');
+              console.log('Upload payload keys:', Object.keys(newContent));
+              
+              await set(ref(rtdb, 'content'), newContent);
+              console.log('✅ Content uploaded');
+              
+              // Verify upload
+              console.log('🔍 Verifying upload...');
+              const verifyData = await get(ref(rtdb, 'content'));
+              if (verifyData.exists()) {
+                const verified = verifyData.val();
+                console.log('✅ Verification successful!');
+                console.log('Verified languages:', Object.keys(verified));
+                console.log('Last updated:', verified.lastUpdated);
+                console.log('Version:', verified.version);
+              } else {
+                throw new Error('Verification failed - no data found after upload');
+              }
+              
+              console.log('🎉 Database refresh completed successfully!');
+              
+            } catch (error) {
+              console.error('❌ Database refresh failed:', error.message);
+              console.error('Error details:', error);
+              if (error.stack) console.error('Stack trace:', error.stack);
+              process.exit(1);
+            }
+          }
+          
+          refreshDatabase();
+          EOF
+          
+          echo "📝 Generated script content:"
+          head -20 refresh-db.js
+          echo "..."
+          
+          echo "🚀 Running refresh script..."
+          node refresh-db.js
+        env:
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}

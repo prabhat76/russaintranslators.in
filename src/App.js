@@ -1,82 +1,144 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import './App.css';
-import Chatbot from './components/Chatbot';
+import { GALLERY_IMAGES } from './constants/content';
+import { useContent } from './hooks/useContent';
+import { useForm } from './hooks/useForm';
+import { collection, addDoc, onSnapshot, query, orderBy, limit, serverTimestamp, getDocs } from 'firebase/firestore';
+import { db, mockFirebaseOps } from './firebase';
+import { throttle } from './utils/performance';
+import { analytics } from './utils/analytics';
 
-const AppContent = () => {
+const Chatbot = lazy(() => import('./components/Chatbot'));
+
+
+const AppContent = React.memo(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [liveFeedback, setLiveFeedback] = useState([]);
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [feedbackData, setFeedbackData] = useState({ rating: 5, message: '', name: '' });
+  const [testimonials, setTestimonials] = useState([]);
+
   const [currentLanguage, setCurrentLanguage] = useState(() => {
     const browserLang = navigator.language.toLowerCase();
     return browserLang.startsWith('ru') ? 'ru' : 'en';
   });
   
-  const switchLanguage = (lang) => {
+  const switchLanguage = useCallback((lang) => {
+    analytics.languageSwitch(currentLanguage, lang);
     setCurrentLanguage(lang);
-  };
+  }, [currentLanguage]);
   
-  const content = {
-    en: {
-      nav: { home: 'Home', about: 'About', services: 'Services', contact: 'Contact' },
-      hero: { title: 'Professional Russian Translation Services', subtitle: 'Expert Russian-English interpreter with 6+ years of experience', cta: 'Call Now', learn: 'Learn More' },
-      about: { title: 'Meet Sabrina Bhatt', subtitle: 'Your Russian Translation Expert', proficiency: 'Language Proficiency', experienceText: 'With 6+ years of professional experience in Russian-English translation and interpretation, I provide accurate and culturally sensitive language services for businesses and individuals.' },
-      services: { title: 'Professional Translation Services', subtitle: 'Comprehensive Russian-English language solutions for businesses and individuals' },
-      gallery: { title: 'Professional Work Gallery' },
-      contact: { title: 'Get In Touch', subtitle: 'Ready to break language barriers? Contact us for professional Russian translation services', call: 'Call Us', email: 'Email Us', whatsapp: 'WhatsApp', offer: 'Special Offer', quote: 'Request a Quote', submit: 'Get Free Quote' },
-      appointments: { title: 'Book Your Appointment', subtitle: 'Choose the perfect consultation package for your translation needs', free: 'Free Consultation', business: 'Business Strategy Session', urgent: 'Urgent Support', book: 'Book Free Call', strategy: 'Book Strategy Call', callNow: 'Call Now' }
-    },
-    ru: {
-      nav: { home: 'Главная', about: 'О нас', services: 'Услуги', contact: 'Контакты' },
-      hero: { title: 'Профессиональные услуги русского перевода', subtitle: 'Эксперт русско-английского перевода с опытом работы 6+ лет', cta: 'Позвонить', learn: 'Узнать больше' },
-      about: { title: 'Знакомьтесь: Сабрина Бхатт', subtitle: 'Ваш эксперт по русскому переводу', proficiency: 'Языковые навыки', experienceText: 'Имея более 6 лет профессионального опыта в русско-английском переводе и устном переводе, я предоставляю точные и культурно чувствительные языковые услуги для бизнеса и частных лиц.' },
-      services: { title: 'Профессиональные переводческие услуги', subtitle: 'Комплексные русско-английские языковые решения для бизнеса и частных лиц' },
-      gallery: { title: 'Галерея профессиональных работ' },
-      contact: { title: 'Свяжитесь с нами', subtitle: 'Готовы преодолеть языковые барьеры? Свяжитесь с нами для профессиональных услуг русского перевода', call: 'Позвоните нам', email: 'Напишите нам', whatsapp: 'WhatsApp', offer: 'Специальное предложение', quote: 'Запросить расценки', submit: 'Получить бесплатную оценку' },
-      appointments: { title: 'Записаться на прием', subtitle: 'Выберите идеальный пакет консультаций для ваших переводческих потребностей', free: 'Бесплатная консультация', business: 'Бизнес-стратегическая сессия', urgent: 'Срочная поддержка', book: 'Записаться на звонок', strategy: 'Записаться на стратегический звонок', callNow: 'Позвонить сейчас' }
+  const { formData, formStatus, isSubmitting, handleInputChange, handleFormSubmit } = useForm({
+    name: '',
+    email: '',
+    phone: '',
+    service: '',
+    message: ''
+  }, currentLanguage);
+  
+  const { content: t, loading: contentLoading } = useContent(currentLanguage);
+  
+  const closeModal = useCallback(() => setSelectedImage(null), []);
+  const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
+  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
+  
+  const handleFeedbackSubmit = useCallback(async (e) => {
+    e.preventDefault();
+    
+    if (!mockFirebaseOps) {
+      try {
+        await addDoc(collection(db, 'feedback'), {
+          ...feedbackData,
+          timestamp: serverTimestamp(),
+          language: currentLanguage
+        });
+      } catch (error) {
+        console.warn('Feedback submission error:', error.message);
+      }
+    } else {
+      console.log('Mock feedback submission:', feedbackData);
     }
-  };
+    
+    setFeedbackData({ rating: 5, message: '', name: '' });
+    setShowFeedbackForm(false);
+  }, [feedbackData, currentLanguage]);
   
-  const t = content[currentLanguage];
+  const handleFeedbackChange = useCallback((e) => {
+    setFeedbackData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  }, []);
 
-  const galleryImages = [
-    {src: '/images/sabrina-work-1.jpeg', title: 'Corporate Meeting', desc: 'Russian-English interpretation for business negotiations'},
-    {src: '/images/sabrina-work-2.jpeg', title: 'International Conference', desc: 'Simultaneous translation services'},
-    {src: '/images/sabrina-work-3.jpeg', title: 'Document Translation', desc: 'Official document certification and translation'},
-    {src: '/images/sabrina-work-4.jpeg', title: 'Ministerial Level Meeting', desc: 'High-level diplomatic interpretation'},
-    {src: '/images/sabrina-work-5.jpeg', title: 'Trade Negotiations', desc: 'Export-import business interpretation'},
-    {src: '/images/sabrina-work-6.jpeg', title: 'Professional Consultation', desc: 'Technical translation and advisory services'},
-    {src: '/images/sabrina-work-7.jpeg', title: 'Client Consultation', desc: 'Personalized translation service planning'},
-    {src: '/images/sabrina-work-8.jpeg', title: 'Language Training', desc: 'Russian language course and etiquette training'},
-    {src: '/images/sabrina-work-9.jpeg', title: 'Virtual Interpretation', desc: 'Online meeting translation services'},
-    {src: '/images/sabrina-work-10.jpeg', title: 'Industry Expertise', desc: 'Specialized translation for various sectors'}
-  ];
-
-  const openModal = (index) => {
+  const openModal = useCallback((index) => {
+    analytics.galleryView(GALLERY_IMAGES[index].title);
     setCurrentImageIndex(index);
-    setSelectedImage(galleryImages[index]);
-  };
+    setSelectedImage(GALLERY_IMAGES[index]);
+  }, []);
 
-  const nextImage = () => {
-    const nextIndex = (currentImageIndex + 1) % galleryImages.length;
+  const nextImage = useCallback(() => {
+    const nextIndex = (currentImageIndex + 1) % GALLERY_IMAGES.length;
     setCurrentImageIndex(nextIndex);
-    setSelectedImage(galleryImages[nextIndex]);
-  };
+    setSelectedImage(GALLERY_IMAGES[nextIndex]);
+  }, [currentImageIndex]);
 
-  const prevImage = () => {
-    const prevIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+  const prevImage = useCallback(() => {
+    const prevIndex = (currentImageIndex - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length;
     setCurrentImageIndex(prevIndex);
-    setSelectedImage(galleryImages[prevIndex]);
-  };
+    setSelectedImage(GALLERY_IMAGES[prevIndex]);
+  }, [currentImageIndex]);
 
   useEffect(() => {
+    // Track page view
+    analytics.pageView('home');
+    
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('config', 'GA_MEASUREMENT_ID', {
         page_title: 'Russian Translation Services - Language Liberty',
         page_location: window.location.href
       });
     }
+    
+    // Real-time listeners
+    let unsubscribeFeedback = () => {};
+    let unsubscribeTestimonials = () => {};
+    
+    if (!mockFirebaseOps) {
+      try {
+        // Feedback listener
+        const feedbackQuery = query(collection(db, 'feedback'), orderBy('timestamp', 'desc'), limit(5));
+        unsubscribeFeedback = onSnapshot(feedbackQuery, (snapshot) => {
+          setLiveFeedback(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        });
+        
+        // Testimonials listener
+        const testimonialsQuery = query(collection(db, 'testimonials'), orderBy('timestamp', 'desc'));
+        unsubscribeTestimonials = onSnapshot(testimonialsQuery, (snapshot) => {
+          setTestimonials(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        });
+        
 
+      } catch (error) {
+        console.warn('Firestore setup error:', error.message);
+      }
+    }
+    
+    // Mobile gallery auto-scroll with performance optimization
     const checkMobile = () => window.innerWidth <= 768;
+    const handleResize = throttle(() => {
+      if (!checkMobile()) {
+        const galleryGrid = document.querySelector('.gallery-grid');
+        if (galleryGrid) {
+          galleryGrid.scrollTo({ left: 0, behavior: 'smooth' });
+        }
+      }
+    }, 250);
+
+    window.addEventListener('resize', handleResize);
+    let galleryInterval;
+    
     if (checkMobile()) {
       const galleryGrid = document.querySelector('.gallery-grid');
       if (galleryGrid) {
@@ -84,9 +146,9 @@ const AppContent = () => {
         const cardWidth = window.innerWidth <= 480 ? 250 : 280;
         const gap = window.innerWidth <= 480 ? 12 : 15;
         
-        const interval = setInterval(() => {
+        galleryInterval = setInterval(() => {
           if (!checkMobile()) {
-            clearInterval(interval);
+            clearInterval(galleryInterval);
             return;
           }
           scrollPosition += cardWidth + gap;
@@ -95,13 +157,20 @@ const AppContent = () => {
           }
           galleryGrid.scrollTo({ left: scrollPosition, behavior: 'smooth' });
         }, 3000);
-
-        return () => clearInterval(interval);
       }
     }
+    
+    return () => {
+      unsubscribeFeedback();
+      unsubscribeTestimonials();
+      if (galleryInterval) clearInterval(galleryInterval);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
-
+  if (contentLoading) {
+    return <div className="loading">Loading content...</div>;
+  }
 
   return (
     <div className="App">
@@ -161,19 +230,19 @@ const AppContent = () => {
             </div>
             
             <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-              <a href="#home" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.nav.home}</a>
-              <a href="#about" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.nav.about}</a>
-              <a href="#services" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.nav.services}</a>
-              <a href="#contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.nav.contact}</a>
+              <a href="#home" className="nav-link" onClick={closeMenu}>{t.nav.home}</a>
+              <a href="#about" className="nav-link" onClick={closeMenu}>{t.nav.about}</a>
+              <a href="#services" className="nav-link" onClick={closeMenu}>{t.nav.services}</a>
+              <a href="#contact" className="nav-link" onClick={closeMenu}>{t.nav.contact}</a>
               <div className="nav-cta-group">
-                <a href="https://wa.me/918789389223" className="nav-cta whatsapp" onClick={() => setIsMenuOpen(false)}>💬 WhatsApp</a>
-                <a href="tel:+918789389223" className="nav-cta call" onClick={() => setIsMenuOpen(false)}>📞 {t.hero.cta}</a>
+                <a href="https://wa.me/918789389223" className="nav-cta whatsapp" onClick={() => { analytics.contactAttempt('whatsapp'); closeMenu(); }}>💬 WhatsApp</a>
+                <a href="tel:+918789389223" className="nav-cta call" onClick={() => { analytics.contactAttempt('phone'); closeMenu(); }}>📞 {t.hero.cta}</a>
               </div>
             </div>
             
             <button 
               className={`menu-toggle ${isMenuOpen ? 'active' : ''}`}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={toggleMenu}
               aria-label="Toggle menu"
             >
               <span></span>
@@ -199,7 +268,7 @@ const AppContent = () => {
               <h1>{t.hero.title}</h1>
               <p>{t.hero.subtitle}</p>
               <div className="hero-cta">
-                <a href="tel:+918789389223" className="cta-button primary">📞 {t.hero.cta}</a>
+                <a href="tel:+918789389223" className="cta-button primary" onClick={() => analytics.contactAttempt('hero_phone')}>📞 {t.hero.cta}</a>
                 <a href="#about" className="cta-button secondary">{t.hero.learn}</a>
               </div>
             </div>
@@ -227,11 +296,34 @@ const AppContent = () => {
         </div>
       </section>
 
+      <section className="stats">
+        <div className="container">
+          <div className="stats-grid">
+            <div className="stat-item">
+              <div className="stat-number">200+</div>
+              <div className="stat-label">{currentLanguage === 'en' ? 'Happy Clients' : 'Довольных клиентов'}</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">500+</div>
+              <div className="stat-label">{currentLanguage === 'en' ? 'Projects Completed' : 'Завершенных проектов'}</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">6+</div>
+              <div className="stat-label">{currentLanguage === 'en' ? 'Years Experience' : 'Лет опыта'}</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">24/7</div>
+              <div className="stat-label">{currentLanguage === 'en' ? 'Support Available' : 'Поддержка доступна'}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="gallery">
         <div className="container">
           <h2>{t.gallery.title}</h2>
           <div className="gallery-grid">
-            {galleryImages.map((image, index) => (
+            {GALLERY_IMAGES.map((image, index) => (
               <div key={index} className="gallery-item" onClick={() => openModal(index)}>
                 <img src={image.src} alt={image.title} />
                 <div className="gallery-overlay">
@@ -243,6 +335,94 @@ const AppContent = () => {
           </div> {/* Close .gallery-grid */}
         </div> {/* Close .container for gallery */}
       </section> {/* Close gallery section */}
+
+      {/* Live Feedback Section */}
+      <section className="live-feedback">
+        <div className="container">
+          <div className="feedback-header">
+            <h2>{currentLanguage === 'en' ? '⚡ Live Client Feedback' : '⚡ Отзывы клиентов в реальном времени'}</h2>
+            <button 
+              className="feedback-btn"
+              onClick={() => { analytics.buttonClick('feedback_form', 'live_feedback'); setShowFeedbackForm(true); }}
+            >
+              {currentLanguage === 'en' ? '⭐ Leave Feedback' : '⭐ Оставить отзыв'}
+            </button>
+          </div>
+          
+          <div className="feedback-stream">
+            {liveFeedback.length > 0 ? liveFeedback.map((feedback) => (
+              <div key={feedback.id} className="feedback-item">
+                <div className="feedback-rating">
+                  {'⭐'.repeat(feedback.rating)}
+                </div>
+                <p className="feedback-message">"{feedback.message}"</p>
+                <div className="feedback-author">- {feedback.name}</div>
+                <div className="feedback-time">
+                  {feedback.timestamp?.toDate ? feedback.timestamp.toDate().toLocaleDateString() : 'Just now'}
+                </div>
+              </div>
+            )) : (
+              <div className="no-feedback">
+                <p>{currentLanguage === 'en' ? 'Be the first to leave feedback!' : 'Будьте первым, кто оставит отзыв!'}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+      
+      <section className="testimonials">
+        <div className="container">
+          <div className="testimonials-header">
+            <h2>{currentLanguage === 'en' ? 'Client Testimonials' : 'Отзывы клиентов'}</h2>
+            <p>{currentLanguage === 'en' ? 'What our clients say about our Russian translation services' : 'Что говорят наши клиенты о наших услугах русского перевода'}</p>
+          </div>
+          <div className="testimonials-grid">
+            {testimonials.length > 0 ? testimonials.map((testimonial) => (
+              <div key={testimonial.id} className="testimonial-card">
+                <div className="testimonial-rating">{'⭐'.repeat(testimonial.rating)}</div>
+                <p>"{testimonial.message}"</p>
+                <div className="testimonial-author">
+                  <strong>{testimonial.name}</strong>
+                  <span>{testimonial.title}</span>
+                </div>
+              </div>
+            )) : (
+              // Default testimonials
+              <>
+                <div className="testimonial-card">
+                  <div className="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                  <p>"{currentLanguage === 'en' ? 'Sabrina provided excellent Russian interpretation for our business meeting with Moscow partners. Her cultural understanding made all the difference.' : 'Сабрина обеспечила отличный русский перевод для нашей деловой встречи с московскими партнерами. Ее культурное понимание имело решающее значение.'}"
+                  </p>
+                  <div className="testimonial-author">
+                    <strong>Rajesh Kumar</strong>
+                    <span>{currentLanguage === 'en' ? 'CEO, Tech Solutions Mumbai' : 'Генеральный директор, Tech Solutions Mumbai'}</span>
+                  </div>
+                </div>
+                
+                <div className="testimonial-card">
+                  <div className="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                  <p>"{currentLanguage === 'en' ? 'Professional document translation service. Fast, accurate, and certified. Highly recommended for legal documents.' : 'Профессиональная служба перевода документов. Быстро, точно и сертифицировано. Настоятельно рекомендуется для юридических документов.'}"
+                  </p>
+                  <div className="testimonial-author">
+                    <strong>Priya Sharma</strong>
+                    <span>{currentLanguage === 'en' ? 'Legal Advisor, Mumbai High Court' : 'Юридический консультант, Высокий суд Мумбаи'}</span>
+                  </div>
+                </div>
+                
+                <div className="testimonial-card">
+                  <div className="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                  <p>"{currentLanguage === 'en' ? 'Sabrina helped our Russian artists during their Mumbai shoot. Her entertainment industry knowledge was invaluable.' : 'Сабрина помогла нашим русским артистам во время их съемок в Мумбаи. Ее знание индустрии развлечений было бесценным.'}"
+                  </p>
+                  <div className="testimonial-author">
+                    <strong>Mikhail Petrov</strong>
+                    <span>{currentLanguage === 'en' ? 'Film Producer, Moscow Films' : 'Кинопродюсер, Moscow Films'}</span>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </section>
 
       <section id="services" className="services">
         <div className="container">
@@ -395,24 +575,67 @@ const AppContent = () => {
               </div>
               <div className="contact-form">
                 <h3>{currentLanguage === 'en' ? 'Request a Quote' : 'Запросить расценки'}</h3>
-                <form className="quote-form">
+                <form className="quote-form" onSubmit={handleFormSubmit}>
                   <div className="form-group">
-                    <input type="text" placeholder="Your Name" required />
-                    <input type="email" placeholder="Email Address" required />
+                    <input 
+                      type="text" 
+                      name="name"
+                      placeholder={currentLanguage === 'en' ? 'Your Name' : 'Ваше имя'}
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required 
+                    />
+                    <input 
+                      type="email" 
+                      name="email"
+                      placeholder={currentLanguage === 'en' ? 'Email Address' : 'Адрес электронной почты'}
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required 
+                    />
                   </div>
                   <div className="form-group">
-                    <input type="tel" placeholder="Phone Number" />
-                    <select required>
-                      <option value="">Select Service</option>
-                      <option value="virtual">Virtual Meeting Interpretation</option>
-                      <option value="business">Business Meeting</option>
-                      <option value="document">Document Translation</option>
-                      <option value="training">Language Training</option>
-                      <option value="travel">Travel Support</option>
+                    <input 
+                      type="tel" 
+                      name="phone"
+                      placeholder={currentLanguage === 'en' ? 'Phone Number' : 'Номер телефона'}
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                    />
+                    <select 
+                      name="service"
+                      value={formData.service}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="">{currentLanguage === 'en' ? 'Select Service' : 'Выберите услугу'}</option>
+                      <option value="virtual">{currentLanguage === 'en' ? 'Virtual Meeting Interpretation' : 'Устный перевод виртуальных встреч'}</option>
+                      <option value="business">{currentLanguage === 'en' ? 'Business Meeting' : 'Деловая встреча'}</option>
+                      <option value="document">{currentLanguage === 'en' ? 'Document Translation' : 'Перевод документов'}</option>
+                      <option value="training">{currentLanguage === 'en' ? 'Language Training' : 'Обучение языку'}</option>
+                      <option value="travel">{currentLanguage === 'en' ? 'Travel Support' : 'Поддержка в поездках'}</option>
                     </select>
                   </div>
-                  <textarea placeholder="Describe your requirements..." rows="4" required></textarea>
-                  <button type="submit" className="submit-btn">{currentLanguage === 'en' ? 'Get Free Quote' : 'Получить бесплатную оценку'}</button>
+                  <textarea 
+                    name="message"
+                    placeholder={currentLanguage === 'en' ? 'Describe your requirements...' : 'Опишите ваши требования...'}
+                    rows="4" 
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                  ></textarea>
+                  {formStatus && (
+                    <div className={`form-status ${formStatus.includes('Error') || formStatus.includes('Ошибка') ? 'error' : 'success'}`}>
+                      {formStatus}
+                    </div>
+                  )}
+                  <button type="submit" className="submit-btn" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      currentLanguage === 'en' ? 'Sending...' : 'Отправка...'
+                    ) : (
+                      currentLanguage === 'en' ? 'Get Free Quote' : 'Получить бесплатную оценку'
+                    )}
+                  </button>
                 </form>
               </div>
             </div>
@@ -543,7 +766,11 @@ const AppContent = () => {
         </div>
       </footer>
       
-      <Chatbot language={currentLanguage} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Chatbot language={currentLanguage} />
+      </Suspense>
+      
+
       
       {/* Mobile-only floating language toggle */}
       <div className="mobile-lang-toggle">
@@ -563,23 +790,69 @@ const AppContent = () => {
       </div>
       
       {selectedImage && (
-        <div className="modal-overlay" onClick={() => setSelectedImage(null)}>
+        <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setSelectedImage(null)}>×</button>
+            <button className="modal-close" onClick={closeModal}>×</button>
             <button className="modal-nav modal-prev" onClick={prevImage}>‹</button>
             <button className="modal-nav modal-next" onClick={nextImage}>›</button>
             <img src={selectedImage.src} alt={selectedImage.title} />
             <div className="modal-info">
               <h3>{selectedImage.title}</h3>
               <p>{selectedImage.desc}</p>
-              <div className="modal-counter">{currentImageIndex + 1} / {galleryImages.length}</div>
+              <div className="modal-counter">{currentImageIndex + 1} / {GALLERY_IMAGES.length}</div>
             </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Feedback Form Modal */}
+      {showFeedbackForm && (
+        <div className="modal-overlay" onClick={() => setShowFeedbackForm(false)}>
+          <div className="feedback-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowFeedbackForm(false)}>×</button>
+            <h3>{currentLanguage === 'en' ? 'Share Your Experience' : 'Поделитесь впечатлениями'}</h3>
+            <form onSubmit={handleFeedbackSubmit}>
+              <div className="rating-input">
+                <label>{currentLanguage === 'en' ? 'Rating:' : 'Оценка:'}</label>
+                <div className="star-rating">
+                  {[1,2,3,4,5].map(star => (
+                    <button
+                      key={star}
+                      type="button"
+                      className={star <= feedbackData.rating ? 'active' : ''}
+                      onClick={() => setFeedbackData(prev => ({...prev, rating: star}))}
+                    >
+                      ⭐
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <input
+                type="text"
+                name="name"
+                placeholder={currentLanguage === 'en' ? 'Your Name' : 'Ваше имя'}
+                value={feedbackData.name}
+                onChange={handleFeedbackChange}
+                required
+              />
+              <textarea
+                name="message"
+                placeholder={currentLanguage === 'en' ? 'Share your experience...' : 'Поделитесь впечатлениями...'}
+                value={feedbackData.message}
+                onChange={handleFeedbackChange}
+                required
+                rows="4"
+              />
+              <button type="submit" className="submit-feedback">
+                {currentLanguage === 'en' ? 'Submit Feedback' : 'Отправить отзыв'}
+              </button>
+            </form>
           </div>
         </div>
       )}
     </div>
   );
-};
+});
 
 function App() {
   return <AppContent />;
