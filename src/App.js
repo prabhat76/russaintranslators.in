@@ -859,6 +859,19 @@ const AppContent = React.memo(() => {
 });
 
 function App() {
+  // Check if current path is admin
+  const isAdminRoute = window.location.pathname === '/admin';
+  
+  if (isAdminRoute) {
+    // Lazy load admin component
+    const AdminApp = React.lazy(() => import('./AdminApp'));
+    return (
+      <Suspense fallback={<div className="loading">Loading Admin...</div>}>
+        <AdminApp />
+      </Suspense>
+    );
+  }
+  
   return <AppContent />;
 }
 
