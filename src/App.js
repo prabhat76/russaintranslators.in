@@ -351,7 +351,7 @@ const AppContent = () => {
             <h2>{t.contact.title}</h2>
             <p>{t.contact.subtitle}</p>
           </div>
-          <div className="contact-content">
+          <div className="contact-main-card">
             <div className="contact-cards">
               <div className="contact-card">
                 <div className="contact-icon">📞</div>
