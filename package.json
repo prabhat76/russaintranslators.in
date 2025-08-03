@@ -16,6 +16,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "prebuild": "node scripts/fetch-content.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -25,7 +26,10 @@
     "firebase:rules": "npx firebase deploy --only firestore:rules",
     "firebase:emulator": "npx firebase emulators:start",
     "db:refresh": "node refresh-database.js",
-    "test:github": "node test-github-trigger.js"
+    "db:refresh-external": "node refresh-from-external.js",
+    "db:refresh-external-force": "node refresh-from-external.js --force",
+    "test:github": "node test-github-trigger.js",
+    "fetch-content": "node scripts/fetch-content.js"
   },
   "eslintConfig": {
     "extends": [

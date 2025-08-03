@@ -171,6 +171,10 @@ const AppContent = React.memo(() => {
   if (contentLoading) {
     return <div className="loading">Loading content...</div>;
   }
+  
+  // Debug: Log the actual content structure
+  console.log('Current content:', t);
+  console.log('Contact section:', t?.contact);
 
   return (
     <div className="App">
@@ -236,7 +240,7 @@ const AppContent = React.memo(() => {
               <a href="#contact" className="nav-link" onClick={closeMenu}>{t.nav.contact}</a>
               <div className="nav-cta-group">
                 <a href="https://wa.me/918789389223" className="nav-cta whatsapp" onClick={() => { analytics.contactAttempt('whatsapp'); closeMenu(); }}>💬 WhatsApp</a>
-                <a href="tel:+918789389223" className="nav-cta call" onClick={() => { analytics.contactAttempt('phone'); closeMenu(); }}>📞 {t.hero.cta}</a>
+                <a href="tel:+918789389223" className="nav-cta call" onClick={() => { analytics.contactAttempt('phone'); closeMenu(); }}>📞 {t.hero?.cta || 'Call Now'}</a>
               </div>
             </div>
             
@@ -268,8 +272,8 @@ const AppContent = React.memo(() => {
               <h1>{t.hero.title}</h1>
               <p>{t.hero.subtitle}</p>
               <div className="hero-cta">
-                <a href="tel:+918789389223" className="cta-button primary" onClick={() => analytics.contactAttempt('hero_phone')}>📞 {t.hero.cta}</a>
-                <a href="#about" className="cta-button secondary">{t.hero.learn}</a>
+                <a href="tel:+918789389223" className="cta-button primary" onClick={() => analytics.contactAttempt('hero_phone')}>📞 {t.hero?.cta || 'Call Now'}</a>
+                <a href="#about" className="cta-button secondary">{t.hero?.learn || 'Learn More'}</a>
               </div>
             </div>
           </div>
@@ -535,7 +539,7 @@ const AppContent = React.memo(() => {
             <div className="contact-cards">
               <div className="contact-card">
                 <div className="contact-icon">📞</div>
-                <h3>{currentLanguage === 'en' ? 'Call Us' : 'Позвоните нам'}</h3>
+                <h3>{t.contact?.call || (currentLanguage === 'en' ? 'Call Us' : 'Позвоните нам')}</h3>
                 <p>{currentLanguage === 'en' ? 'Speak directly with our experts' : 'Говорите напрямую с нашими экспертами'}</p>
                 <div className="contact-details">
                   <a href="tel:+918789389223">+91-8789389223</a>
@@ -545,7 +549,7 @@ const AppContent = React.memo(() => {
               
               <div className="contact-card">
                 <div className="contact-icon">✉️</div>
-                <h3>{currentLanguage === 'en' ? 'Email Us' : 'Напишите нам'}</h3>
+                <h3>{t.contact?.email || (currentLanguage === 'en' ? 'Email Us' : 'Напишите нам')}</h3>
                 <p>{currentLanguage === 'en' ? 'Send us your requirements' : 'Отправьте нам ваши требования'}</p>
                 <div className="contact-details">
                   <a href="mailto:sabrina@languageliberty.com">sabrina@languageliberty.com</a>
@@ -563,7 +567,7 @@ const AppContent = React.memo(() => {
               
               <div className="contact-card special-offer">
                 <div className="contact-icon">🎉</div>
-                <h3>{currentLanguage === 'en' ? 'Special Offer' : 'Специальное предложение'}</h3>
+                <h3>{t.contact?.offer || (currentLanguage === 'en' ? 'Special Offer' : 'Специальное предложение')}</h3>
                 <p>{currentLanguage === 'en' ? 'First-time clients get' : 'Новые клиенты получают'}</p>
                 <div className="offer-badge">20% OFF</div>
               </div>
@@ -574,7 +578,7 @@ const AppContent = React.memo(() => {
                 <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=500&h=600&fit=crop" alt="Professional Translator" />
               </div>
               <div className="contact-form">
-                <h3>{currentLanguage === 'en' ? 'Request a Quote' : 'Запросить расценки'}</h3>
+                <h3>{t.contact?.quote || (currentLanguage === 'en' ? 'Request a Quote' : 'Запросить расценки')}</h3>
                 <form className="quote-form" onSubmit={handleFormSubmit}>
                   <div className="form-group">
                     <input 
@@ -633,7 +637,7 @@ const AppContent = React.memo(() => {
                     {isSubmitting ? (
                       currentLanguage === 'en' ? 'Sending...' : 'Отправка...'
                     ) : (
-                      currentLanguage === 'en' ? 'Get Free Quote' : 'Получить бесплатную оценку'
+                      t.contact?.submit || (currentLanguage === 'en' ? 'Get Free Quote' : 'Получить бесплатную оценку')
                     )}
                   </button>
                 </form>

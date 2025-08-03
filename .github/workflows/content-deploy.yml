@@ -1,0 +1,122 @@
+name: Content Update & Deploy
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # Check every 10 minutes
+  workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: 'Force deploy even if no changes'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm install firebase
+        
+      - name: Fetch and Check Content Changes
+        id: content-check
+        run: |
+          echo "📥 Fetching content from external repository..."
+          curl -o content.json https://raw.githubusercontent.com/prabhat76/russian-translator-content/master/data/content.json
+          
+          # Generate content hash
+          CONTENT_HASH=$(node -e "
+            const crypto = require('crypto');
+            const fs = require('fs');
+            const content = fs.readFileSync('content.json', 'utf8');
+            console.log(crypto.createHash('md5').update(content).digest('hex'));
+          ")
+          
+          echo "📋 New content hash: $CONTENT_HASH"
+          echo "content_hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
+          
+          # Check if hash file exists and compare
+          if [ -f "last_content_hash.txt" ]; then
+            LAST_HASH=$(cat last_content_hash.txt)
+            echo "📋 Last content hash: $LAST_HASH"
+            if [ "$CONTENT_HASH" = "$LAST_HASH" ] && [ "${{ github.event.inputs.force_deploy }}" != "true" ]; then
+              echo "⏭️ Content unchanged, skipping deployment"
+              echo "should_deploy=false" >> $GITHUB_OUTPUT
+            else
+              echo "🔄 Content changed, proceeding with deployment"
+              echo "should_deploy=true" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "🆕 First run, proceeding with deployment"
+            echo "should_deploy=true" >> $GITHUB_OUTPUT
+          fi
+          
+          # Save current hash
+          echo "$CONTENT_HASH" > last_content_hash.txt
+          
+      - name: Update Firebase Database
+        if: steps.content-check.outputs.should_deploy == 'true'
+        run: |
+          cat > sync-firebase.js << 'EOF'
+          const { initializeApp } = require('firebase/app');
+          const { getDatabase, ref, set } = require('firebase/database');
+          const fs = require('fs');
+          
+          const firebaseConfig = {
+            apiKey: "${{ secrets.FIREBASE_API_KEY }}",
+            authDomain: "russiantranslator-aa708.firebaseapp.com",
+            databaseURL: "https://russiantranslator-aa708-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "russiantranslator-aa708"
+          };
+          
+          const app = initializeApp(firebaseConfig);
+          const rtdb = getDatabase(app);
+          
+          async function updateFirebase() {
+            const contentData = JSON.parse(fs.readFileSync('content.json', 'utf8'));
+            
+            await set(ref(rtdb, 'content'), {
+              en: contentData.en || {},
+              ru: contentData.ru || {},
+              lastUpdated: new Date().toISOString(),
+              version: Date.now(),
+              source: 'auto-deploy',
+              contentHash: '${{ steps.content-check.outputs.content_hash }}'
+            });
+            
+            console.log('✅ Firebase updated successfully');
+          }
+          
+          updateFirebase().catch(console.error);
+          EOF
+          
+          node sync-firebase.js
+        env:
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          
+      - name: Trigger Vercel Deployment
+        if: steps.content-check.outputs.should_deploy == 'true'
+        run: |
+          curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "ref": "main",
+              "message": "Content update deployment - Hash: ${{ steps.content-check.outputs.content_hash }}"
+            }'
+          echo "🚀 Vercel deployment triggered"
+          
+      - name: Commit Hash File
+        if: steps.content-check.outputs.should_deploy == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add last_content_hash.txt
+          git commit -m "Update content hash: ${{ steps.content-check.outputs.content_hash }}" || exit 0
+          git push

@@ -1,10 +1,17 @@
 name: Refresh Firebase Database
 
 on:
-  push:
-    branches: [ main ]
-    paths: [ 'data/**' ]
+  schedule:
+    - cron: '*/5 * * * *'  # Check every 5 minutes
   workflow_dispatch:
+    inputs:
+      force_sync:
+        description: 'Force sync even if content unchanged'
+        required: false
+        default: 'false'
+        type: boolean
+  repository_dispatch:
+    types: [content-updated]
 
 jobs:
   refresh-database:
@@ -26,9 +33,15 @@ jobs:
           echo "Node version: $(node --version)"
           echo "NPM version: $(npm --version)"
           echo "Current directory: $(pwd)"
-          echo "Files in data directory:"
-          ls -la data/ || echo "No data directory found"
           echo "API Key present: ${{ secrets.FIREBASE_API_KEY != '' }}"
+          
+      - name: Fetch Content from External Repository
+        run: |
+          echo "📥 Fetching content from external repository..."
+          curl -o content.json https://raw.githubusercontent.com/prabhat76/russian-translator-content/master/data/content.json
+          echo "✅ Content fetched"
+          echo "📄 Content preview:"
+          head -20 content.json
           
       - name: Refresh Firebase Database
         run: |
@@ -36,6 +49,7 @@ jobs:
           const { initializeApp } = require('firebase/app');
           const { getDatabase, ref, set, remove, get } = require('firebase/database');
           const fs = require('fs');
+          const crypto = require('crypto');
           
           console.log('🚀 Script started at:', new Date().toISOString());
           
@@ -61,16 +75,20 @@ jobs:
             try {
               console.log('🔄 Starting database refresh at:', new Date().toISOString());
               
-              // Check if files exist
-              console.log('📁 Checking files...');
-              if (!fs.existsSync('data/en.json')) throw new Error('data/en.json not found');
-              if (!fs.existsSync('data/ru.json')) throw new Error('data/ru.json not found');
-              console.log('✅ Files exist');
+              // Check if content file exists
+              console.log('📁 Checking content file...');
+              if (!fs.existsSync('content.json')) throw new Error('content.json not found');
+              console.log('✅ Content file exists');
               
-              // Read content files
-              console.log('📖 Reading content files...');
-              const enContent = JSON.parse(fs.readFileSync('data/en.json', 'utf8'));
-              const ruContent = JSON.parse(fs.readFileSync('data/ru.json', 'utf8'));
+              // Read content from external repository
+              console.log('📖 Reading content from external repository...');
+              const contentData = JSON.parse(fs.readFileSync('content.json', 'utf8'));
+              const enContent = contentData.en || {};
+              const ruContent = contentData.ru || {};
+              
+              // Generate content hash for comparison
+              const contentHash = crypto.createHash('md5').update(JSON.stringify({en: enContent, ru: ruContent})).digest('hex');
+              console.log('📋 New content hash:', contentHash);
               
               console.log('📊 Content loaded:');
               console.log(`  EN sections: ${Object.keys(enContent).join(', ')}`);
@@ -80,9 +98,29 @@ jobs:
               console.log('🔍 Checking current database content...');
               const currentData = await get(ref(rtdb, 'content'));
               console.log('Current data exists:', currentData.exists());
-              if (currentData.exists()) {
+              
+              const forceSync = '${{ github.event.inputs.force_sync }}' === 'true';
+              console.log('🔧 Force sync:', forceSync);
+              
+              let shouldUpdate = true;
+              if (currentData.exists() && !forceSync) {
                 const current = currentData.val();
                 console.log('Current languages:', Object.keys(current));
+                console.log('Current hash:', current.contentHash || 'none');
+                
+                if (current.contentHash === contentHash) {
+                  console.log('⏭️ Content unchanged, skipping update');
+                  shouldUpdate = false;
+                } else {
+                  console.log('🔄 Content changed, proceeding with update');
+                }
+              } else if (forceSync) {
+                console.log('💪 Force sync enabled, updating regardless of changes');
+              }
+              
+              if (!shouldUpdate) {
+                console.log('✅ Sync completed - no changes needed');
+                return;
               }
               
               // Clear existing content first
@@ -96,7 +134,9 @@ jobs:
                 ru: ruContent,
                 lastUpdated: new Date().toISOString(),
                 version: Date.now(),
-                source: 'github-actions'
+                source: 'github-actions',
+                contentHash: contentHash,
+                syncTrigger: process.env.GITHUB_EVENT_NAME || 'manual'
               };
               
               console.log('📤 Uploading fresh content...');
