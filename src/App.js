@@ -22,8 +22,8 @@ const AppContent = () => {
       about: { title: 'Meet Sabrina Bhatt', subtitle: 'Your Russian Translation Expert', proficiency: 'Language Proficiency', experienceText: 'With 6+ years of professional experience in Russian-English translation and interpretation, I provide accurate and culturally sensitive language services for businesses and individuals.' },
       services: { title: 'Professional Translation Services', subtitle: 'Comprehensive Russian-English language solutions for businesses and individuals' },
       gallery: { title: 'Professional Work Gallery' },
-      contact: { title: 'Get In Touch', subtitle: 'Ready to break language barriers? Contact us for professional Russian translation services' },
-      appointments: { title: 'Book Your Appointment', subtitle: 'Choose the perfect consultation package for your translation needs' }
+      contact: { title: 'Get In Touch', subtitle: 'Ready to break language barriers? Contact us for professional Russian translation services', call: 'Call Us', email: 'Email Us', whatsapp: 'WhatsApp', offer: 'Special Offer', quote: 'Request a Quote', submit: 'Get Free Quote' },
+      appointments: { title: 'Book Your Appointment', subtitle: 'Choose the perfect consultation package for your translation needs', free: 'Free Consultation', business: 'Business Strategy Session', urgent: 'Urgent Support', book: 'Book Free Call', strategy: 'Book Strategy Call', callNow: 'Call Now' }
     },
     ru: {
       nav: { home: 'Главная', about: 'О нас', services: 'Услуги', contact: 'Контакты' },
@@ -31,8 +31,8 @@ const AppContent = () => {
       about: { title: 'Знакомьтесь: Сабрина Бхатт', subtitle: 'Ваш эксперт по русскому переводу', proficiency: 'Языковые навыки', experienceText: 'Имея более 6 лет профессионального опыта в русско-английском переводе и устном переводе, я предоставляю точные и культурно чувствительные языковые услуги для бизнеса и частных лиц.' },
       services: { title: 'Профессиональные переводческие услуги', subtitle: 'Комплексные русско-английские языковые решения для бизнеса и частных лиц' },
       gallery: { title: 'Галерея профессиональных работ' },
-      contact: { title: 'Свяжитесь с нами', subtitle: 'Готовы преодолеть языковые барьеры? Свяжитесь с нами для профессиональных услуг русского перевода' },
-      appointments: { title: 'Записаться на прием', subtitle: 'Выберите идеальный пакет консультаций для ваших переводческих потребностей' }
+      contact: { title: 'Свяжитесь с нами', subtitle: 'Готовы преодолеть языковые барьеры? Свяжитесь с нами для профессиональных услуг русского перевода', call: 'Позвоните нам', email: 'Напишите нам', whatsapp: 'WhatsApp', offer: 'Специальное предложение', quote: 'Запросить расценки', submit: 'Получить бесплатную оценку' },
+      appointments: { title: 'Записаться на прием', subtitle: 'Выберите идеальный пакет консультаций для ваших переводческих потребностей', free: 'Бесплатная консультация', business: 'Бизнес-стратегическая сессия', urgent: 'Срочная поддержка', book: 'Записаться на звонок', strategy: 'Записаться на стратегический звонок', callNow: 'Позвонить сейчас' }
     }
   };
   
@@ -256,13 +256,13 @@ const AppContent = () => {
                 <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=250&fit=crop" alt="Virtual Meetings" />
               </div>
               <div className="service-content">
-                <div className="service-badge">Most Popular</div>
-                <h3>Virtual Meeting Interpretation</h3>
-                <p>Real-time Russian-English interpretation for Zoom, Teams, and Google Meet sessions with crystal-clear audio quality.</p>
+                <div className="service-badge">{currentLanguage === 'en' ? 'Most Popular' : 'Самый популярный'}</div>
+                <h3>{currentLanguage === 'en' ? 'Virtual Meeting Interpretation' : 'Устный перевод виртуальных встреч'}</h3>
+                <p>{currentLanguage === 'en' ? 'Real-time Russian-English interpretation for Zoom, Teams, and Google Meet sessions with crystal-clear audio quality.' : 'Устный перевод русский-английский в реальном времени для сессий Zoom, Teams и Google Meet с кристально чистым качеством звука.'}</p>
                 <ul className="service-features">
-                  <li>✓ HD Audio Quality</li>
-                  <li>✓ Screen Sharing Support</li>
-                  <li>✓ 24/7 Availability</li>
+                  <li>✓ {currentLanguage === 'en' ? 'HD Audio Quality' : 'HD качество звука'}</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Screen Sharing Support' : 'Поддержка демонстрации экрана'}</li>
+                  <li>✓ {currentLanguage === 'en' ? '24/7 Availability' : 'Доступность 24/7'}</li>
                 </ul>
               </div>
             </div>
@@ -272,12 +272,12 @@ const AppContent = () => {
                 <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&h=250&fit=crop" alt="Business Meetings" />
               </div>
               <div className="service-content">
-                <h3>In-Person Business Meetings</h3>
-                <p>Professional on-site interpretation for corporate meetings, negotiations, and conferences across Mumbai and India.</p>
+                <h3>{currentLanguage === 'en' ? 'In-Person Business Meetings' : 'Личные деловые встречи'}</h3>
+                <p>{currentLanguage === 'en' ? 'Professional on-site interpretation for corporate meetings, negotiations, and conferences across Mumbai and India.' : 'Профессиональный устный перевод на месте для корпоративных встреч, переговоров и конференций по всему Мумбаи и Индии.'}</p>
                 <ul className="service-features">
-                  <li>✓ Ministerial Level Experience</li>
-                  <li>✓ Confidentiality Assured</li>
-                  <li>✓ Industry Expertise</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Ministerial Level Experience' : 'Опыт министерского уровня'}</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Confidentiality Assured' : 'Гарантированная конфиденциальность'}</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Industry Expertise' : 'Отраслевая экспертиза'}</li>
                 </ul>
               </div>
             </div>
@@ -287,12 +287,12 @@ const AppContent = () => {
                 <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=250&fit=crop" alt="Document Translation" />
               </div>
               <div className="service-content">
-                <h3>Certified Document Translation</h3>
-                <p>Official translation of legal documents, contracts, certificates, and technical manuals with government certification.</p>
+                <h3>{currentLanguage === 'en' ? 'Certified Document Translation' : 'Сертифицированный перевод документов'}</h3>
+                <p>{currentLanguage === 'en' ? 'Official translation of legal documents, contracts, certificates, and technical manuals with government certification.' : 'Официальный перевод юридических документов, контрактов, сертификатов и технических руководств с государственной сертификацией.'}</p>
                 <ul className="service-features">
-                  <li>✓ Legal Certification</li>
-                  <li>✓ Fast Turnaround</li>
-                  <li>✓ Technical Accuracy</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Legal Certification' : 'Юридическая сертификация'}</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Fast Turnaround' : 'Быстрое выполнение'}</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Technical Accuracy' : 'Техническая точность'}</li>
                 </ul>
               </div>
             </div>
@@ -302,12 +302,12 @@ const AppContent = () => {
                 <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop" alt="Russian Language Training" />
               </div>
               <div className="service-content">
-                <h3>Russian Language Training</h3>
-                <p>Comprehensive Russian language courses from beginner to advanced levels, including business etiquette and cultural training.</p>
+                <h3>{currentLanguage === 'en' ? 'Russian Language Training' : 'Обучение английскому языку'}</h3>
+                <p>{currentLanguage === 'en' ? 'Comprehensive Russian language courses from beginner to advanced levels, including business etiquette and cultural training.' : 'Комплексные курсы английского языка от начального до продвинутого уровня, включая деловой этикет и культурное обучение.'}</p>
                 <ul className="service-features">
-                  <li>✓ A1 to C1 Levels</li>
-                  <li>✓ Cultural Etiquette</li>
-                  <li>✓ Business Russian</li>
+                  <li>✓ {currentLanguage === 'en' ? 'A1 to C1 Levels' : 'Уровни A1-C1'}</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Cultural Etiquette' : 'Культурный этикет'}</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Business Russian' : 'Деловой английский'}</li>
                 </ul>
               </div>
             </div>
@@ -317,12 +317,12 @@ const AppContent = () => {
                 <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=250&fit=crop" alt="Travel Support" />
               </div>
               <div className="service-content">
-                <h3>Executive Travel Support</h3>
-                <p>Personal interpreter services for business executives traveling to Russian-speaking countries or hosting Russian delegates.</p>
+                <h3>{currentLanguage === 'en' ? 'Executive Travel Support' : 'Поддержка деловых поездок'}</h3>
+                <p>{currentLanguage === 'en' ? 'Personal interpreter services for business executives traveling to Russian-speaking countries or hosting Russian delegates.' : 'Персональные услуги переводчика для бизнес-руководителей, путешествующих в русскоговорящие страны или принимающих российские делегации.'}</p>
                 <ul className="service-features">
-                  <li>✓ Airport Assistance</li>
-                  <li>✓ Cultural Guidance</li>
-                  <li>✓ 24/7 Support</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Airport Assistance' : 'Помощь в аэропорту'}</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Cultural Guidance' : 'Культурное руководство'}</li>
+                  <li>✓ {currentLanguage === 'en' ? '24/7 Support' : 'Поддержка 24/7'}</li>
                 </ul>
               </div>
             </div>
@@ -332,12 +332,12 @@ const AppContent = () => {
                 <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=250&fit=crop" alt="Entertainment Industry" />
               </div>
               <div className="service-content">
-                <h3>Entertainment Industry Support</h3>
-                <p>Specialized services for Russian artists, models, and performers working in India, including script reading and agency coordination.</p>
+                <h3>{currentLanguage === 'en' ? 'Entertainment Industry Support' : 'Поддержка индустрии развлечений'}</h3>
+                <p>{currentLanguage === 'en' ? 'Specialized services for Russian artists, models, and performers working in India, including script reading and agency coordination.' : 'Специализированные услуги для российских артистов, моделей и исполнителей, работающих в Индии, включая чтение сценариев и координацию с агентствами.'}</p>
                 <ul className="service-features">
-                  <li>✓ Script Translation</li>
-                  <li>✓ Agency Coordination</li>
-                  <li>✓ Cultural Adaptation</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Script Translation' : 'Перевод сценариев'}</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Agency Coordination' : 'Координация с агентствами'}</li>
+                  <li>✓ {currentLanguage === 'en' ? 'Cultural Adaptation' : 'Культурная адаптация'}</li>
                 </ul>
               </div>
             </div>
@@ -355,8 +355,8 @@ const AppContent = () => {
             <div className="contact-cards">
               <div className="contact-card">
                 <div className="contact-icon">📞</div>
-                <h3>Call Us</h3>
-                <p>Speak directly with our experts</p>
+                <h3>{currentLanguage === 'en' ? 'Call Us' : 'Позвоните нам'}</h3>
+                <p>{currentLanguage === 'en' ? 'Speak directly with our experts' : 'Говорите напрямую с нашими экспертами'}</p>
                 <div className="contact-details">
                   <a href="tel:+918789389223">+91-8789389223</a>
                   <a href="tel:+917304876702">+91-7304876702</a>
@@ -365,8 +365,8 @@ const AppContent = () => {
               
               <div className="contact-card">
                 <div className="contact-icon">✉️</div>
-                <h3>Email Us</h3>
-                <p>Send us your requirements</p>
+                <h3>{currentLanguage === 'en' ? 'Email Us' : 'Напишите нам'}</h3>
+                <p>{currentLanguage === 'en' ? 'Send us your requirements' : 'Отправьте нам ваши требования'}</p>
                 <div className="contact-details">
                   <a href="mailto:sabrina@languageliberty.com">sabrina@languageliberty.com</a>
                 </div>
@@ -375,7 +375,7 @@ const AppContent = () => {
               <div className="contact-card">
                 <div className="contact-icon">💬</div>
                 <h3>WhatsApp</h3>
-                <p>Quick chat for instant quotes</p>
+                <p>{currentLanguage === 'en' ? 'Quick chat for instant quotes' : 'Быстрый чат для мгновенных расценок'}</p>
                 <div className="contact-details">
                   <a href="https://wa.me/918789389223">Message on WhatsApp</a>
                 </div>
@@ -383,8 +383,8 @@ const AppContent = () => {
               
               <div className="contact-card special-offer">
                 <div className="contact-icon">🎉</div>
-                <h3>Special Offer</h3>
-                <p>First-time clients get</p>
+                <h3>{currentLanguage === 'en' ? 'Special Offer' : 'Специальное предложение'}</h3>
+                <p>{currentLanguage === 'en' ? 'First-time clients get' : 'Новые клиенты получают'}</p>
                 <div className="offer-badge">20% OFF</div>
               </div>
             </div>
@@ -394,7 +394,7 @@ const AppContent = () => {
                 <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=500&h=600&fit=crop" alt="Professional Translator" />
               </div>
               <div className="contact-form">
-                <h3>Request a Quote</h3>
+                <h3>{currentLanguage === 'en' ? 'Request a Quote' : 'Запросить расценки'}</h3>
                 <form className="quote-form">
                   <div className="form-group">
                     <input type="text" placeholder="Your Name" required />
@@ -412,7 +412,7 @@ const AppContent = () => {
                     </select>
                   </div>
                   <textarea placeholder="Describe your requirements..." rows="4" required></textarea>
-                  <button type="submit" className="submit-btn">Get Free Quote</button>
+                  <button type="submit" className="submit-btn">{currentLanguage === 'en' ? 'Get Free Quote' : 'Получить бесплатную оценку'}</button>
                 </form>
               </div>
             </div>
@@ -430,7 +430,7 @@ const AppContent = () => {
             <div className="appointment-card free">
               <div className="appointment-badge">Most Popular</div>
               <div className="appointment-icon">💬</div>
-              <h3>Free Consultation</h3>
+              <h3>{currentLanguage === 'en' ? 'Free Consultation' : 'Бесплатная консультация'}</h3>
               <div className="appointment-price">
                 <span className="price">₹0</span>
                 <span className="duration">30 minutes</span>
@@ -441,12 +441,12 @@ const AppContent = () => {
                 <li>✓ Pricing Discussion</li>
                 <li>✓ Timeline Planning</li>
               </ul>
-              <button className="book-btn primary" onClick={() => window.open('tel:+918789389223')}>Book Free Call</button>
+              <button className="book-btn primary" onClick={() => window.open('tel:+918789389223')}>{currentLanguage === 'en' ? 'Book Free Call' : 'Записаться на звонок'}</button>
             </div>
             
             <div className="appointment-card premium">
               <div className="appointment-icon">🎯</div>
-              <h3>Business Strategy Session</h3>
+              <h3>{currentLanguage === 'en' ? 'Business Strategy Session' : 'Бизнес-стратегическая сессия'}</h3>
               <div className="appointment-price">
                 <span className="price">₹2,500</span>
                 <span className="duration">60 minutes</span>
@@ -457,12 +457,12 @@ const AppContent = () => {
                 <li>✓ Cultural Adaptation Plan</li>
                 <li>✓ Long-term Partnership</li>
               </ul>
-              <button className="book-btn secondary" onClick={() => window.open('https://wa.me/918789389223')}>Book Strategy Call</button>
+              <button className="book-btn secondary" onClick={() => window.open('https://wa.me/918789389223')}>{currentLanguage === 'en' ? 'Book Strategy Call' : 'Записаться на стратегический звонок'}</button>
             </div>
             
             <div className="appointment-card urgent">
               <div className="appointment-icon">⚡</div>
-              <h3>Urgent Support</h3>
+              <h3>{currentLanguage === 'en' ? 'Urgent Support' : 'Срочная поддержка'}</h3>
               <div className="appointment-price">
                 <span className="price">₹5,000</span>
                 <span className="duration">Available 24/7</span>
@@ -473,7 +473,7 @@ const AppContent = () => {
                 <li>✓ Crisis Communication</li>
                 <li>✓ Same-day Delivery</li>
               </ul>
-              <button className="book-btn urgent-btn" onClick={() => window.open('tel:+918789389223')}>Call Now</button>
+              <button className="book-btn urgent-btn" onClick={() => window.open('tel:+918789389223')}>{currentLanguage === 'en' ? 'Call Now' : 'Позвонить сейчас'}</button>
             </div>
           </div>
         </div>
