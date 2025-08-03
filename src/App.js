@@ -74,8 +74,12 @@ const AppContent = () => {
     }
   }, []);
 
-  if (loading || !content) {
+  if (loading) {
     return <div className="loading">Loading...</div>;
+  }
+
+  if (!content) {
+    return <div className="error">Error loading content. Please refresh the page.</div>;
   }
 
   return (
@@ -176,8 +180,8 @@ const AppContent = () => {
               <h1>Meet Sabrina Bhatt</h1>
               <h4>Your Russian Translation Expert</h4>
               <p>Born to a Russian mother and an Indian father, I bridge communication gaps between Russian-speaking countries and the world. With education in Russia, Uzbekistan, and India, I bring authentic cultural understanding to every translation project.</p>
-              <h4>{content.about.proficiency}</h4>
-              <p>{content.about.experienceText}</p>
+              <h4>{content?.about?.proficiency || 'Language Proficiency'}</h4>
+              <p>{content?.about?.experienceText || 'Professional Russian translation services with years of experience.'}</p>
             </div>
             
             <div className="about-image">
@@ -210,7 +214,7 @@ const AppContent = () => {
             <h2>Professional Translation Services</h2>
             <p>Comprehensive Russian-English language solutions for businesses and individuals</p>
           </div>
-          <h2>{content.services.title}</h2>
+          <h2>{content?.services?.title || 'Our Services'}</h2>
           <div className="services-grid">
             <div className="service-card featured">
               <div className="service-image">
@@ -233,8 +237,8 @@ const AppContent = () => {
                 <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=250&fit=crop" alt="Online Meetings" />
               </div>
               <div className="service-content">
-                <h3>{content.services.items[0].title}</h3>
-                <p>{currentLanguage === 'en' ? content.services.items[0].description : 'Профессиональный перевод в реальном времени с английского и хинди на русский для конференций Zoom, Teams и WebEx'}</p>
+                <h3>{content?.services?.items?.[0]?.title || 'Online Meetings'}</h3>
+                <p>{currentLanguage === 'en' ? (content?.services?.items?.[0]?.description || 'Professional real-time interpretation services') : 'Профессиональный перевод в реальном времени с английского и хинди на русский для конференций Zoom, Teams и WebEx'}</p>
                 <ul className="service-features">
                   <li>✓ Real-time Translation</li>
                   <li>✓ Multiple Platforms</li>
