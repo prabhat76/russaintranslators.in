@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Chatbot from './components/Chatbot';
+import SEO from './components/SEO';
 
-function App() {
+import { ContentProvider, useContentContext } from './contexts/ContentContext';
+
+const AppContent = () => {
+  const { content, currentLanguage, changeLanguage, loading } = useContentContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -44,7 +48,35 @@ function App() {
         page_location: window.location.href
       });
     }
+
+    const checkMobile = () => window.innerWidth <= 768;
+    if (checkMobile()) {
+      const galleryGrid = document.querySelector('.gallery-grid');
+      if (galleryGrid) {
+        let scrollPosition = 0;
+        const cardWidth = window.innerWidth <= 480 ? 250 : 280;
+        const gap = window.innerWidth <= 480 ? 12 : 15;
+        
+        const interval = setInterval(() => {
+          if (!checkMobile()) {
+            clearInterval(interval);
+            return;
+          }
+          scrollPosition += cardWidth + gap;
+          if (scrollPosition >= galleryGrid.scrollWidth - galleryGrid.clientWidth) {
+            scrollPosition = 0;
+          }
+          galleryGrid.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+        }, 3000);
+
+        return () => clearInterval(interval);
+      }
+    }
   }, []);
+
+  if (loading || !content) {
+    return <div className="loading">Loading...</div>;
+  }
 
   return (
     <div className="App">
@@ -89,18 +121,18 @@ function App() {
             </div>
             
             <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-              <a href="#home" className="nav-link">Home</a>
-              <a href="#about" className="nav-link">About Sabrina</a>
-              <a href="#services" className="nav-link">Services</a>
-              <a href="#contact" className="nav-link">Contact</a>
+              <a href="#home" className="nav-link" onClick={() => setIsMenuOpen(false)}>Home</a>
+              <a href="#about" className="nav-link" onClick={() => setIsMenuOpen(false)}>About Sabrina</a>
+              <a href="#services" className="nav-link" onClick={() => setIsMenuOpen(false)}>Services</a>
+              <a href="#contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>Contact</a>
               <div className="nav-cta-group">
-                <a href="https://wa.me/918789389223" className="nav-cta whatsapp">💬 WhatsApp</a>
-                <a href="tel:+918789389223" className="nav-cta call">📞 Call Now</a>
+                <a href="https://wa.me/918789389223" className="nav-cta whatsapp" onClick={() => setIsMenuOpen(false)}>💬 WhatsApp</a>
+                <a href="tel:+918789389223" className="nav-cta call" onClick={() => setIsMenuOpen(false)}>📞 Call Now</a>
               </div>
             </div>
             
             <button 
-              className="menu-toggle"
+              className={`menu-toggle ${isMenuOpen ? 'active' : ''}`}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -135,19 +167,17 @@ function App() {
         </div>
       </section>
 
+
+
       <section id="about" className="about">
         <div className="container">
           <div className="about-content">
             <div className="about-text">
-              <h1>About me</h1>
-              <h4>SABRINA BHATT</h4>
-              <p>Born to a Russian mother and an Indian father, she always enjoyed burning the communicational bridges between Russian speaking countries and the rest of the world. She was born in Russia and has done her schooling in parts of Russia and Uzbekistan. She is now here, providing Russian Translation and Interpretation service to help various companies grow.</p>
-              
-              <h4>Language Proficiency</h4>
-              <p>As her higher education and college was done in India, her proficiency in Hindi, English and Russian is now helping corporate companies in having easy and efficient communication with countries like Russia, Ukraine, Belarus, Uzbekistan, Kazakhstan etc., So if you need russian translator in Mumbai or interpreter in Mumbai please feel free to contact us.</p>
-              
-              <h4>Experience</h4>
-              <p>Having an experience of more than 6 years of working with different companies who are into pharmaceuticals, chemicals, mining and export/import businesses she is currently working with Enrika Trades and Services Pvt. Ltd. She regularly attends meeting at a ministerial level with several companies like Coal India, Belaz, Artek Surfin Chemical Ltd and many more.</p>
+              <h1>Meet Sabrina Bhatt</h1>
+              <h4>Your Russian Translation Expert</h4>
+              <p>{content.about.description}</p>
+              <h4>{content.about.proficiency}</h4>
+              <p>{content.about.experienceText}</p>
             </div>
             
             <div className="about-image">
@@ -159,7 +189,7 @@ function App() {
 
       <section className="gallery">
         <div className="container">
-          <h2>Professional Work Gallery</h2>
+          <h2>{currentLanguage === 'en' ? 'Professional Work Gallery' : 'Галерея профессиональных работ'}</h2>
           <div className="gallery-grid">
             {galleryImages.map((image, index) => (
               <div key={index} className="gallery-item" onClick={() => openModal(index)}>
@@ -170,9 +200,9 @@ function App() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
+          </div> {/* Close .gallery-grid */}
+        </div> {/* Close .container for gallery */}
+      </section> {/* Close gallery section */}
 
       <section id="services" className="services">
         <div className="container">
@@ -180,6 +210,7 @@ function App() {
             <h2>Professional Translation Services</h2>
             <p>Comprehensive Russian-English language solutions for businesses and individuals</p>
           </div>
+          <h2>{content.services.title}</h2>
           <div className="services-grid">
             <div className="service-card featured">
               <div className="service-image">
@@ -193,6 +224,21 @@ function App() {
                   <li>✓ HD Audio Quality</li>
                   <li>✓ Screen Sharing Support</li>
                   <li>✓ 24/7 Availability</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="service-card">
+              <div className="service-image">
+                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=250&fit=crop" alt="Online Meetings" />
+              </div>
+              <div className="service-content">
+                <h3>{content.services.items[0].title}</h3>
+                <p>{currentLanguage === 'en' ? content.services.items[0].description : 'Профессиональный перевод в реальном времени с английского и хинди на русский для конференций Zoom, Teams и WebEx'}</p>
+                <ul className="service-features">
+                  <li>✓ Real-time Translation</li>
+                  <li>✓ Multiple Platforms</li>
+                  <li>✓ Professional Quality</li>
                 </ul>
               </div>
             </div>
@@ -473,7 +519,7 @@ function App() {
         </div>
       </footer>
       
-      <Chatbot />
+      <Chatbot language={currentLanguage} />
       
       {selectedImage && (
         <div className="modal-overlay" onClick={() => setSelectedImage(null)}>
@@ -491,6 +537,14 @@ function App() {
         </div>
       )}
     </div>
+  );
+};
+
+function App() {
+  return (
+    <ContentProvider>
+      <AppContent />
+    </ContentProvider>
   );
 }
 

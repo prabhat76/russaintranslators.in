@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const Chatbot = () => {
+const Chatbot = ({ language = 'en' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { text: "Hi! I'm Sabrina's assistant. How can I help you with Russian translation services?", sender: 'bot' }
+    { text: language === 'en' ? "Hi! I'm Sabrina's assistant. How can I help you with Russian translation services?" : "Привет! Я помощник Сабрины. Как я могу помочь вам с услугами русского перевода?", sender: 'bot' }
   ]);
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef(null);
@@ -16,15 +16,21 @@ const Chatbot = () => {
     scrollToBottom();
   }, [messages]);
 
-  const quickReplies = [
+  const quickReplies = language === 'en' ? [
     "Get Quote",
     "📞 Call Now",
     "✉️ Email Us",
     "Services",
     "Pricing"
+  ] : [
+    "Получить расчет",
+    "📞 Позвонить",
+    "✉️ Написать",
+    "Услуги",
+    "Цены"
   ];
 
-  const botResponses = {
+  const botResponses = language === 'en' ? {
     "get quote": "I'd be happy to help you get a quote! Please share:\n• Document type\n• Number of pages/words\n• Deadline\n• Language pair\n\nOr call +91-8789389223 for instant quote!",
     "services": "Our services include:\n• Document Translation\n• Online/Offline Meetings\n• Russian Language Course\n• Travel Support\n• Artist Assistance\n\nWhich service interests you?",
     "pricing": "We offer competitive rates:\n• Document: ₹2-5 per word\n• Interpretation: ₹2000-5000/hour\n• 20% OFF first booking!\n\nCall +91-8789389223 for exact quote.",
@@ -32,6 +38,13 @@ const Chatbot = () => {
     "hello": "Hello! Welcome to Language Liberty. I'm here to help with your Russian translation needs. What can I assist you with today?",
     "hi": "Hi there! How can I help you with Russian translation services today?",
     "help": "I can help you with:\n• Getting quotes\n• Service information\n• Pricing details\n• Contact information\n• Booking appointments\n\nWhat would you like to know?"
+  } : {
+    "получить расчет": "Я буду рад помочь вам получить расчет! Пожалуйста, укажите:\n• Тип документа\n• Количество страниц/слов\n• Срок\n• Языковая пара\n\nИли позвоните +91-8789389223 для мгновенного расчета!",
+    "услуги": "Наши услуги включают:\n• Перевод документов\n• Онлайн/Офлайн встречи\n• Курс русского языка\n• Поддержка в поездках\n• Помощь артистам\n\nКакая услуга вас интересует?",
+    "цены": "Мы предлагаем конкурентные цены:\n• Документы: ₹2-5 за слово\n• Интерпретация: ₹2000-5000/час\n• Скидка 20% на первый заказ!\n\nПозвоните +91-8789389223 для точного расчета.",
+    "контакт": "📞 Основной: +91-8789389223\n📞 Дополнительный: +91-7304876702\n📧 Email: sabrina@languageliberty.com\n📍 Мумбаи, Индия\n⏰ Поддержка 24/7\n\nНажмите 'Позвонить' или 'Написать' для мгновенной связи!",
+    "привет": "Привет! Добро пожаловать в Language Liberty. Я здесь, чтобы помочь с вашими потребностями в русском переводе. Чем могу помочь сегодня?",
+    "помощь": "Я могу помочь вам с:\n• Получением расчетов\n• Информацией об услугах\n• Деталями о ценах\n• Контактной информацией\n• Бронированием встреч\n\nЧто бы вы хотели узнать?"
   };
 
   const handleSend = () => {
@@ -93,8 +106,8 @@ const Chatbot = () => {
           <div className="chat-header">
             <div className="chat-avatar">🇷🇺</div>
             <div className="chat-info">
-              <h4>Russian Translation Assistant</h4>
-              <span className="online-status">● Online</span>
+              <h4>{language === 'en' ? 'Russian Translation Assistant' : 'Помощник по русскому переводу'}</h4>
+              <span className="online-status">● {language === 'en' ? 'Online' : 'Онлайн'}</span>
             </div>
           </div>
 
@@ -129,9 +142,9 @@ const Chatbot = () => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Type your message..."
+              placeholder={language === 'en' ? 'Type your message...' : 'Напишите сообщение...'}
             />
-            <button onClick={handleSend}>Send</button>
+            <button onClick={handleSend}>{language === 'en' ? 'Send' : 'Отправить'}</button>
           </div>
         </div>
       )}
@@ -318,14 +331,11 @@ const Chatbot = () => {
           }
           
           .chat-window {
-            width: 100vw;
-            height: 100vh;
-            right: 0;
-            bottom: 0;
-            border-radius: 0;
-            position: fixed;
-            top: 0;
-            left: 0;
+            width: 90vw;
+            height: 70vh;
+            right: 5vw;
+            bottom: 80px;
+            border-radius: 15px;
           }
           
           .chat-header {

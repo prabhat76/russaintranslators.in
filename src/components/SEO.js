@@ -61,12 +61,16 @@ const SEO = () => {
       <meta name="language" content="English" />
       <meta name="author" content="Sabrina Bhatt - Language Liberty" />
       
+      {/* Favicon */}
+      <link rel="icon" type="image/webp" href="/images/download.webp" />
+      <link rel="shortcut icon" type="image/webp" href="/images/download.webp" />
+      
       {/* Open Graph / Facebook */}
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://languageliberty.com/" />
       <meta property="og:title" content="Russian Translation Services Mumbai | Language Liberty" />
       <meta property="og:description" content="Professional Russian translation & interpretation services in Mumbai. 6+ years experience. Get 20% OFF on first booking!" />
-      <meta property="og:image" content="/images/sabrina-profile.jpeg" />
+      <meta property="og:image" content="/images/download.webp" />
       <meta property="og:site_name" content="Language Liberty" />
       <meta property="og:locale" content="en_IN" />
       
@@ -75,7 +79,7 @@ const SEO = () => {
       <meta property="twitter:url" content="https://languageliberty.com/" />
       <meta property="twitter:title" content="Russian Translation Services Mumbai | Language Liberty" />
       <meta property="twitter:description" content="Professional Russian translation & interpretation services in Mumbai. 6+ years experience." />
-      <meta property="twitter:image" content="/images/sabrina-profile.jpeg" />
+      <meta property="twitter:image" content="/images/download.webp" />
       
       {/* Additional SEO Tags */}
       <meta name="geo.region" content="IN-MH" />

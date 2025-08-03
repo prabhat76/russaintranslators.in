@@ -628,7 +628,7 @@ body {
   width: 100%;
   height: auto;
   max-height: 70vh;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
 }
 
@@ -945,6 +945,9 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .service-card:hover {
@@ -981,6 +984,18 @@ body {
 .service-content {
   padding: 30px;
   position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.service-content h3 {
+  margin-bottom: 16px;
+}
+
+.service-content p {
+  flex: 1;
+  margin-bottom: 20px;
 }
 
 .service-badge {
@@ -1251,6 +1266,7 @@ body {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 .submit-btn:hover {
@@ -1755,10 +1771,7 @@ body {
   .footer-buttons {
     flex-direction: row;
   }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
+  
   .header-top {
     padding: 6px 0;
     font-size: 12px;
@@ -1789,6 +1802,22 @@ body {
   .nav .container {
     justify-content: space-between;
     padding: 0 16px;
+    flex-wrap: wrap;
+  }
+  
+  .language-toggle {
+    position: absolute;
+    top: 10px;
+    right: 60px;
+    margin-left: 0;
+    margin-top: 0;
+    width: auto;
+    z-index: 1002;
+  }
+  
+  .lang-btn {
+    padding: 4px 8px;
+    font-size: 11px;
   }
   
   .nav-brand {
@@ -1953,6 +1982,11 @@ body {
     text-align: center;
   }
   
+  .hero {
+    margin-top: 140px;
+  }
+  }
+  
   .header-info {
     justify-content: center;
     gap: 12px;
@@ -2052,4 +2086,3 @@ body {
   .brand-text span {
     font-size: 9px;
   }
-}
