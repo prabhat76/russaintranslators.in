@@ -38,7 +38,6 @@ function App() {
   };
 
   useEffect(() => {
-    // SEO Analytics
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('config', 'GA_MEASUREMENT_ID', {
         page_title: 'Russian Translation Services - Language Liberty',
@@ -49,44 +48,93 @@ function App() {
 
   return (
     <div className="App">
-      {/* Header */}
       <header className="header">
-        <nav className="nav">
-          <div className="nav-brand">
-            <img src="/images/download.webp" alt="Language Liberty Logo" className="logo" />
-            <div className="brand-text">
-              <h3>LANGUAGE LIBERTY</h3>
-              <span>Your Russian Translator & Interpreter</span>
+        <div className="header-top">
+          <div className="container">
+            <div className="header-info">
+              <div className="info-item">
+                <span className="info-icon">📞</span>
+                <a href="tel:+918789389223">+91-8789389223</a>
+              </div>
+              <div className="info-item">
+                <span className="info-icon">✉️</span>
+                <a href="mailto:sabrina@languageliberty.com">sabrina@languageliberty.com</a>
+              </div>
+              <div className="info-item">
+                <span className="info-icon">📍</span>
+                <span>Mumbai, India</span>
+              </div>
+            </div>
+            <div className="header-actions">
+              <div className="language-badge">
+                <span className="flag">🇷🇺</span>
+                <span>Russian Expert</span>
+              </div>
+              <div className="experience-badge">
+                <span className="years">6+</span>
+                <span>Years Experience</span>
+              </div>
             </div>
           </div>
-          
-          <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#services">Services</a>
-            <a href="#contact">Contact Us</a>
-            <a href="tel:+918789389223" className="nav-cta">📞 Call Now</a>
+        </div>
+        
+        <nav className="nav">
+          <div className="container">
+            <div className="nav-brand">
+              <img src="/images/download.webp" alt="Language Liberty Logo" className="logo" />
+              <div className="brand-text">
+                <h3>LANGUAGE LIBERTY</h3>
+                <span>Professional Russian Translation Services</span>
+              </div>
+            </div>
+            
+            <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
+              <a href="#home" className="nav-link">Home</a>
+              <a href="#about" className="nav-link">About Sabrina</a>
+              <a href="#services" className="nav-link">Services</a>
+              <a href="#contact" className="nav-link">Contact</a>
+              <div className="nav-cta-group">
+                <a href="https://wa.me/918789389223" className="nav-cta whatsapp">💬 WhatsApp</a>
+                <a href="tel:+918789389223" className="nav-cta call">📞 Call Now</a>
+              </div>
+            </div>
+            
+            <button 
+              className="menu-toggle"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
           </div>
-          
-          <button 
-            className="menu-toggle"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
         </nav>
       </header>
 
-      {/* Hero Section */}
       <section id="home" className="hero">
-        <div className="hero-image">
-          <img src="/images/sabrina-profile.jpeg" alt="Russian Translation Services" />
+        <div className="hero-content">
+          <div className="hero-video">
+            <video 
+              src="/images/sabrina-intro-video.mp4" 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              className="hero-video-element"
+            />
+            <div className="video-overlay">
+              <h1>Professional Russian Translation Services</h1>
+              <p>Expert Russian-English interpreter with 6+ years of experience</p>
+              <div className="hero-cta">
+                <a href="tel:+918789389223" className="cta-button primary">📞 Call Now</a>
+                <a href="#about" className="cta-button secondary">Learn More</a>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* About Section */}
       <section id="about" className="about">
         <div className="container">
           <div className="about-content">
@@ -109,7 +157,6 @@ function App() {
         </div>
       </section>
 
-      {/* Gallery Section */}
       <section className="gallery">
         <div className="container">
           <h2>Professional Work Gallery</h2>
@@ -127,142 +174,307 @@ function App() {
         </div>
       </section>
 
-      {/* Services Section */}
       <section id="services" className="services">
         <div className="container">
-          <h2>Services Offered</h2>
+          <div className="services-header">
+            <h2>Professional Translation Services</h2>
+            <p>Comprehensive Russian-English language solutions for businesses and individuals</p>
+          </div>
           <div className="services-grid">
-            <div className="service-card">
-              <div className="service-icon">💻</div>
-              <h3>Online Meetings</h3>
-              <p>Interpretation/translation service for online meetings.</p>
+            <div className="service-card featured">
+              <div className="service-image">
+                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=250&fit=crop" alt="Virtual Meetings" />
+              </div>
+              <div className="service-content">
+                <div className="service-badge">Most Popular</div>
+                <h3>Virtual Meeting Interpretation</h3>
+                <p>Real-time Russian-English interpretation for Zoom, Teams, and Google Meet sessions with crystal-clear audio quality.</p>
+                <ul className="service-features">
+                  <li>✓ HD Audio Quality</li>
+                  <li>✓ Screen Sharing Support</li>
+                  <li>✓ 24/7 Availability</li>
+                </ul>
+              </div>
             </div>
             
             <div className="service-card">
-              <div className="service-icon">🤝</div>
-              <h3>Offline Meetings</h3>
-              <p>Interpretation/translation service for offline meetings.</p>
+              <div className="service-image">
+                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&h=250&fit=crop" alt="Business Meetings" />
+              </div>
+              <div className="service-content">
+                <h3>In-Person Business Meetings</h3>
+                <p>Professional on-site interpretation for corporate meetings, negotiations, and conferences across Mumbai and India.</p>
+                <ul className="service-features">
+                  <li>✓ Ministerial Level Experience</li>
+                  <li>✓ Confidentiality Assured</li>
+                  <li>✓ Industry Expertise</li>
+                </ul>
+              </div>
             </div>
             
             <div className="service-card">
-              <div className="service-icon">📄</div>
-              <h3>Documentation</h3>
-              <p>Translation service for official/unofficial letters, documents, emails etc.</p>
+              <div className="service-image">
+                <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=250&fit=crop" alt="Document Translation" />
+              </div>
+              <div className="service-content">
+                <h3>Certified Document Translation</h3>
+                <p>Official translation of legal documents, contracts, certificates, and technical manuals with government certification.</p>
+                <ul className="service-features">
+                  <li>✓ Legal Certification</li>
+                  <li>✓ Fast Turnaround</li>
+                  <li>✓ Technical Accuracy</li>
+                </ul>
+              </div>
             </div>
             
             <div className="service-card">
-              <div className="service-icon">🎓</div>
-              <h3>Survival Russian Course/Etiquette Training</h3>
-              <p>Survival Russian course, greetings and basic etiquettes courses for employees visiting Russian speaking countries</p>
+              <div className="service-image">
+                <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop" alt="Russian Language Training" />
+              </div>
+              <div className="service-content">
+                <h3>Russian Language Training</h3>
+                <p>Comprehensive Russian language courses from beginner to advanced levels, including business etiquette and cultural training.</p>
+                <ul className="service-features">
+                  <li>✓ A1 to C1 Levels</li>
+                  <li>✓ Cultural Etiquette</li>
+                  <li>✓ Business Russian</li>
+                </ul>
+              </div>
             </div>
             
             <div className="service-card">
-              <div className="service-icon">✈️</div>
-              <h3>Official Travel</h3>
-              <p>Travel with the senior team of a company for meetings held within the country and abroad</p>
+              <div className="service-image">
+                <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=250&fit=crop" alt="Travel Support" />
+              </div>
+              <div className="service-content">
+                <h3>Executive Travel Support</h3>
+                <p>Personal interpreter services for business executives traveling to Russian-speaking countries or hosting Russian delegates.</p>
+                <ul className="service-features">
+                  <li>✓ Airport Assistance</li>
+                  <li>✓ Cultural Guidance</li>
+                  <li>✓ 24/7 Support</li>
+                </ul>
+              </div>
             </div>
             
             <div className="service-card">
-              <div className="service-icon">🗣️</div>
-              <h3>Communicational Assistance</h3>
-              <p>Communicational assistance to Russian clients while their stay in India and Indian clients while their stay in Russia</p>
-            </div>
-            
-            <div className="service-card">
-              <div className="service-icon">📱</div>
-              <h3>Online Communicational Assistance</h3>
-              <p>Communicational assistance to Russian/Indian clients though emails, WhatsApp, and other social media platforms.</p>
-            </div>
-            
-            <div className="service-card">
-              <div className="service-icon">🎭</div>
-              <h3>Artists Training And Assistance</h3>
-              <p>Communicational assistance to Russian models, actors, and other artists during their stay in India (including shoots, auditions, script readings and dealing with agencies)</p>
-            </div>
-            
-            <div className="service-card">
-              <div className="service-icon">👨‍🏫</div>
-              <h3>Personal Classes</h3>
-              <p>Personal Russian classes – level A-1, A-2, A-3 (speaking, reading ,talking)</p>
+              <div className="service-image">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=250&fit=crop" alt="Entertainment Industry" />
+              </div>
+              <div className="service-content">
+                <h3>Entertainment Industry Support</h3>
+                <p>Specialized services for Russian artists, models, and performers working in India, including script reading and agency coordination.</p>
+                <ul className="service-features">
+                  <li>✓ Script Translation</li>
+                  <li>✓ Agency Coordination</li>
+                  <li>✓ Cultural Adaptation</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
       <section id="contact" className="contact">
         <div className="container">
+          <div className="contact-header">
+            <h2>Get In Touch</h2>
+            <p>Ready to break language barriers? Contact us for professional Russian translation services</p>
+          </div>
           <div className="contact-content">
-            <div className="contact-info">
-              <h6>Contact Us (+91)-8789389223 (+91)-7304876702</h6>
-              <p>Book your Russian Interpreter in Mumbai now.</p>
-              <p>Get 20% OFF on your first booking. Russian translation and interpretation service is now providing 24 hours of communicational assistance.</p>
+            <div className="contact-cards">
+              <div className="contact-card">
+                <div className="contact-icon">📞</div>
+                <h3>Call Us</h3>
+                <p>Speak directly with our experts</p>
+                <div className="contact-details">
+                  <a href="tel:+918789389223">+91-8789389223</a>
+                  <a href="tel:+917304876702">+91-7304876702</a>
+                </div>
+              </div>
+              
+              <div className="contact-card">
+                <div className="contact-icon">✉️</div>
+                <h3>Email Us</h3>
+                <p>Send us your requirements</p>
+                <div className="contact-details">
+                  <a href="mailto:sabrina@languageliberty.com">sabrina@languageliberty.com</a>
+                </div>
+              </div>
+              
+              <div className="contact-card">
+                <div className="contact-icon">💬</div>
+                <h3>WhatsApp</h3>
+                <p>Quick chat for instant quotes</p>
+                <div className="contact-details">
+                  <a href="https://wa.me/918789389223">Message on WhatsApp</a>
+                </div>
+              </div>
+              
+              <div className="contact-card special-offer">
+                <div className="contact-icon">🎉</div>
+                <h3>Special Offer</h3>
+                <p>First-time clients get</p>
+                <div className="offer-badge">20% OFF</div>
+              </div>
             </div>
-            <div className="contact-image">
-              <img src="/images/contact-image.jpg" alt="Contact Us" />
+            
+            <div className="contact-form-section">
+              <div className="contact-image">
+                <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=500&h=600&fit=crop" alt="Professional Translator" />
+              </div>
+              <div className="contact-form">
+                <h3>Request a Quote</h3>
+                <form className="quote-form">
+                  <div className="form-group">
+                    <input type="text" placeholder="Your Name" required />
+                    <input type="email" placeholder="Email Address" required />
+                  </div>
+                  <div className="form-group">
+                    <input type="tel" placeholder="Phone Number" />
+                    <select required>
+                      <option value="">Select Service</option>
+                      <option value="virtual">Virtual Meeting Interpretation</option>
+                      <option value="business">Business Meeting</option>
+                      <option value="document">Document Translation</option>
+                      <option value="training">Language Training</option>
+                      <option value="travel">Travel Support</option>
+                    </select>
+                  </div>
+                  <textarea placeholder="Describe your requirements..." rows="4" required></textarea>
+                  <button type="submit" className="submit-btn">Get Free Quote</button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Appointments Section */}
       <section className="appointments">
         <div className="container">
-          <h2>Online Appointments</h2>
-          <div className="appointment-card">
-            <h3>Senior Translator and Interpreter</h3>
-            <div className="service-item">
-              <h4>Consultation</h4>
-              <p>30 mins | Free</p>
-              <p>Get consultation from our certified translators and discuss about your requirement in details. All our Russian translators in India are Russian Native...</p>
-              <button className="book-btn">BOOK</button>
+          <div className="appointments-header">
+            <h2>Book Your Appointment</h2>
+            <p>Choose the perfect consultation package for your translation needs</p>
+          </div>
+          <div className="appointments-grid">
+            <div className="appointment-card free">
+              <div className="appointment-badge">Most Popular</div>
+              <div className="appointment-icon">💬</div>
+              <h3>Free Consultation</h3>
+              <div className="appointment-price">
+                <span className="price">₹0</span>
+                <span className="duration">30 minutes</span>
+              </div>
+              <ul className="appointment-features">
+                <li>✓ Requirement Analysis</li>
+                <li>✓ Service Recommendations</li>
+                <li>✓ Pricing Discussion</li>
+                <li>✓ Timeline Planning</li>
+              </ul>
+              <button className="book-btn primary" onClick={() => window.open('tel:+918789389223')}>Book Free Call</button>
+            </div>
+            
+            <div className="appointment-card premium">
+              <div className="appointment-icon">🎯</div>
+              <h3>Business Strategy Session</h3>
+              <div className="appointment-price">
+                <span className="price">₹2,500</span>
+                <span className="duration">60 minutes</span>
+              </div>
+              <ul className="appointment-features">
+                <li>✓ Detailed Business Analysis</li>
+                <li>✓ Custom Translation Strategy</li>
+                <li>✓ Cultural Adaptation Plan</li>
+                <li>✓ Long-term Partnership</li>
+              </ul>
+              <button className="book-btn secondary" onClick={() => window.open('https://wa.me/918789389223')}>Book Strategy Call</button>
+            </div>
+            
+            <div className="appointment-card urgent">
+              <div className="appointment-icon">⚡</div>
+              <h3>Urgent Support</h3>
+              <div className="appointment-price">
+                <span className="price">₹5,000</span>
+                <span className="duration">Available 24/7</span>
+              </div>
+              <ul className="appointment-features">
+                <li>✓ Immediate Response</li>
+                <li>✓ Emergency Translation</li>
+                <li>✓ Crisis Communication</li>
+                <li>✓ Same-day Delivery</li>
+              </ul>
+              <button className="book-btn urgent-btn" onClick={() => window.open('tel:+918789389223')}>Call Now</button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="footer">
         <div className="container">
-          <div className="footer-content">
-            <p><strong>Language Liberty - Russian Translation & Interpretation Services</strong></p>
-            <p>Professional Russian translation services in Mumbai with 6+ years of experience. Expert Russian-English translator for businesses and individuals.</p>
+          <div className="footer-main">
+            <div className="footer-brand">
+              <h3>Language Liberty</h3>
+              <p>Breaking language barriers with professional Russian translation services in Mumbai. 6+ years of expertise in business interpretation and cultural communication.</p>
+              <div className="footer-social">
+                <a href="tel:+918789389223" className="social-link">📞</a>
+                <a href="mailto:sabrina@languageliberty.com" className="social-link">✉️</a>
+                <a href="https://wa.me/918789389223" className="social-link">💬</a>
+              </div>
+            </div>
             
-            <div className="services-list">
+            <div className="footer-services">
               <h4>Our Services</h4>
               <ul>
-                <li><strong>Online/Offline Meetings:</strong> Real-time Russian interpretation</li>
-                <li><strong>Document Translation:</strong> Official documents and technical content</li>
-                <li><strong>Russian Language Course:</strong> Professional training and etiquette</li>
-                <li><strong>Travel Support:</strong> Linguistic aid for business meetings</li>
-                <li><strong>Communication Assistance:</strong> 24/7 support via multiple channels</li>
-                <li><strong>Artist Support:</strong> Assistance for Russian artists in India</li>
+                <li>Virtual Meeting Interpretation</li>
+                <li>Business Meeting Support</li>
+                <li>Document Translation</li>
+                <li>Russian Language Training</li>
+                <li>Travel Support</li>
+                <li>Entertainment Industry</li>
               </ul>
             </div>
             
-            <div className="why-choose">
-              <h4>Why Choose Us?</h4>
-              <ul>
-                <li><strong>Expert Translator:</strong> Native Russian speaker with Indian education</li>
-                <li><strong>Proven Experience:</strong> 6+ years working with top companies</li>
-                <li><strong>24/7 Availability:</strong> Round-the-clock support</li>
-                <li><strong>Special Offer:</strong> 20% OFF on first booking</li>
-              </ul>
+            <div className="footer-contact">
+              <h4>Contact Info</h4>
+              <div className="contact-item">
+                <span className="contact-label">Phone:</span>
+                <a href="tel:+918789389223">+91-8789389223</a>
+              </div>
+              <div className="contact-item">
+                <span className="contact-label">Alt Phone:</span>
+                <a href="tel:+917304876702">+91-7304876702</a>
+              </div>
+              <div className="contact-item">
+                <span className="contact-label">Email:</span>
+                <a href="mailto:sabrina@languageliberty.com">sabrina@languageliberty.com</a>
+              </div>
+              <div className="contact-item">
+                <span className="contact-label">Location:</span>
+                <span>Mumbai, India</span>
+              </div>
             </div>
             
-            <p><strong>Contact: +91-8789389223 | +91-7304876702</strong></p>
-            <p><strong>Email: sabrina@languageliberty.com</strong></p>
-            
-            <div className="footer-bottom">
-              <p>Copyright © 2025 Language Liberty - All Rights Reserved.</p>
+            <div className="footer-cta">
+              <h4>Get Started</h4>
+              <p>Ready to break language barriers?</p>
+              <div className="footer-buttons">
+                <a href="tel:+918789389223" className="footer-btn primary">Call Now</a>
+                <a href="https://wa.me/918789389223" className="footer-btn secondary">WhatsApp</a>
+              </div>
+              <div className="footer-offer">
+                <span className="offer-text">🎉 20% OFF First Booking</span>
+              </div>
             </div>
+          </div>
+          
+          <div className="footer-bottom">
+            <p>© 2025 Language Liberty. All rights reserved. | Professional Russian Translation Services</p>
           </div>
         </div>
       </footer>
       
       <Chatbot />
       
-      {/* Image Modal */}
       {selectedImage && (
         <div className="modal-overlay" onClick={() => setSelectedImage(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
