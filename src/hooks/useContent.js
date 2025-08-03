@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 
+// Note: This hook is deprecated in favor of ContentContext
+// Use useContentContext() instead
+
 const contentCache = new Map();
 
 export const useContent = (language = 'en') => {
@@ -20,8 +23,14 @@ export const useContent = (language = 'en') => {
       }
 
       try {
-        const contentModule = await import(`../data/content-${language}.json`);
-        const loadedContent = contentModule.default;
+        const contentUrl = language === 'en' 
+          ? 'https://raw.githubusercontent.com/prabhat76/russian-translator-content/master/data/content.json'
+          : 'https://raw.githubusercontent.com/prabhat76/russian-translator-content/master/data/russian.json';
+        
+        const response = await fetch(contentUrl);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const loadedContent = await response.json();
         
         // Cache the content
         contentCache.set(language, loadedContent);
@@ -32,8 +41,11 @@ export const useContent = (language = 'en') => {
         // Fallback to English if other language fails
         if (language !== 'en') {
           try {
-            const fallbackModule = await import('../data/content-en.json');
-            const fallbackContent = fallbackModule.default;
+            const fallbackUrl = 'https://raw.githubusercontent.com/prabhat76/russian-translator-content/master/data/content.json';
+            const fallbackResponse = await fetch(fallbackUrl);
+            if (!fallbackResponse.ok) throw new Error(`HTTP ${fallbackResponse.status}`);
+            
+            const fallbackContent = await fallbackResponse.json();
             contentCache.set('en', fallbackContent);
             setContent(fallbackContent);
           } catch (fallbackErr) {
