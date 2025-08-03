@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Professional Russian Translation Services in Mumbai",
+    "subtitle": "Expert Russian-English translator with 6+ years of experience."
+  },
+  "about": {
+    "title": "Meet Sabrina Bhatt",
+    "proficiency": "Language Proficiency",
+    "experienceText": "6+ years of expertise working with Fortune 500 companies in pharmaceutical, chemical, mining, and export/import sectors."
+  },
+  "services": {
+    "title": "Our Services",
+    "items": [
+      {
+        "title": "Online Meetings",
+        "description": "Professional real-time interpretation for Zoom, Teams, and WebEx conferences"
+      }
+    ]
+  }
+}
