@@ -175,7 +175,7 @@ const AppContent = () => {
             <div className="about-text">
               <h1>Meet Sabrina Bhatt</h1>
               <h4>Your Russian Translation Expert</h4>
-              <p>{content.about.description}</p>
+              <p>Born to a Russian mother and an Indian father, I bridge communication gaps between Russian-speaking countries and the world. With education in Russia, Uzbekistan, and India, I bring authentic cultural understanding to every translation project.</p>
               <h4>{content.about.proficiency}</h4>
               <p>{content.about.experienceText}</p>
             </div>
