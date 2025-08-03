@@ -6,23 +6,37 @@ const AppContent = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const currentLanguage = 'en';
+  const [currentLanguage, setCurrentLanguage] = useState(() => {
+    const browserLang = navigator.language.toLowerCase();
+    return browserLang.startsWith('ru') ? 'ru' : 'en';
+  });
+  
+  const switchLanguage = (lang) => {
+    setCurrentLanguage(lang);
+  };
   
   const content = {
-    about: {
-      proficiency: 'Language Proficiency',
-      experienceText: 'With 6+ years of professional experience in Russian-English translation and interpretation, I provide accurate and culturally sensitive language services for businesses and individuals.'
+    en: {
+      nav: { home: 'Home', about: 'About', services: 'Services', contact: 'Contact' },
+      hero: { title: 'Professional Russian Translation Services', subtitle: 'Expert Russian-English interpreter with 6+ years of experience', cta: 'Call Now', learn: 'Learn More' },
+      about: { title: 'Meet Sabrina Bhatt', subtitle: 'Your Russian Translation Expert', proficiency: 'Language Proficiency', experienceText: 'With 6+ years of professional experience in Russian-English translation and interpretation, I provide accurate and culturally sensitive language services for businesses and individuals.' },
+      services: { title: 'Professional Translation Services', subtitle: 'Comprehensive Russian-English language solutions for businesses and individuals' },
+      gallery: { title: 'Professional Work Gallery' },
+      contact: { title: 'Get In Touch', subtitle: 'Ready to break language barriers? Contact us for professional Russian translation services' },
+      appointments: { title: 'Book Your Appointment', subtitle: 'Choose the perfect consultation package for your translation needs' }
     },
-    services: {
-      title: 'Our Services',
-      items: [
-        {
-          title: 'Virtual Meeting Interpretation',
-          description: 'Professional real-time interpretation services for online meetings and conferences'
-        }
-      ]
+    ru: {
+      nav: { home: 'Главная', about: 'О нас', services: 'Услуги', contact: 'Контакты' },
+      hero: { title: 'Профессиональные услуги русского перевода', subtitle: 'Эксперт русско-английского перевода с опытом работы 6+ лет', cta: 'Позвонить', learn: 'Узнать больше' },
+      about: { title: 'Знакомьтесь: Сабрина Бхатт', subtitle: 'Ваш эксперт по русскому переводу', proficiency: 'Языковые навыки', experienceText: 'Имея более 6 лет профессионального опыта в русско-английском переводе и устном переводе, я предоставляю точные и культурно чувствительные языковые услуги для бизнеса и частных лиц.' },
+      services: { title: 'Профессиональные переводческие услуги', subtitle: 'Комплексные русско-английские языковые решения для бизнеса и частных лиц' },
+      gallery: { title: 'Галерея профессиональных работ' },
+      contact: { title: 'Свяжитесь с нами', subtitle: 'Готовы преодолеть языковые барьеры? Свяжитесь с нами для профессиональных услуг русского перевода' },
+      appointments: { title: 'Записаться на прием', subtitle: 'Выберите идеальный пакет консультаций для ваших переводческих потребностей' }
     }
   };
+  
+  const t = content[currentLanguage];
 
   const galleryImages = [
     {src: '/images/sabrina-work-1.jpeg', title: 'Corporate Meeting', desc: 'Russian-English interpretation for business negotiations'},
@@ -109,13 +123,28 @@ const AppContent = () => {
               </div>
             </div>
             <div className="header-actions">
+              <div className="language-toggle">
+                <div className="toggle-switch">
+                  <input 
+                    type="checkbox" 
+                    id="langToggle" 
+                    checked={currentLanguage === 'ru'} 
+                    onChange={(e) => switchLanguage(e.target.checked ? 'ru' : 'en')}
+                  />
+                  <label htmlFor="langToggle" className="toggle-label">
+                    <span className="toggle-text left">🇺🇸 EN</span>
+                    <span className="toggle-slider"></span>
+                    <span className="toggle-text right">🇷🇺 RU</span>
+                  </label>
+                </div>
+              </div>
               <div className="language-badge">
                 <span className="flag">🇷🇺</span>
-                <span>Russian Expert</span>
+                <span>{currentLanguage === 'en' ? 'Russian Expert' : 'Эксперт русского языка'}</span>
               </div>
               <div className="experience-badge">
                 <span className="years">6+</span>
-                <span>Years Experience</span>
+                <span>{currentLanguage === 'en' ? 'Years Experience' : 'Лет опыта'}</span>
               </div>
             </div>
           </div>
@@ -132,13 +161,13 @@ const AppContent = () => {
             </div>
             
             <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-              <a href="#home" className="nav-link" onClick={() => setIsMenuOpen(false)}>Home</a>
-              <a href="#about" className="nav-link" onClick={() => setIsMenuOpen(false)}>About Sabrina</a>
-              <a href="#services" className="nav-link" onClick={() => setIsMenuOpen(false)}>Services</a>
-              <a href="#contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>Contact</a>
+              <a href="#home" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.nav.home}</a>
+              <a href="#about" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.nav.about}</a>
+              <a href="#services" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.nav.services}</a>
+              <a href="#contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.nav.contact}</a>
               <div className="nav-cta-group">
                 <a href="https://wa.me/918789389223" className="nav-cta whatsapp" onClick={() => setIsMenuOpen(false)}>💬 WhatsApp</a>
-                <a href="tel:+918789389223" className="nav-cta call" onClick={() => setIsMenuOpen(false)}>📞 Call Now</a>
+                <a href="tel:+918789389223" className="nav-cta call" onClick={() => setIsMenuOpen(false)}>📞 {t.hero.cta}</a>
               </div>
             </div>
             
@@ -167,11 +196,11 @@ const AppContent = () => {
               className="hero-video-element"
             />
             <div className="video-overlay">
-              <h1>Professional Russian Translation Services</h1>
-              <p>Expert Russian-English interpreter with 6+ years of experience</p>
+              <h1>{t.hero.title}</h1>
+              <p>{t.hero.subtitle}</p>
               <div className="hero-cta">
-                <a href="tel:+918789389223" className="cta-button primary">📞 Call Now</a>
-                <a href="#about" className="cta-button secondary">Learn More</a>
+                <a href="tel:+918789389223" className="cta-button primary">📞 {t.hero.cta}</a>
+                <a href="#about" className="cta-button secondary">{t.hero.learn}</a>
               </div>
             </div>
           </div>
@@ -184,11 +213,11 @@ const AppContent = () => {
         <div className="container">
           <div className="about-content">
             <div className="about-text">
-              <h1>Meet Sabrina Bhatt</h1>
-              <h4>Your Russian Translation Expert</h4>
-              <p>Born to a Russian mother and an Indian father, I bridge communication gaps between Russian-speaking countries and the world. With education in Russia, Uzbekistan, and India, I bring authentic cultural understanding to every translation project.</p>
-              <h4>{content?.about?.proficiency || 'Language Proficiency'}</h4>
-              <p>{content?.about?.experienceText || 'Professional Russian translation services with years of experience.'}</p>
+              <h1>{t.about.title}</h1>
+              <h4>{t.about.subtitle}</h4>
+              <p>{currentLanguage === 'en' ? 'Born to a Russian mother and an Indian father, I bridge communication gaps between Russian-speaking countries and the world. With education in Russia, Uzbekistan, and India, I bring authentic cultural understanding to every translation project.' : 'Рожденная от русской матери и индийского отца, я устраняю коммуникационные барьеры между русскоговорящими странами и миром. Получив образование в России, Узбекистане и Индии, я привношу подлинное культурное понимание в каждый переводческий проект.'}</p>
+              <h4>{t.about.proficiency}</h4>
+              <p>{t.about.experienceText}</p>
             </div>
             
             <div className="about-image">
@@ -200,7 +229,7 @@ const AppContent = () => {
 
       <section className="gallery">
         <div className="container">
-          <h2>{currentLanguage === 'en' ? 'Professional Work Gallery' : 'Галерея профессиональных работ'}</h2>
+          <h2>{t.gallery.title}</h2>
           <div className="gallery-grid">
             {galleryImages.map((image, index) => (
               <div key={index} className="gallery-item" onClick={() => openModal(index)}>
@@ -218,10 +247,9 @@ const AppContent = () => {
       <section id="services" className="services">
         <div className="container">
           <div className="services-header">
-            <h2>Professional Translation Services</h2>
-            <p>Comprehensive Russian-English language solutions for businesses and individuals</p>
+            <h2>{t.services.title}</h2>
+            <p>{t.services.subtitle}</p>
           </div>
-          <h2>{content?.services?.title || 'Our Services'}</h2>
           <div className="services-grid">
             <div className="service-card featured">
               <div className="service-image">
@@ -235,21 +263,6 @@ const AppContent = () => {
                   <li>✓ HD Audio Quality</li>
                   <li>✓ Screen Sharing Support</li>
                   <li>✓ 24/7 Availability</li>
-                </ul>
-              </div>
-            </div>
-            
-            <div className="service-card">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=250&fit=crop" alt="Online Meetings" />
-              </div>
-              <div className="service-content">
-                <h3>{content?.services?.items?.[0]?.title || 'Online Meetings'}</h3>
-                <p>{currentLanguage === 'en' ? (content?.services?.items?.[0]?.description || 'Professional real-time interpretation services') : 'Профессиональный перевод в реальном времени с английского и хинди на русский для конференций Zoom, Teams и WebEx'}</p>
-                <ul className="service-features">
-                  <li>✓ Real-time Translation</li>
-                  <li>✓ Multiple Platforms</li>
-                  <li>✓ Professional Quality</li>
                 </ul>
               </div>
             </div>
@@ -335,8 +348,8 @@ const AppContent = () => {
       <section id="contact" className="contact">
         <div className="container">
           <div className="contact-header">
-            <h2>Get In Touch</h2>
-            <p>Ready to break language barriers? Contact us for professional Russian translation services</p>
+            <h2>{t.contact.title}</h2>
+            <p>{t.contact.subtitle}</p>
           </div>
           <div className="contact-content">
             <div className="contact-cards">
@@ -410,8 +423,8 @@ const AppContent = () => {
       <section className="appointments">
         <div className="container">
           <div className="appointments-header">
-            <h2>Book Your Appointment</h2>
-            <p>Choose the perfect consultation package for your translation needs</p>
+            <h2>{t.appointments.title}</h2>
+            <p>{t.appointments.subtitle}</p>
           </div>
           <div className="appointments-grid">
             <div className="appointment-card free">
@@ -531,6 +544,23 @@ const AppContent = () => {
       </footer>
       
       <Chatbot language={currentLanguage} />
+      
+      {/* Mobile-only floating language toggle */}
+      <div className="mobile-lang-toggle">
+        <div className="toggle-switch">
+          <input 
+            type="checkbox" 
+            id="mobileLangToggle" 
+            checked={currentLanguage === 'ru'} 
+            onChange={(e) => switchLanguage(e.target.checked ? 'ru' : 'en')}
+          />
+          <label htmlFor="mobileLangToggle" className="toggle-label">
+            <span className="toggle-text left">🇺🇸 EN</span>
+            <span className="toggle-slider"></span>
+            <span className="toggle-text right">🇷🇺 RU</span>
+          </label>
+        </div>
+      </div>
       
       {selectedImage && (
         <div className="modal-overlay" onClick={() => setSelectedImage(null)}>
