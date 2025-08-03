@@ -1,15 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Chatbot from './components/Chatbot';
-import SEO from './components/SEO';
-
-import { ContentProvider, useContentContext } from './contexts/ContentContext';
 
 const AppContent = () => {
-  const { content, currentLanguage, changeLanguage, loading } = useContentContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const currentLanguage = 'en';
+  
+  const content = {
+    about: {
+      proficiency: 'Language Proficiency',
+      experienceText: 'With 6+ years of professional experience in Russian-English translation and interpretation, I provide accurate and culturally sensitive language services for businesses and individuals.'
+    },
+    services: {
+      title: 'Our Services',
+      items: [
+        {
+          title: 'Virtual Meeting Interpretation',
+          description: 'Professional real-time interpretation services for online meetings and conferences'
+        }
+      ]
+    }
+  };
 
   const galleryImages = [
     {src: '/images/sabrina-work-1.jpeg', title: 'Corporate Meeting', desc: 'Russian-English interpretation for business negotiations'},
@@ -74,13 +87,7 @@ const AppContent = () => {
     }
   }, []);
 
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
 
-  if (!content) {
-    return <div className="error">Error loading content. Please refresh the page.</div>;
-  }
 
   return (
     <div className="App">
@@ -545,11 +552,7 @@ const AppContent = () => {
 };
 
 function App() {
-  return (
-    <ContentProvider>
-      <AppContent />
-    </ContentProvider>
-  );
+  return <AppContent />;
 }
 
 export default App;
