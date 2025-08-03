@@ -18,15 +18,26 @@ export const ContentProvider = ({ children }) => {
     setError(null);
 
     try {
-      const contentModule = await import(`../data/content-${language}.json`);
-      setContent(contentModule.default);
+      const contentUrl = language === 'en' 
+        ? 'https://raw.githubusercontent.com/prabhat76/russian-translator-content/master/data/content.json'
+        : 'https://raw.githubusercontent.com/prabhat76/russian-translator-content/master/data/russian.json';
+      
+      const response = await fetch(contentUrl);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      
+      const contentData = await response.json();
+      setContent(contentData);
     } catch (err) {
       console.error(`Failed to load content for language: ${language}`, err);
       
       if (language !== DEFAULT_LANGUAGE) {
         try {
-          const fallbackModule = await import(`../data/content-${DEFAULT_LANGUAGE}.json`);
-          setContent(fallbackModule.default);
+          const fallbackUrl = 'https://raw.githubusercontent.com/prabhat76/russian-translator-content/master/data/content.json';
+          const fallbackResponse = await fetch(fallbackUrl);
+          if (!fallbackResponse.ok) throw new Error(`HTTP ${fallbackResponse.status}`);
+          
+          const fallbackData = await fallbackResponse.json();
+          setContent(fallbackData);
           setCurrentLanguage(DEFAULT_LANGUAGE);
         } catch (fallbackErr) {
           setError('Failed to load content');
