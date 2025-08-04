@@ -10,6 +10,11 @@ const ContentEditor = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(new Set());
+  const [newFieldKey, setNewFieldKey] = useState('');
+  const [newFieldValue, setNewFieldValue] = useState('');
+  const [showAddField, setShowAddField] = useState(false);
+  const [bulkEditMode, setBulkEditMode] = useState(false);
+  const [bulkEditData, setBulkEditData] = useState('');
 
   useEffect(() => {
     const contentRef = ref(rtdb, 'content');
@@ -59,6 +64,71 @@ const ContentEditor = () => {
     await Promise.all(promises);
   };
 
+  const addNewField = async () => {
+    if (!newFieldKey.trim() || !newFieldValue.trim()) {
+      setSaveStatus('❌ Key and value required');
+      return;
+    }
+    
+    if (currentSection[newFieldKey]) {
+      setSaveStatus('❌ Key already exists');
+      return;
+    }
+
+    try {
+      await set(ref(rtdb, `content/${selectedLang}/${selectedSection}/${newFieldKey}`), newFieldValue);
+      setSaveStatus('✅ Field added');
+      setNewFieldKey('');
+      setNewFieldValue('');
+      setShowAddField(false);
+      setTimeout(() => setSaveStatus(''), 2000);
+    } catch (error) {
+      setSaveStatus('❌ Error adding field');
+      console.error('Add field error:', error);
+    }
+  };
+
+  const deleteField = async (fieldKey) => {
+    if (!window.confirm(`Delete field "${fieldKey}"?`)) return;
+    
+    try {
+      await set(ref(rtdb, `content/${selectedLang}/${selectedSection}/${fieldKey}`), null);
+      setSaveStatus('✅ Field deleted');
+      setTimeout(() => setSaveStatus(''), 2000);
+    } catch (error) {
+      setSaveStatus('❌ Error deleting field');
+      console.error('Delete field error:', error);
+    }
+  };
+
+  const handleBulkEdit = async () => {
+    try {
+      const bulkData = JSON.parse(bulkEditData);
+      const promises = Object.entries(bulkData).map(([key, value]) => 
+        set(ref(rtdb, `content/${selectedLang}/${selectedSection}/${key}`), value)
+      );
+      await Promise.all(promises);
+      setSaveStatus('✅ Bulk update completed');
+      setBulkEditData('');
+      setBulkEditMode(false);
+      setTimeout(() => setSaveStatus(''), 2000);
+    } catch (error) {
+      setSaveStatus('❌ Invalid JSON or update error');
+      console.error('Bulk edit error:', error);
+    }
+  };
+
+  const exportSection = () => {
+    const dataStr = JSON.stringify(currentSection, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${selectedLang}-${selectedSection}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   const currentSection = content[selectedLang]?.[selectedSection] || {};
   const filteredFields = Object.entries(currentSection).filter(([key]) => 
     key.toLowerCase().includes(searchTerm.toLowerCase())
@@ -92,6 +162,45 @@ const ContentEditor = () => {
         </div>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {saveStatus && <span style={{ fontSize: '14px' }}>{saveStatus}</span>}
+          <button 
+            onClick={() => setShowAddField(!showAddField)}
+            style={{
+              background: '#007bff',
+              color: 'white',
+              border: 'none',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              cursor: 'pointer'
+            }}
+          >
+            ➕ Add Field
+          </button>
+          <button 
+            onClick={() => setBulkEditMode(!bulkEditMode)}
+            style={{
+              background: '#6f42c1',
+              color: 'white',
+              border: 'none',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              cursor: 'pointer'
+            }}
+          >
+            📝 Bulk Edit
+          </button>
+          <button 
+            onClick={exportSection}
+            style={{
+              background: '#17a2b8',
+              color: 'white',
+              border: 'none',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              cursor: 'pointer'
+            }}
+          >
+            📥 Export
+          </button>
           {unsavedChanges.size > 0 && (
             <button 
               onClick={saveAllChanges}
@@ -235,6 +344,117 @@ const ContentEditor = () => {
         </div>
       </div>
 
+      {showAddField && (
+        <div className="add-field-form" style={{
+          padding: '20px',
+          background: '#e3f2fd',
+          borderRadius: '8px',
+          marginBottom: '20px',
+          border: '1px solid #2196f3'
+        }}>
+          <h3 style={{ margin: '0 0 15px 0', color: '#1976d2' }}>➕ Add New Field</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr auto', gap: '10px', alignItems: 'end' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: '5px', fontWeight: '600' }}>Field Key:</label>
+              <input
+                type="text"
+                value={newFieldKey}
+                onChange={(e) => setNewFieldKey(e.target.value)}
+                placeholder="e.g., newButton"
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  border: '1px solid #ced4da',
+                  borderRadius: '6px'
+                }}
+              />
+            </div>
+            <div>
+              <label style={{ display: 'block', marginBottom: '5px', fontWeight: '600' }}>Field Value:</label>
+              <input
+                type="text"
+                value={newFieldValue}
+                onChange={(e) => setNewFieldValue(e.target.value)}
+                placeholder="Enter the content value"
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  border: '1px solid #ced4da',
+                  borderRadius: '6px'
+                }}
+              />
+            </div>
+            <button
+              onClick={addNewField}
+              style={{
+                background: '#28a745',
+                color: 'white',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '6px',
+                cursor: 'pointer'
+              }}
+            >
+              ✅ Add
+            </button>
+          </div>
+        </div>
+      )}
+
+      {bulkEditMode && (
+        <div className="bulk-edit-form" style={{
+          padding: '20px',
+          background: '#f3e5f5',
+          borderRadius: '8px',
+          marginBottom: '20px',
+          border: '1px solid #9c27b0'
+        }}>
+          <h3 style={{ margin: '0 0 15px 0', color: '#7b1fa2' }}>📝 Bulk Edit (JSON Format)</h3>
+          <textarea
+            value={bulkEditData}
+            onChange={(e) => setBulkEditData(e.target.value)}
+            placeholder={`{\n  "key1": "value1",\n  "key2": "value2"\n}`}
+            rows={8}
+            style={{
+              width: '100%',
+              padding: '12px',
+              border: '1px solid #ced4da',
+              borderRadius: '6px',
+              fontFamily: 'monospace',
+              fontSize: '14px'
+            }}
+          />
+          <div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
+            <button
+              onClick={handleBulkEdit}
+              style={{
+                background: '#28a745',
+                color: 'white',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '6px',
+                cursor: 'pointer'
+              }}
+            >
+              ✅ Apply Changes
+            </button>
+            <button
+              onClick={() => setBulkEditData(JSON.stringify(currentSection, null, 2))}
+              style={{
+                background: '#6c757d',
+                color: 'white',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '6px',
+                cursor: 'pointer'
+              }}
+            >
+              📋 Load Current
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="content-fields" style={{
         display: 'grid',
         gap: '20px'
@@ -261,8 +481,25 @@ const ContentEditor = () => {
                 {key}
                 {unsavedChanges.has(key) && <span style={{ color: '#ffc107', marginLeft: '5px' }}>●</span>}
               </label>
-              <div style={{ fontSize: '12px', color: '#6c757d' }}>
-                {value?.length || 0} characters
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '12px', color: '#6c757d' }}>
+                  {value?.length || 0} characters
+                </span>
+                <button
+                  onClick={() => deleteField(key)}
+                  style={{
+                    background: '#dc3545',
+                    color: 'white',
+                    border: 'none',
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '12px'
+                  }}
+                  title="Delete field"
+                >
+                  🗑️
+                </button>
               </div>
             </div>
             {isPreviewMode ? (

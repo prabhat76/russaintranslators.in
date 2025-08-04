@@ -1,0 +1,26 @@
+{
+  "en": {
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "services": "Services",
+      "contact": "Contact"
+    },
+    "hero": {
+      "title": "Professional Russian Translation Services",
+      "subtitle": "Expert Russian-English interpreter with 6+ years of experience"
+    }
+  },
+  "ru": {
+    "nav": {
+      "home": "Главная",
+      "about": "О нас",
+      "services": "Услуги",
+      "contact": "Контакты"
+    },
+    "hero": {
+      "title": "Профессиональные услуги русского перевода",
+      "subtitle": "Эксперт русско-английского перевода с опытом работы 6+ лет"
+    }
+  }
+}

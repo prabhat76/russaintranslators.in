@@ -10,8 +10,17 @@ on:
         required: false
         default: 'false'
         type: boolean
+      submit_trigger:
+        description: 'Manual content submission'
+        required: false
+        default: 'false'
+        type: boolean
   repository_dispatch:
     types: [content-updated]
+  push:
+    paths:
+      - 'data/**'
+      - '.github/workflows/sync-content.yml'
 
 jobs:
   refresh-database:

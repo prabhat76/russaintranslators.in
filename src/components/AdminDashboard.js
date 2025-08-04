@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import QuoteManager from './QuoteManager';
 import AnalyticsDashboard from './AnalyticsDashboard';
 import RealtimeData from './RealtimeData';
-import ContentEditor from './ContentEditor';
+import SimpleContentEditor from './SimpleContentEditor';
 import './AdminDashboard.css';
 
 const AdminDashboard = ({ onLogout }) => {
@@ -89,10 +89,10 @@ const AdminDashboard = ({ onLogout }) => {
         
         <div className="dashboard-card">
           <div className="card-header">
-            <div className="card-icon">✏️</div>
+            <div className="card-icon">📝</div>
             <h3 className="card-title">Content Editor</h3>
           </div>
-          <p>Edit website content and manage translations.</p>
+          <p>Edit all website content directly with submit button.</p>
           <div className="action-buttons">
             <button className="action-btn primary" onClick={() => setActiveTab('content')}>
               Edit Content
@@ -146,7 +146,7 @@ const AdminDashboard = ({ onLogout }) => {
       {activeTab === 'quotes' && <div className="admin-content"><QuoteManager /></div>}
       {activeTab === 'analytics' && <div className="admin-content"><AnalyticsDashboard /></div>}
       {activeTab === 'realtime' && <div className="admin-content"><RealtimeData /></div>}
-      {activeTab === 'content' && <div className="admin-content"><ContentEditor /></div>}
+      {activeTab === 'content' && <div className="admin-content"><SimpleContentEditor /></div>}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import './App.css';
 import { GALLERY_IMAGES } from './constants/content';
 import { useContent } from './hooks/useContent';
 import { useForm } from './hooks/useForm';
-import { collection, addDoc, onSnapshot, query, orderBy, limit, serverTimestamp, getDocs } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, query, orderBy, limit, serverTimestamp } from 'firebase/firestore';
 import { db, mockFirebaseOps } from './firebase';
 import { throttle } from './utils/performance';
 import { analytics } from './utils/analytics';

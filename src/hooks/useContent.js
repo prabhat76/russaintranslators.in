@@ -43,7 +43,7 @@ export const useContent = (language) => {
     });
 
     return () => unsubscribe();
-  }, [language]);
+  }, [language, fallbackContent]);
 
   return { content, loading };
 };

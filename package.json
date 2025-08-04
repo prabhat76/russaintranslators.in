@@ -30,7 +30,10 @@
     "db:refresh-external-force": "node refresh-from-external.js --force",
     "test:github": "node test-github-trigger.js",
     "fetch-content": "node scripts/fetch-content.js",
-    "setup-admin": "node setup-admin.js"
+    "setup-admin": "node setup-admin.js",
+    "content:upload": "node scripts/content-uploader.js",
+    "content:validate": "node scripts/content-uploader.js --validate",
+    "content:export": "node scripts/content-uploader.js --export"
   },
   "eslintConfig": {
     "extends": [
