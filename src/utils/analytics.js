@@ -57,5 +57,7 @@ export const analytics = {
   serviceView: (service) => trackEvent('service_view', { service }),
   galleryView: (image) => trackEvent('gallery_view', { image }),
   contactAttempt: (method) => trackEvent('contact_attempt', { method }),
-  quoteRequest: (service, amount) => trackEvent('quote_request', { service, amount })
+  quoteRequest: (service, amount) => trackEvent('quote_request', { service, amount }),
+  liveChatOpen: () => trackEvent('live_chat_open'),
+  liveChatMessage: (messageType) => trackEvent('live_chat_message', { messageType })
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import './App.css';
 import { GALLERY_IMAGES } from './constants/content';
 import { useContent } from './hooks/useContent';
@@ -7,23 +7,46 @@ import { collection, addDoc, onSnapshot, query, orderBy, limit, serverTimestamp 
 import { db, mockFirebaseOps } from './firebase';
 import { throttle } from './utils/performance';
 import { analytics } from './utils/analytics';
-
-const Chatbot = lazy(() => import('./components/Chatbot'));
+import ErrorBoundary from './components/ErrorBoundary';
+import { LoadingSpinner, Toast } from './components/ui/LoadingComponents';
+import SEO from './components/SEO';
+import LiveChat from './components/LiveChat';
+import AccessibilityPanel from './components/AccessibilityPanel';
+import SplashScreen from './components/SplashScreen';
 
 
 const AppContent = React.memo(() => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [liveFeedback, setLiveFeedback] = useState([]);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [feedbackData, setFeedbackData] = useState({ rating: 5, message: '', name: '' });
   const [testimonials, setTestimonials] = useState([]);
+  const [toasts, setToasts] = useState([]);
+  const [isLiveChatOpen, setIsLiveChatOpen] = useState(false);
 
   const [currentLanguage, setCurrentLanguage] = useState(() => {
     const browserLang = navigator.language.toLowerCase();
     return browserLang.startsWith('ru') ? 'ru' : 'en';
   });
+
+  // Toast notification function
+  const showToast = useCallback((message, type = 'info') => {
+    const id = Date.now() + Math.random();
+    const newToast = { id, message, type };
+    setToasts(prev => [...prev, newToast]);
+  }, []);
+
+  const removeToast = useCallback((id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  }, []);
+
+  const toggleLiveChat = useCallback(() => {
+    setIsLiveChatOpen(prev => !prev);
+    if (!isLiveChatOpen) {
+      analytics.liveChatOpen();
+    }
+  }, [isLiveChatOpen]);
   
   const switchLanguage = useCallback((lang) => {
     analytics.languageSwitch(currentLanguage, lang);
@@ -41,8 +64,6 @@ const AppContent = React.memo(() => {
   const { content: t, loading: contentLoading } = useContent(currentLanguage);
   
   const closeModal = useCallback(() => setSelectedImage(null), []);
-  const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
-  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
   
   const handleFeedbackSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -54,16 +75,28 @@ const AppContent = React.memo(() => {
           timestamp: serverTimestamp(),
           language: currentLanguage
         });
+        showToast(
+          currentLanguage === 'en' ? 'Feedback submitted successfully!' : 'Отзыв успешно отправлен!',
+          'success'
+        );
       } catch (error) {
         console.warn('Feedback submission error:', error.message);
+        showToast(
+          currentLanguage === 'en' ? 'Failed to submit feedback. Please try again.' : 'Не удалось отправить отзыв. Попробуйте еще раз.',
+          'error'
+        );
       }
     } else {
       console.log('Mock feedback submission:', feedbackData);
+      showToast(
+        currentLanguage === 'en' ? 'Feedback submitted successfully!' : 'Отзыв успешно отправлен!',
+        'success'
+      );
     }
     
     setFeedbackData({ rating: 5, message: '', name: '' });
     setShowFeedbackForm(false);
-  }, [feedbackData, currentLanguage]);
+  }, [feedbackData, currentLanguage, showToast]);
   
   const handleFeedbackChange = useCallback((e) => {
     setFeedbackData(prev => ({
@@ -169,7 +202,11 @@ const AppContent = React.memo(() => {
   }, []);
 
   if (contentLoading) {
-    return <div className="loading">Loading content...</div>;
+    return (
+      <div className="loading">
+        <LoadingSpinner text="Loading content..." />
+      </div>
+    );
   }
   
   // Debug: Log the actual content structure
@@ -178,150 +215,146 @@ const AppContent = React.memo(() => {
 
   return (
     <div className="App">
-      <header className="header">
-        <div className="header-top">
-          <div className="container">
-            <div className="header-info">
-              <div className="info-item">
-                <span className="info-icon">📞</span>
-                <a href="tel:+918789389223">+91-8789389223</a>
-              </div>
-              <div className="info-item">
-                <span className="info-icon">✉️</span>
-                <a href="mailto:sabrina@languageliberty.com">sabrina@languageliberty.com</a>
-              </div>
-              <div className="info-item">
-                <span className="info-icon">📍</span>
-                <span>Mumbai, India</span>
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+      <SEO language={currentLanguage} />
+      <AccessibilityPanel currentLanguage={currentLanguage} />
+      
+      {/* Floating Language Toggle */}
+      <div className="floating-language-toggle">
+        <div className="language-toggle">
+          <div className="toggle-switch">
+            <input 
+              type="checkbox" 
+              id="langToggle" 
+              checked={currentLanguage === 'ru'} 
+              onChange={(e) => switchLanguage(e.target.checked ? 'ru' : 'en')}
+            />
+            <label htmlFor="langToggle" className="toggle-label">
+              <span className="toggle-text left">🇺🇸 EN</span>
+              <span className="toggle-slider"></span>
+              <span className="toggle-text right">🇷🇺 RU</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Responsive Header */}
+      <header className="main-header">
+        <div className="container">
+          <div className="header-content">
+            <div className="logo-section">
+              <img src="/images/download.webp" alt="Language Liberty Logo" className="header-logo" />
+              <div className="brand-info">
+                <h1 className="brand-name">Language Liberty</h1>
+                <p className="brand-tagline">
+                  {currentLanguage === 'en' ? 'Professional Russian Translation Services' : 'Профессиональные услуги русского перевода'}
+                </p>
               </div>
             </div>
             <div className="header-actions">
-              <div className="language-toggle">
-                <div className="toggle-switch">
-                  <input 
-                    type="checkbox" 
-                    id="langToggle" 
-                    checked={currentLanguage === 'ru'} 
-                    onChange={(e) => switchLanguage(e.target.checked ? 'ru' : 'en')}
-                  />
-                  <label htmlFor="langToggle" className="toggle-label">
-                    <span className="toggle-text left">🇺🇸 EN</span>
-                    <span className="toggle-slider"></span>
-                    <span className="toggle-text right">🇷🇺 RU</span>
-                  </label>
-                </div>
-              </div>
-              <div className="language-badge">
-                <span className="flag">🇷🇺</span>
-                <span>{currentLanguage === 'en' ? 'Russian Expert' : 'Эксперт русского языка'}</span>
-              </div>
-              <div className="experience-badge">
-                <span className="years">6+</span>
-                <span>{currentLanguage === 'en' ? 'Years Experience' : 'Лет опыта'}</span>
-              </div>
+              <a href="tel:+918789389223" className="header-phone">
+                📞 +91-8789389223
+              </a>
+              <button 
+                className="header-quote-btn"
+                onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
+              >
+                {currentLanguage === 'en' ? 'Get Quote' : 'Получить расценки'}
+              </button>
             </div>
           </div>
         </div>
-        
-        <nav className="nav">
-          <div className="container">
-            <div className="nav-brand">
-              <img src="/images/download.webp" alt="Language Liberty Logo" className="logo" />
-              <div className="brand-text">
-                <h3>LANGUAGE LIBERTY</h3>
-                <span>Professional Russian Translation Services</span>
-              </div>
-            </div>
-            
-            <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-              <a href="#home" className="nav-link" onClick={closeMenu}>{t.nav.home}</a>
-              <a href="#about" className="nav-link" onClick={closeMenu}>{t.nav.about}</a>
-              <a href="#services" className="nav-link" onClick={closeMenu}>{t.nav.services}</a>
-              <a href="#contact" className="nav-link" onClick={closeMenu}>{t.nav.contact}</a>
-              <div className="nav-cta-group">
-                <a href="https://wa.me/918789389223" className="nav-cta whatsapp" onClick={() => { analytics.contactAttempt('whatsapp'); closeMenu(); }}>💬 WhatsApp</a>
-                <a href="tel:+918789389223" className="nav-cta call" onClick={() => { analytics.contactAttempt('phone'); closeMenu(); }}>📞 {t.hero?.cta || 'Call Now'}</a>
-              </div>
-            </div>
-            
-            <button 
-              className={`menu-toggle ${isMenuOpen ? 'active' : ''}`}
-              onClick={toggleMenu}
-              aria-label="Toggle menu"
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-          </div>
-        </nav>
       </header>
 
-      <section id="home" className="hero">
-        <div className="hero-content">
-          <div className="hero-video">
-            <video 
-              src="/images/sabrina-intro-video.mp4" 
-              autoPlay 
-              muted 
-              loop 
-              playsInline
-              className="hero-video-element"
-            />
-            <div className="video-overlay">
-              <h1>{t.hero.title}</h1>
-              <p>{t.hero.subtitle}</p>
-              <div className="hero-cta">
-                <a href="tel:+918789389223" className="cta-button primary" onClick={() => analytics.contactAttempt('hero_phone')}>📞 {t.hero?.cta || 'Call Now'}</a>
-                <a href="#about" className="cta-button secondary">{t.hero?.learn || 'Learn More'}</a>
+      <main id="main-content">
+        {/* Meet Sabrina Section */}
+        <section className="meet-sabrina">
+          <div className="container">
+            <div className="meet-sabrina-content">
+              <div className="sabrina-text">
+                <div className="section-label">
+                  {currentLanguage === 'en' ? 'About Your Translator' : 'О вашем переводчике'}
+                </div>
+                <h1 className="sabrina-heading">
+                  {currentLanguage === 'en' ? 'Meet Sabrina' : 'Познакомьтесь с Сабриной'}
+                </h1>
+                <div className="sabrina-subtitle">
+                  {currentLanguage === 'en' 
+                    ? 'Professional Russian-English Translation Services'
+                    : 'Профессиональные услуги русско-английского перевода'
+                  }
+                </div>
+                <div className="sabrina-description">
+                  <p>
+                    {currentLanguage === 'en'
+                      ? 'Born to a Russian mother and an Indian father, I bridge communication gaps between Russian-speaking countries and the world. With education in Russia, Uzbekistan, and India, I bring authentic cultural understanding to every translation project.'
+                      : 'Рожденная от русской матери и индийского отца, я устраняю коммуникационные барьеры между русскоговорящими странами и миром. Получив образование в России, Узбекистане и Индии, я привношу подлинное культурное понимание в каждый переводческий проект.'
+                    }
+                  </p>
+                  <p>
+                    {currentLanguage === 'en'
+                      ? 'With 6+ years of professional experience, I specialize in business interpretation, document translation, and cultural consultation for companies expanding into Russian markets.'
+                      : 'Имея более 6 лет профессионального опыта, я специализируюсь на деловом переводе, переводе документов и культурном консультировании для компаний, выходящих на российские рынки.'
+                    }
+                  </p>
+                </div>
+
+                {/* Credentials */}
+                <div className="credentials">
+                  <div className="credential-badge">
+                    <div className="badge-icon">�</div>
+                    <div className="badge-text">
+                      <span className="badge-title">{currentLanguage === 'en' ? 'CERTIFIED' : 'СЕРТИФИЦИРОВАНО'}</span>
+                      <span className="badge-subtitle">{currentLanguage === 'en' ? 'TRANSLATOR' : 'ПЕРЕВОДЧИК'}</span>
+                    </div>
+                  </div>
+                  <div className="credential-badge">
+                    <div className="badge-icon">🌍</div>
+                    <div className="badge-text">
+                      <span className="badge-title">{currentLanguage === 'en' ? 'MULTICULTURAL' : 'МУЛЬТИКУЛЬТУРНОЕ'}</span>
+                      <span className="badge-subtitle">{currentLanguage === 'en' ? 'BACKGROUND' : 'ОБРАЗОВАНИЕ'}</span>
+                    </div>
+                  </div>
+                  <div className="credential-badge">
+                    <div className="badge-icon">💼</div>
+                    <div className="badge-text">
+                      <span className="badge-title">{currentLanguage === 'en' ? 'BUSINESS' : 'БИЗНЕС'}</span>
+                      <span className="badge-subtitle">{currentLanguage === 'en' ? 'SPECIALIST' : 'СПЕЦИАЛИСТ'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="trusted-cta">
+                  <button 
+                    className="cta-button primary-cta"
+                    onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
+                  >
+                    {currentLanguage === 'en' ? 'GET QUOTE' : 'ПОЛУЧИТЬ РАСЦЕНКИ'}
+                  </button>
+                  <button 
+                    className="cta-button secondary-cta"
+                    onClick={() => window.open('tel:+918789389223')}
+                  >
+                    📞 {currentLanguage === 'en' ? 'CALL NOW' : 'ПОЗВОНИТЬ'}
+                  </button>
+                </div>
+              </div>
+
+              <div className="trusted-image">
+                <div className="team-image">
+                  <img src="/images/sabrina-profile.jpeg" alt="Sabrina Bhatt - Professional Russian Translator" />
+                  <div className="floating-elements">
+                    <div className="float-element float-1">🌍</div>
+                    <div className="float-element float-2">📊</div>
+                    <div className="float-element float-3">💼</div>
+                    <div className="float-element float-4">🔗</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-
-
-      <section id="about" className="about">
-        <div className="container">
-          <div className="about-content">
-            <div className="about-text">
-              <h1>{t.about.title}</h1>
-              <h4>{t.about.subtitle}</h4>
-              <p>{currentLanguage === 'en' ? 'Born to a Russian mother and an Indian father, I bridge communication gaps between Russian-speaking countries and the world. With education in Russia, Uzbekistan, and India, I bring authentic cultural understanding to every translation project.' : 'Рожденная от русской матери и индийского отца, я устраняю коммуникационные барьеры между русскоговорящими странами и миром. Получив образование в России, Узбекистане и Индии, я привношу подлинное культурное понимание в каждый переводческий проект.'}</p>
-              <h4>{t.about.proficiency}</h4>
-              <p>{t.about.experienceText}</p>
-            </div>
-            
-            <div className="about-image">
-              <img src="/images/sabrina-profile.jpeg" alt="Sabrina Bhatt" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="stats">
-        <div className="container">
-          <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-number">200+</div>
-              <div className="stat-label">{currentLanguage === 'en' ? 'Happy Clients' : 'Довольных клиентов'}</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">500+</div>
-              <div className="stat-label">{currentLanguage === 'en' ? 'Projects Completed' : 'Завершенных проектов'}</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">6+</div>
-              <div className="stat-label">{currentLanguage === 'en' ? 'Years Experience' : 'Лет опыта'}</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">24/7</div>
-              <div className="stat-label">{currentLanguage === 'en' ? 'Support Available' : 'Поддержка доступна'}</div>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
       <section className="gallery">
         <div className="container">
@@ -436,8 +469,11 @@ const AppContent = React.memo(() => {
           </div>
           <div className="services-grid">
             <div className="service-card featured">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=250&fit=crop" alt="Virtual Meetings" />
+              <div className="service-icon">
+                <div className="icon-design virtual-meeting">
+                  <div className="icon-symbol">🖥️</div>
+                  <div className="icon-badge">ZOOM</div>
+                </div>
               </div>
               <div className="service-content">
                 <div className="service-badge">{currentLanguage === 'en' ? 'Most Popular' : 'Самый популярный'}</div>
@@ -452,8 +488,11 @@ const AppContent = React.memo(() => {
             </div>
             
             <div className="service-card">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&h=250&fit=crop" alt="Business Meetings" />
+              <div className="service-icon">
+                <div className="icon-design business-meeting">
+                  <div className="icon-symbol">🤝</div>
+                  <div className="icon-badge">BUSINESS</div>
+                </div>
               </div>
               <div className="service-content">
                 <h3>{currentLanguage === 'en' ? 'In-Person Business Meetings' : 'Личные деловые встречи'}</h3>
@@ -467,8 +506,11 @@ const AppContent = React.memo(() => {
             </div>
             
             <div className="service-card">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=250&fit=crop" alt="Document Translation" />
+              <div className="service-icon">
+                <div className="icon-design document-translation">
+                  <div className="icon-symbol">📋</div>
+                  <div className="icon-badge">CERTIFIED</div>
+                </div>
               </div>
               <div className="service-content">
                 <h3>{currentLanguage === 'en' ? 'Certified Document Translation' : 'Сертифицированный перевод документов'}</h3>
@@ -482,8 +524,11 @@ const AppContent = React.memo(() => {
             </div>
             
             <div className="service-card">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop" alt="Russian Language Training" />
+              <div className="service-icon">
+                <div className="icon-design language-training">
+                  <div className="icon-symbol">🎓</div>
+                  <div className="icon-badge">TRAINING</div>
+                </div>
               </div>
               <div className="service-content">
                 <h3>{currentLanguage === 'en' ? 'Russian Language Training' : 'Обучение английскому языку'}</h3>
@@ -497,8 +542,11 @@ const AppContent = React.memo(() => {
             </div>
             
             <div className="service-card">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=250&fit=crop" alt="Travel Support" />
+              <div className="service-icon">
+                <div className="icon-design travel-support">
+                  <div className="icon-symbol">✈️</div>
+                  <div className="icon-badge">TRAVEL</div>
+                </div>
               </div>
               <div className="service-content">
                 <h3>{currentLanguage === 'en' ? 'Executive Travel Support' : 'Поддержка деловых поездок'}</h3>
@@ -512,8 +560,11 @@ const AppContent = React.memo(() => {
             </div>
             
             <div className="service-card">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=250&fit=crop" alt="Entertainment Industry" />
+              <div className="service-icon">
+                <div className="icon-design entertainment-industry">
+                  <div className="icon-symbol">🎬</div>
+                  <div className="icon-badge">ENTERTAINMENT</div>
+                </div>
               </div>
               <div className="service-content">
                 <h3>{currentLanguage === 'en' ? 'Entertainment Industry Support' : 'Поддержка индустрии развлечений'}</h3>
@@ -706,6 +757,8 @@ const AppContent = React.memo(() => {
         </div>
       </section>
 
+      </main>
+
       <footer className="footer">
         <div className="container">
           <div className="footer-main">
@@ -769,12 +822,6 @@ const AppContent = React.memo(() => {
           </div>
         </div>
       </footer>
-      
-      <Suspense fallback={<div>Loading...</div>}>
-        <Chatbot language={currentLanguage} />
-      </Suspense>
-      
-
       
       {/* Mobile-only floating language toggle */}
       <div className="mobile-lang-toggle">
@@ -854,11 +901,52 @@ const AppContent = React.memo(() => {
           </div>
         </div>
       )}
+
+      {/* Toast Notifications */}
+      <div className="toast-container">
+        {toasts.map(toast => (
+          <Toast
+            key={toast.id}
+            message={toast.message}
+            type={toast.type}
+            onClose={() => removeToast(toast.id)}
+          />
+        ))}
+      </div>
+
+      {/* Live Chat */}
+      <LiveChat 
+        currentLanguage={currentLanguage}
+        isOpen={isLiveChatOpen}
+        onToggle={toggleLiveChat}
+      />
+
+      {/* Floating Chat Button */}
+      {!isLiveChatOpen && (
+        <button 
+          className="floating-chat-btn"
+          onClick={toggleLiveChat}
+          title={currentLanguage === 'en' ? 'Start Live Chat' : 'Начать чат'}
+        >
+          <span className="chat-icon">💬</span>
+          <span className="chat-pulse"></span>
+        </button>
+      )}
     </div>
   );
 });
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+  const [currentLanguage, setCurrentLanguage] = useState(() => {
+    const browserLang = navigator.language.toLowerCase();
+    return browserLang.startsWith('ru') ? 'ru' : 'en';
+  });
+
+  const handleSplashComplete = useCallback(() => {
+    setShowSplash(false);
+  }, []);
+
   // Check if current path is admin
   const isAdminRoute = window.location.pathname === '/admin';
   
@@ -866,13 +954,27 @@ function App() {
     // Lazy load admin component
     const AdminApp = React.lazy(() => import('./AdminApp'));
     return (
-      <Suspense fallback={<div className="loading">Loading Admin...</div>}>
-        <AdminApp />
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingSpinner text="Loading Admin..." />}>
+          <AdminApp />
+        </Suspense>
+      </ErrorBoundary>
     );
   }
   
-  return <AppContent />;
+  return (
+    <ErrorBoundary>
+      {showSplash && (
+        <SplashScreen
+          onComplete={handleSplashComplete}
+          duration={2000}
+          currentLanguage={currentLanguage}
+          isVisible={showSplash}
+        />
+      )}
+      {!showSplash && <AppContent />}
+    </ErrorBoundary>
+  );
 }
 
 export default App;
