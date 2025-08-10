@@ -9,17 +9,21 @@ const SplashScreen = ({
   const [isComplete, setIsComplete] = useState(false);
   const [animationPhase, setAnimationPhase] = useState('initial');
 
+  console.log('SplashScreen rendering - isVisible:', isVisible, 'duration:', duration); // Debug log
+
   // Content for both languages
   const content = {
     en: {
       welcome: "Welcome to",
-      brand: "Russian Translators",
-      tagline: "Professional Russian-English Translation Services"
+      brand: "Language Liberty",
+      tagline: "Professional Russian-English Translation Services",
+      subtitle: "Breaking Language Barriers with Excellence"
     },
     ru: {
       welcome: "Добро пожаловать в",
-      brand: "Русские переводчики",
-      tagline: "Профессиональные услуги русско-английского перевода"
+      brand: "Language Liberty",
+      tagline: "Профессиональные услуги русско-английского перевода",
+      subtitle: "Преодолеваем языковые барьеры с превосходством"
     }
   };
 
@@ -67,7 +71,12 @@ const SplashScreen = ({
     };
   }, [isVisible, duration, onComplete]);
 
-  if (!isVisible) return null;
+  if (!isVisible) {
+    console.log('SplashScreen not visible, returning null'); // Debug log
+    return null;
+  }
+
+  console.log('SplashScreen rendering JSX'); // Debug log
 
   return (
     <div className={`splash-screen ${isComplete ? 'complete' : ''}`}>
@@ -88,6 +97,7 @@ const SplashScreen = ({
               alt="Language Liberty Logo" 
               className="logo-image"
             />
+            <div className="logo-glow"></div>
           </div>
 
           {/* Text content */}
@@ -96,11 +106,30 @@ const SplashScreen = ({
               {currentContent.welcome}
             </div>
             <h1 className="brand-name">
-              {currentContent.brand}
+              <span className="brand-text">{currentContent.brand}</span>
             </h1>
             <div className="tagline">
               {currentContent.tagline}
             </div>
+            <div className="subtitle">
+              {currentContent.subtitle}
+            </div>
+          </div>
+
+          {/* Language flags */}
+          <div className="language-flags">
+            <span className="flag">🇺🇸</span>
+            <span className="separator">⟷</span>
+            <span className="flag">🇷🇺</span>
+          </div>
+        </div>
+
+        {/* Loading indicator */}
+        <div className="splash-loader">
+          <div className="loader-dots">
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </div>
       </div>

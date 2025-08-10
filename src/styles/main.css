@@ -1,0 +1,56 @@
+/* MASTER CSS FILE - Imports all modular stylesheets */
+
+/* Base Styles - Global resets and utilities */
+@import './base/globals.css';
+@import './base/responsive.css';
+@import './base/layout.css';
+
+/* Component Styles - Reusable UI components */
+@import './components/header.css';
+@import './components/language-toggle.css';
+@import './components/credentials.css';
+@import './components/splash-screen.css';
+
+/* Section Styles - Page sections */
+@import './sections/hero.css';
+@import './sections/book-consultation.css';
+@import './sections/services.css';
+@import './sections/contact.css';
+
+/* 
+ARCHITECTURE NOTES:
+- Base: Global styles, resets, utilities
+- Components: Reusable UI elements  
+- Sections: Page-specific content areas
+- Pages: Full page layouts (future)
+- Themes: Color schemes and branding (future)
+*/
+
+/* Legacy Overrides - Temporary during migration */
+.App {
+  text-align: center;
+}
+
+/* Ensure proper z-index layering */
+.header { z-index: 1000; }
+.language-toggle { z-index: 9999; }
+
+/* Performance optimizations */
+* {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

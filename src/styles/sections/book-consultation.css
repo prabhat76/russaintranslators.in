@@ -1,0 +1,141 @@
+/* BOOK CONSULTATION SECTION STYLES */
+.book-consultation {
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #20b2aa 0%, #48d1cc 100%);
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.book-consultation::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="25" cy="25" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+  background-size: 100px 100px;
+  animation: float 15s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.consultation-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.book-consultation h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.book-consultation p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+  line-height: 1.6;
+}
+
+.consultation-cta {
+  display: inline-block;
+  background: white;
+  color: #20b2aa;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 3px solid transparent;
+}
+
+.consultation-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: transparent;
+  color: white;
+  border-color: white;
+}
+
+/* Features list */
+.consultation-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+  text-align: left;
+}
+
+.feature-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.feature-item h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.feature-item p {
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Mobile consultation styles */
+@media (max-width: 768px) {
+  .book-consultation {
+    padding: 3rem 0;
+  }
+  
+  .book-consultation h2 {
+    font-size: 2rem;
+  }
+  
+  .book-consultation p {
+    font-size: 1rem;
+  }
+  
+  .consultation-cta {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+  
+  .consultation-features {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .feature-item {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-consultation h2 {
+    font-size: 1.8rem;
+  }
+  
+  .consultation-cta {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}

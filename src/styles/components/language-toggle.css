@@ -1,0 +1,117 @@
+/* LANGUAGE TOGGLE COMPONENT STYLES */
+.language-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.language-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a5acd 100%);
+}
+
+.language-toggle:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Different states based on scroll position */
+.language-toggle.scrolled {
+  background: rgba(102, 126, 234, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+/* Integration with header when visible */
+.language-toggle.in-header {
+  position: relative;
+  top: auto;
+  right: auto;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.language-toggle.in-header:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Hide floating toggle when header is visible */
+.language-toggle.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+}
+
+/* Language indicator styles */
+.language-toggle::before {
+  content: attr(data-lang);
+  margin-right: 8px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Mobile language toggle styles */
+@media (max-width: 768px) {
+  .language-toggle {
+    top: 15px;
+    right: 15px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    border-radius: 20px;
+  }
+  
+  .language-toggle.in-header {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .language-toggle {
+    top: 10px;
+    right: 10px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+  
+  .language-toggle::before {
+    margin-right: 6px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Animation for language switch */
+@keyframes languageSwitch {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.language-toggle.switching {
+  animation: languageSwitch 0.3s ease-in-out;
+}

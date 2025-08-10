@@ -1,0 +1,126 @@
+/* LAYOUT UTILITIES - Full width sections and spacing */
+
+/* Full-width section utility */
+.full-width-section {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  position: relative;
+}
+
+/* Container that centers content within full-width sections */
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+/* Grid layout utilities */
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.equal-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+/* Content alignment utilities */
+.content-left {
+  width: 100%;
+  max-width: none;
+  padding-right: 2rem;
+}
+
+.content-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Section spacing utilities */
+.section-padding-lg {
+  padding: 5rem 0;
+}
+
+.section-padding-md {
+  padding: 3rem 0;
+}
+
+.section-padding-sm {
+  padding: 2rem 0;
+}
+
+/* Minimum height utilities */
+.min-height-screen {
+  min-height: 100vh;
+}
+
+.min-height-section {
+  min-height: 80vh;
+}
+
+.min-height-content {
+  min-height: 60vh;
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 1024px) {
+  .two-col-grid {
+    grid-template-columns: 1.5fr 1fr;
+    gap: 3rem;
+  }
+  
+  .content-left {
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .full-width-section {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .two-col-grid,
+  .equal-col-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    min-height: auto;
+  }
+  
+  .content-left {
+    padding-right: 0;
+    text-align: center;
+  }
+  
+  .content-right {
+    justify-content: center;
+  }
+  
+  .min-height-section,
+  .min-height-content {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-container {
+    padding: 0 15px;
+  }
+  
+  .two-col-grid,
+  .equal-col-grid {
+    gap: 1.5rem;
+  }
+}

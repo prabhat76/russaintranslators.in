@@ -1,0 +1,57 @@
+/* RESPONSIVE DESIGN - Breakpoints and mobile-first approach */
+
+/* Mobile First Breakpoints */
+:root {
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1400px;
+}
+
+/* Common responsive utilities */
+.d-none { display: none; }
+.d-block { display: block; }
+.d-flex { display: flex; }
+.d-grid { display: grid; }
+
+/* Flex utilities */
+.flex-column { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+.align-center { align-items: center; }
+.align-start { align-items: flex-start; }
+.align-end { align-items: flex-end; }
+
+/* Grid utilities */
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.gap-1 { gap: 1rem; }
+.gap-2 { gap: 2rem; }
+.gap-3 { gap: 3rem; }
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+  .mobile-hidden { display: none !important; }
+  .mobile-full-width { width: 100% !important; }
+  .mobile-text-center { text-align: center !important; }
+  .mobile-p-1 { padding: 1rem !important; }
+  .mobile-mb-2 { margin-bottom: 2rem !important; }
+}
+
+/* Tablet responsiveness */
+@media (min-width: 768px) and (max-width: 991px) {
+  .tablet-hidden { display: none !important; }
+  .tablet-grid-2 { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* Desktop responsiveness */
+@media (min-width: 992px) {
+  .desktop-hidden { display: none !important; }
+  .desktop-grid-3 { grid-template-columns: repeat(3, 1fr) !important; }
+  .desktop-grid-4 { grid-template-columns: repeat(4, 1fr) !important; }
+}
