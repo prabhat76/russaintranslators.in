@@ -281,123 +281,996 @@ const AppContent = React.memo(() => {
 
   return (
     <div className="App">
-      <header className="header">
-        <div className="header-top">
-          <div className="container">
-            <div className="header-info">
-              <div className="info-item">
-                <span className="info-icon">📞</span>
-                <a href="tel:+918789389223">+91-8789389223</a>
+      <header style={{
+        background: 'white',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000
+      }}>
+        {/* Main Navigation Only */}
+        <nav style={{ padding: '1.25rem 0' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center'
+            }}>
+              {/* Brand */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <img 
+                  src="/images/download.webp" 
+                  alt="Language Liberty Logo" 
+                  style={{
+                    width: '60px',
+                    height: '60px',
+                    borderRadius: '12px',
+                    border: '2px solid #e2e8f0'
+                  }}
+                />
+                <div>
+                  <h3 style={{
+                    margin: 0,
+                    fontSize: '1.5rem',
+                    fontWeight: '800',
+                    color: '#1e293b',
+                    letterSpacing: '-0.02em'
+                  }}>
+                    LANGUAGE LIBERTY
+                  </h3>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '0.9rem',
+                    color: '#6366f1',
+                    fontWeight: '500'
+                  }}>
+                    Professional Russian Translation Services
+                  </p>
+                </div>
               </div>
-              <div className="info-item">
-                <span className="info-icon">✉️</span>
-                <a href="mailto:sabrina@languageliberty.com">sabrina@languageliberty.com</a>
-              </div>
-              <div className="info-item">
-                <span className="info-icon">📍</span>
-                <span>Mumbai, India</span>
-              </div>
-            </div>
-            <div className="header-actions">
-              <div className="language-toggle">
-                <div className="toggle-switch">
+              
+              {/* Navigation Links & Controls */}
+              <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '2rem'
+              }}>
+                <a href="#home" onClick={closeMenu} style={{
+                  color: '#475569',
+                  textDecoration: 'none',
+                  fontWeight: '500',
+                  fontSize: '1rem',
+                  transition: 'color 0.3s'
+                }}>
+                  {t.nav?.home || 'Home'}
+                </a>
+                <a href="#about" onClick={closeMenu} style={{
+                  color: '#475569',
+                  textDecoration: 'none',
+                  fontWeight: '500',
+                  fontSize: '1rem',
+                  transition: 'color 0.3s'
+                }}>
+                  {currentLanguage === 'ru' ? 'О Сабрине' : 'Meet Sabrina'}
+                </a>
+                <a href="#services" onClick={closeMenu} style={{
+                  color: '#475569',
+                  textDecoration: 'none',
+                  fontWeight: '500',
+                  fontSize: '1rem',
+                  transition: 'color 0.3s'
+                }}>
+                  {t.nav?.services || 'Services'}
+                </a>
+                <a href="#contact" onClick={closeMenu} style={{
+                  color: '#475569',
+                  textDecoration: 'none',
+                  fontWeight: '500',
+                  fontSize: '1rem',
+                  transition: 'color 0.3s'
+                }}>
+                  {t.nav?.contact || 'Contact'}
+                </a>
+                
+                {/* Language Toggle - Optimal Position */}
+                <div style={{
+                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  borderRadius: '25px',
+                  padding: '0.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginLeft: '1rem'
+                }}>
                   <input 
                     type="checkbox" 
                     id="langToggle" 
                     checked={currentLanguage === 'ru'} 
                     onChange={(e) => switchLanguage(e.target.checked ? 'ru' : 'en')}
+                    style={{ display: 'none' }}
                   />
-                  <label htmlFor="langToggle" className="toggle-label">
-                    <span className="toggle-text left">🇺🇸 EN</span>
-                    <span className="toggle-slider"></span>
-                    <span className="toggle-text right">🇷🇺 RU</span>
+                  <label htmlFor="langToggle" style={{ 
+                    display: 'flex', 
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    gap: '0.25rem'
+                  }}>
+                    <span style={{
+                      padding: '0.5rem 1rem',
+                      borderRadius: '20px',
+                      background: currentLanguage === 'en' ? 'white' : 'transparent',
+                      color: currentLanguage === 'en' ? '#6366f1' : 'white',
+                      fontSize: '0.85rem',
+                      fontWeight: '600',
+                      transition: 'all 0.3s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem'
+                    }}>
+                      🇺🇸 EN
+                    </span>
+                    <span style={{
+                      padding: '0.5rem 1rem',
+                      borderRadius: '20px',
+                      background: currentLanguage === 'ru' ? 'white' : 'transparent',
+                      color: currentLanguage === 'ru' ? '#6366f1' : 'white',
+                      fontSize: '0.85rem',
+                      fontWeight: '600',
+                      transition: 'all 0.3s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem'
+                    }}>
+                      🇷🇺 RU
+                    </span>
                   </label>
                 </div>
+                
+                {/* CTA Buttons */}
+                <div style={{ display: 'flex', gap: '0.75rem', marginLeft: '1rem' }}>
+                  <a 
+                    href="https://wa.me/918789389223" 
+                    onClick={() => { analytics.contactAttempt('whatsapp'); closeMenu(); }}
+                    style={{
+                      background: '#10b981',
+                      color: 'white',
+                      padding: '0.75rem 1.25rem',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      fontWeight: '600',
+                      fontSize: '0.9rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      transition: 'all 0.3s'
+                    }}
+                  >
+                    💬 WhatsApp
+                  </a>
+                  <a 
+                    href="tel:+918789389223" 
+                    onClick={() => { analytics.contactAttempt('phone'); closeMenu(); }}
+                    style={{
+                      background: '#6366f1',
+                      color: 'white',
+                      padding: '0.75rem 1.25rem',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      fontWeight: '600',
+                      fontSize: '0.9rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      transition: 'all 0.3s'
+                    }}
+                  >
+                    📞 Call Now
+                  </a>
+                </div>
               </div>
-              <div className="language-badge">
-                <span className="flag">🇷🇺</span>
-                <span>{currentLanguage === 'en' ? 'Russian Expert' : 'Эксперт русского языка'}</span>
-              </div>
-              <div className="experience-badge">
-                <span className="years">6+</span>
-                <span>{currentLanguage === 'en' ? 'Years Experience' : 'Лет опыта'}</span>
-              </div>
+              
+              {/* Mobile Menu Toggle */}
+              <button 
+                className={`menu-toggle ${isMenuOpen ? 'active' : ''}`}
+                onClick={toggleMenu}
+                aria-label="Toggle menu"
+                style={{
+                  display: 'none',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '0.5rem'
+                }}
+              >
+                <span style={{
+                  display: 'block',
+                  width: '25px',
+                  height: '3px',
+                  background: '#1e293b',
+                  margin: '5px 0',
+                  transition: '0.3s'
+                }}></span>
+                <span style={{
+                  display: 'block',
+                  width: '25px',
+                  height: '3px',
+                  background: '#1e293b',
+                  margin: '5px 0',
+                  transition: '0.3s'
+                }}></span>
+                <span style={{
+                  display: 'block',
+                  width: '25px',
+                  height: '3px',
+                  background: '#1e293b',
+                  margin: '5px 0',
+                  transition: '0.3s'
+                }}></span>
+              </button>
             </div>
-          </div>
-        </div>
-        
-        <nav className="nav">
-          <div className="container">
-            <div className="nav-brand">
-              <img src="/images/download.webp" alt="Language Liberty Logo" className="logo" />
-              <div className="brand-text">
-                <h3>LANGUAGE LIBERTY</h3>
-                <span>Professional Russian Translation Services</span>
-              </div>
-            </div>
-            
-            <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-              <a href="#home" className="nav-link" onClick={closeMenu}>{t.nav.home}</a>
-              <a href="#about" className="nav-link" onClick={closeMenu}>{t.nav.about}</a>
-              <a href="#services" className="nav-link" onClick={closeMenu}>{t.nav.services}</a>
-              <a href="#contact" className="nav-link" onClick={closeMenu}>{t.nav.contact}</a>
-              <div className="nav-cta-group">
-                <a href="https://wa.me/918789389223" className="nav-cta whatsapp" onClick={() => { analytics.contactAttempt('whatsapp'); closeMenu(); }}>💬 WhatsApp</a>
-                <a href="tel:+918789389223" className="nav-cta call" onClick={() => { analytics.contactAttempt('phone'); closeMenu(); }}>📞 {t.hero?.cta || 'Call Now'}</a>
-              </div>
-            </div>
-            
-            <button 
-              className={`menu-toggle ${isMenuOpen ? 'active' : ''}`}
-              onClick={toggleMenu}
-              aria-label="Toggle menu"
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
           </div>
         </nav>
       </header>
 
-      <section id="home" className="hero">
-        <div className="hero-content">
-          <div className="hero-video">
-            <video 
-              src="/images/sabrina-intro-video.mp4" 
-              autoPlay 
-              muted 
-              loop 
-              playsInline
-              className="hero-video-element"
-            />
-            <div className="video-overlay">
-              <h1>{t.hero.title}</h1>
-              <p>{t.hero.subtitle}</p>
-              <div className="hero-cta">
-                <a href="tel:+918789389223" className="cta-button primary" onClick={() => analytics.contactAttempt('hero_phone')}>📞 {t.hero?.cta || 'Call Now'}</a>
-                <a href="#about" className="cta-button secondary">{t.hero?.learn || 'Learn More'}</a>
+      {/* Meet Sabrina Section - Moved to Top */}
+      <section id="about" style={{ 
+        padding: '6rem 2rem', 
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+        position: 'relative'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr 400px', 
+            gap: '4rem', 
+            alignItems: 'center'
+          }}>
+            {/* Left Content */}
+            <div>
+              <div style={{ marginBottom: '1rem' }}>
+                <span style={{
+                  fontSize: '0.9rem',
+                  color: '#6366f1',
+                  fontWeight: '600',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em'
+                }}>
+                  ABOUT YOUR TRANSLATOR
+                </span>
+              </div>
+              
+              <h1 style={{
+                fontSize: '3rem',
+                fontWeight: '800',
+                color: '#1e293b',
+                marginBottom: '1.5rem',
+                lineHeight: '1.1'
+              }}>
+                MEET SABRINA
+              </h1>
+              
+              <h2 style={{
+                fontSize: '1.3rem',
+                color: '#6366f1',
+                fontWeight: '600',
+                marginBottom: '1.5rem'
+              }}>
+                Professional Russian-English Translation Services
+              </h2>
+              
+              <p style={{
+                fontSize: '1.1rem',
+                color: '#475569',
+                lineHeight: '1.7',
+                marginBottom: '1.5rem'
+              }}>
+                {currentLanguage === 'en' ? 'Born to a Russian mother and an Indian father, I bridge communication gaps between Russian-speaking countries and the world. With education in Russia, Uzbekistan, and India, I bring authentic cultural understanding to every translation project.' : 'Рожденная от русской матери и индийского отца, я устраняю коммуникационные барьеры между русскоговорящими странами и миром. Получив образование в России, Узбекистане и Индии, я привношу подлинное культурное понимание в каждый переводческий проект.'}
+              </p>
+              
+              <p style={{
+                fontSize: '1.1rem',
+                color: '#475569',
+                lineHeight: '1.7',
+                marginBottom: '2.5rem'
+              }}>
+                With 6+ years of professional experience, I specialize in business interpretation, document translation, and cultural consultation for companies expanding into Russian markets.
+              </p>
+              
+              {/* Credentials */}
+              <div style={{ 
+                display: 'flex', 
+                gap: '1rem', 
+                marginBottom: '2.5rem',
+                flexWrap: 'wrap'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  background: 'white',
+                  padding: '0.75rem 1.25rem',
+                  borderRadius: '50px',
+                  border: '2px solid #e2e8f0',
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: '#3b82f6',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: '0.75rem'
+                  }}>
+                    <span style={{ color: 'white', fontSize: '1.2rem' }}>✓</span>
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: '600', color: '#1e293b', fontSize: '0.9rem' }}>CERTIFIED</div>
+                    <div style={{ color: '#6b7280', fontSize: '0.8rem' }}>TRANSLATOR</div>
+                  </div>
+                </div>
+                
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  background: 'white',
+                  padding: '0.75rem 1.25rem',
+                  borderRadius: '50px',
+                  border: '2px solid #e2e8f0',
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: '#10b981',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: '0.75rem'
+                  }}>
+                    <span style={{ color: 'white', fontSize: '1.2rem' }}>🌍</span>
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: '600', color: '#1e293b', fontSize: '0.9rem' }}>MULTICULTURAL</div>
+                    <div style={{ color: '#6b7280', fontSize: '0.8rem' }}>BACKGROUND</div>
+                  </div>
+                </div>
+                
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  background: 'white',
+                  padding: '0.75rem 1.25rem',
+                  borderRadius: '50px',
+                  border: '2px solid #e2e8f0',
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: '#f59e0b',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: '0.75rem'
+                  }}>
+                    <span style={{ color: 'white', fontSize: '1.2rem' }}>💼</span>
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: '600', color: '#1e293b', fontSize: '0.9rem' }}>BUSINESS</div>
+                    <div style={{ color: '#6b7280', fontSize: '0.8rem' }}>SPECIALIST</div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <button style={{
+                  background: '#6366f1',
+                  color: 'white',
+                  padding: '0.875rem 2rem',
+                  borderRadius: '8px',
+                  border: 'none',
+                  fontWeight: '600',
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(99,102,241,0.3)',
+                  transition: 'all 0.3s ease'
+                }} onClick={() => { 
+                  analytics.contactAttempt('meet_sabrina_quote'); 
+                  document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }); 
+                }}>
+                  GET QUOTE
+                </button>
+                
+                <button style={{
+                  background: 'white',
+                  color: '#6366f1',
+                  padding: '0.875rem 2rem',
+                  borderRadius: '8px',
+                  border: '2px solid #6366f1',
+                  fontWeight: '600',
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }} onClick={() => { 
+                  analytics.contactAttempt('meet_sabrina_call'); 
+                  window.open('tel:+918789389223'); 
+                }}>
+                  📞 CALL NOW
+                </button>
+              </div>
+            </div>
+            
+            {/* Right Image */}
+            <div style={{ position: 'relative' }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                borderRadius: '20px',
+                padding: '1rem',
+                transform: 'rotate(-2deg)',
+                boxShadow: '0 25px 50px rgba(99,102,241,0.3)'
+              }}>
+                <img 
+                  src="/images/sabrina-profile.jpeg" 
+                  alt="Sabrina Bhatt - Professional Russian Translator" 
+                  style={{
+                    width: '100%',
+                    height: '500px',
+                    objectFit: 'cover',
+                    borderRadius: '12px',
+                    transform: 'rotate(2deg)'
+                  }}
+                />
+              </div>
+              
+              {/* Floating decorative elements */}
+              <div style={{
+                position: 'absolute',
+                top: '-20px',
+                right: '-20px',
+                background: '#fbbf24',
+                borderRadius: '50%',
+                width: '80px',
+                height: '80px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '2rem',
+                boxShadow: '0 10px 25px rgba(251,191,36,0.3)'
+              }}>
+                🏆
+              </div>
+              
+              <div style={{
+                position: 'absolute',
+                bottom: '-10px',
+                left: '-30px',
+                background: 'white',
+                borderRadius: '15px',
+                padding: '1rem',
+                boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+                border: '2px solid #e2e8f0'
+              }}>
+                <div style={{ fontWeight: '700', color: '#1e293b' }}>6+ Years</div>
+                <div style={{ color: '#6b7280', fontSize: '0.9rem' }}>Experience</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-
-
-      <section id="about" className="about">
-        <div className="container">
-          <div className="about-content">
-            <div className="about-text">
-              <h1>{t.about.title}</h1>
-              <h4>{t.about.subtitle}</h4>
-              <p>{currentLanguage === 'en' ? 'Born to a Russian mother and an Indian father, I bridge communication gaps between Russian-speaking countries and the world. With education in Russia, Uzbekistan, and India, I bring authentic cultural understanding to every translation project.' : 'Рожденная от русской матери и индийского отца, я устраняю коммуникационные барьеры между русскоговорящими странами и миром. Получив образование в России, Узбекистане и Индии, я привношу подлинное культурное понимание в каждый переводческий проект.'}</p>
-              <h4>{t.about.proficiency}</h4>
-              <p>{t.about.experienceText}</p>
+      <section id="home" style={{
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+        padding: '4rem 2rem',
+        minHeight: '70vh',
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr 400px', 
+            gap: '4rem', 
+            alignItems: 'center'
+          }}>
+            {/* Left Content */}
+            <div>
+              <div style={{ marginBottom: '1rem' }}>
+                <span style={{
+                  fontSize: '0.9rem',
+                  color: '#6366f1',
+                  fontWeight: '600',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em'
+                }}>
+                  PROFESSIONAL TRANSLATION SERVICES
+                </span>
+              </div>
+              
+              <h1 style={{
+                fontSize: '4rem',
+                fontWeight: '900',
+                color: '#1e293b',
+                marginBottom: '1.5rem',
+                lineHeight: '1.1'
+              }}>
+                {currentLanguage === 'ru' ? 'Разрушаем языковые барьеры' : 'Breaking Language Barriers'}
+              </h1>
+              
+              <h2 style={{
+                fontSize: '1.5rem',
+                color: '#6366f1',
+                fontWeight: '600',
+                marginBottom: '2rem'
+              }}>
+                {currentLanguage === 'ru' 
+                  ? 'Профессиональные услуги русско-английского перевода в Мумбаи'
+                  : 'Expert Russian-English Translation Services in Mumbai'
+                }
+              </h2>
+              
+              <p style={{
+                fontSize: '1.2rem',
+                color: '#475569',
+                lineHeight: '1.7',
+                marginBottom: '3rem',
+                maxWidth: '500px'
+              }}>
+                {currentLanguage === 'ru' 
+                  ? 'Соединяя русскоговорящие страны с индийскими предприятиями через профессиональный перевод и культурную экспертизу.'
+                  : 'Connecting Russian-speaking countries with Indian businesses through professional interpretation and cultural expertise.'
+                }
+              </p>
+              
+              {/* Hero CTAs */}
+              <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem' }}>
+                <button style={{
+                  background: '#6366f1',
+                  color: 'white',
+                  padding: '1rem 2.5rem',
+                  borderRadius: '12px',
+                  border: 'none',
+                  fontWeight: '700',
+                  fontSize: '1.1rem',
+                  cursor: 'pointer',
+                  boxShadow: '0 8px 25px rgba(99,102,241,0.3)',
+                  transition: 'all 0.3s ease'
+                }} onClick={() => { 
+                  analytics.contactAttempt('hero_phone'); 
+                  window.open('tel:+918789389223'); 
+                }}>
+                  📞 {currentLanguage === 'ru' ? 'Позвонить сейчас' : 'Call Now'}
+                </button>
+                
+                <button style={{
+                  background: 'white',
+                  color: '#6366f1',
+                  padding: '1rem 2.5rem',
+                  borderRadius: '12px',
+                  border: '2px solid #6366f1',
+                  fontWeight: '600',
+                  fontSize: '1.1rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }} onClick={() => { 
+                  document.getElementById('services').scrollIntoView({ behavior: 'smooth' }); 
+                }}>
+                  {currentLanguage === 'ru' ? 'Узнать больше' : 'Learn More'}
+                </button>
+              </div>
+              
+              {/* Quick Stats */}
+              <div style={{ 
+                display: 'flex', 
+                gap: '2rem',
+                padding: '1.5rem 0',
+                borderTop: '1px solid #e2e8f0'
+              }}>
+                <div>
+                  <div style={{ fontSize: '2rem', fontWeight: '800', color: '#1e293b' }}>200+</div>
+                  <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+                    {currentLanguage === 'ru' ? 'Довольных клиентов' : 'Happy Clients'}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '2rem', fontWeight: '800', color: '#1e293b' }}>6+</div>
+                  <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+                    {currentLanguage === 'ru' ? 'Лет опыта' : 'Years Experience'}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '2rem', fontWeight: '800', color: '#1e293b' }}>24/7</div>
+                  <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+                    {currentLanguage === 'ru' ? 'Поддержка' : 'Support'}
+                  </div>
+                </div>
+              </div>
             </div>
             
-            <div className="about-image">
-              <img src="/images/sabrina-profile.jpeg" alt="Sabrina Bhatt" />
+            {/* Right Image/Visual */}
+            <div style={{ position: 'relative' }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                borderRadius: '20px',
+                padding: '2rem',
+                textAlign: 'center',
+                color: 'white',
+                boxShadow: '0 25px 50px rgba(99,102,241,0.3)'
+              }}>
+                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🇺🇸 ⟷ 🇷🇺</div>
+                <h3 style={{ 
+                  fontSize: '1.5rem', 
+                  fontWeight: '700', 
+                  marginBottom: '1rem',
+                  margin: 0
+                }}>
+                  Language Liberty
+                </h3>
+                <p style={{ 
+                  opacity: 0.9, 
+                  marginBottom: '2rem',
+                  margin: 0,
+                  lineHeight: '1.6'
+                }}>
+                  {currentLanguage === 'ru' 
+                    ? 'Ваш надежный партнер в русско-английском переводе'
+                    : 'Your trusted partner in Russian-English translation'
+                  }
+                </p>
+                
+                {/* Contact Info Cards */}
+                <div style={{ display: 'grid', gap: '1rem' }}>
+                  <div style={{
+                    background: 'rgba(255,255,255,0.2)',
+                    borderRadius: '12px',
+                    padding: '1rem',
+                    backdropFilter: 'blur(10px)'
+                  }}>
+                    <div style={{ fontWeight: '600', marginBottom: '0.5rem' }}>📞 Direct Call</div>
+                    <div style={{ fontSize: '1.1rem' }}>+91-8789389223</div>
+                  </div>
+                  
+                  <div style={{
+                    background: 'rgba(255,255,255,0.2)',
+                    borderRadius: '12px',
+                    padding: '1rem',
+                    backdropFilter: 'blur(10px)'
+                  }}>
+                    <div style={{ fontWeight: '600', marginBottom: '0.5rem' }}>✉️ Email</div>
+                    <div style={{ fontSize: '0.9rem' }}>sabrina@languageliberty.com</div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Floating testimonial */}
+              <div style={{
+                position: 'absolute',
+                bottom: '-20px',
+                left: '-30px',
+                background: 'white',
+                borderRadius: '15px',
+                padding: '1rem',
+                boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+                border: '2px solid #e2e8f0',
+                maxWidth: '200px'
+              }}>
+                <div style={{ color: '#fbbf24', marginBottom: '0.5rem' }}>⭐⭐⭐⭐⭐</div>
+                <div style={{ fontWeight: '600', color: '#1e293b', fontSize: '0.9rem' }}>
+                  "Professional & Reliable"
+                </div>
+                <div style={{ color: '#6b7280', fontSize: '0.8rem' }}>- Business Client</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trusted by Global Brands Section - Full Screen with Better Spacing */}
+      <section style={{
+        background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+        padding: '8rem 4rem',
+        color: 'white',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        <div style={{ 
+          width: '100%',
+          maxWidth: '1600px',
+          margin: '0 auto'
+        }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1.2fr 0.8fr',
+            gap: '8rem',
+            alignItems: 'center'
+          }}>
+            {/* Left Content - More Spacious */}
+            <div style={{ paddingRight: '2rem' }}>
+              <h2 style={{
+                fontSize: 'clamp(4rem, 10vw, 6rem)',
+                fontWeight: '900',
+                lineHeight: '0.85',
+                marginBottom: '3rem',
+                margin: 0,
+                letterSpacing: '-0.02em'
+              }}>
+                TRUSTED BY<br />
+                <span style={{ color: '#fbbf24' }}>GLOBAL BRANDS</span>
+              </h2>
+              
+              <p style={{
+                fontSize: 'clamp(1.4rem, 3vw, 1.8rem)',
+                lineHeight: '1.7',
+                marginBottom: '4rem',
+                opacity: 0.95,
+                margin: 0,
+                maxWidth: '600px'
+              }}>
+                Professional Russian-English translation & interpretation services trusted by leading companies across India, Russia, and Eastern Europe
+              </p>
+              
+              {/* Trust Badges - More Spaced */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '2.5rem',
+                marginBottom: '5rem'
+              }}>
+                <div style={{
+                  background: 'rgba(255,255,255,0.15)',
+                  borderRadius: '25px',
+                  padding: '2.5rem 2rem',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(15px)',
+                  border: '2px solid rgba(255,255,255,0.25)',
+                  transition: 'transform 0.3s ease'
+                }}>
+                  <div style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>🏆</div>
+                  <div style={{ fontWeight: '700', fontSize: '1.2rem', marginBottom: '0.5rem' }}>ISO</div>
+                  <div style={{ fontSize: '1rem', opacity: 0.9 }}>CERTIFIED</div>
+                </div>
+                
+                <div style={{
+                  background: 'rgba(255,255,255,0.15)',
+                  borderRadius: '25px',
+                  padding: '2.5rem 2rem',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(15px)',
+                  border: '2px solid rgba(255,255,255,0.25)',
+                  transition: 'transform 0.3s ease'
+                }}>
+                  <div style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>⭐</div>
+                  <div style={{ fontWeight: '700', fontSize: '1.2rem', marginBottom: '0.5rem' }}>PREMIUM</div>
+                  <div style={{ fontSize: '1rem', opacity: 0.9 }}>QUALITY</div>
+                </div>
+                
+                <div style={{
+                  background: 'rgba(255,255,255,0.15)',
+                  borderRadius: '25px',
+                  padding: '2.5rem 2rem',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(15px)',
+                  border: '2px solid rgba(255,255,255,0.25)',
+                  transition: 'transform 0.3s ease'
+                }}>
+                  <div style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>🔒</div>
+                  <div style={{ fontWeight: '700', fontSize: '1.2rem', marginBottom: '0.5rem' }}>SECURE</div>
+                  <div style={{ fontSize: '1rem', opacity: 0.9 }}>& CONFIDENTIAL</div>
+                </div>
+              </div>
+              
+              {/* Large Stats Row - More Spread Out */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '3rem',
+                marginBottom: '5rem',
+                padding: '3rem 0',
+                borderTop: '2px solid rgba(255,255,255,0.25)',
+                borderBottom: '2px solid rgba(255,255,255,0.25)'
+              }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '3.5rem', fontWeight: '900', color: '#fbbf24', marginBottom: '0.5rem' }}>200+</div>
+                  <div style={{ fontSize: '1.1rem', opacity: 0.9 }}>Happy Clients</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '3.5rem', fontWeight: '900', color: '#fbbf24', marginBottom: '0.5rem' }}>6+</div>
+                  <div style={{ fontSize: '1.1rem', opacity: 0.9 }}>Years Experience</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '3.5rem', fontWeight: '900', color: '#fbbf24', marginBottom: '0.5rem' }}>24/7</div>
+                  <div style={{ fontSize: '1.1rem', opacity: 0.9 }}>Support</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '3.5rem', fontWeight: '900', color: '#fbbf24', marginBottom: '0.5rem' }}>100%</div>
+                  <div style={{ fontSize: '1.1rem', opacity: 0.9 }}>Accuracy</div>
+                </div>
+              </div>
+              
+              {/* CTA Buttons - More Breathing Room */}
+              <div style={{ display: 'flex', gap: '2rem' }}>
+                <button style={{
+                  background: '#fbbf24',
+                  color: '#1e293b',
+                  padding: '2rem 4rem',
+                  borderRadius: '20px',
+                  border: 'none',
+                  fontWeight: '700',
+                  fontSize: '1.4rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 15px 45px rgba(251,191,36,0.4)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }} onClick={() => { 
+                  document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }); 
+                }}>
+                  GET QUOTE
+                </button>
+                
+                <button style={{
+                  background: 'transparent',
+                  color: 'white',
+                  padding: '2rem 4rem',
+                  borderRadius: '20px',
+                  border: '3px solid white',
+                  fontWeight: '600',
+                  fontSize: '1.4rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem'
+                }} onClick={() => { 
+                  window.open('tel:+918789389223'); 
+                }}>
+                  📞 +91 8789389223
+                </button>
+              </div>
+            </div>
+            
+            {/* Right Visual - Less Dense */}
+            <div style={{ 
+              position: 'relative',
+              height: '70vh',
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+              <div style={{
+                background: 'rgba(255,255,255,0.1)',
+                borderRadius: '40px',
+                padding: '4rem',
+                backdropFilter: 'blur(20px)',
+                border: '3px solid rgba(255,255,255,0.25)',
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center'
+              }}>
+                {/* Larger Team Grid with More Space */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',
+                  gap: '4rem',
+                  marginBottom: '4rem'
+                }}>
+                  <div style={{
+                    width: '140px',
+                    height: '140px',
+                    background: 'rgba(255,255,255,0.3)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '4.5rem',
+                    margin: '0 auto',
+                    border: '4px solid rgba(255,255,255,0.4)'
+                  }}>👨‍💼</div>
+                  <div style={{
+                    width: '140px',
+                    height: '140px',
+                    background: 'rgba(255,255,255,0.3)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '4.5rem',
+                    margin: '0 auto',
+                    border: '4px solid rgba(255,255,255,0.4)'
+                  }}>👩‍💼</div>
+                  <div style={{
+                    width: '140px',
+                    height: '140px',
+                    background: 'rgba(255,255,255,0.3)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '4.5rem',
+                    margin: '0 auto',
+                    border: '4px solid rgba(255,255,255,0.4)'
+                  }}>👨‍💻</div>
+                  <div style={{
+                    width: '140px',
+                    height: '140px',
+                    background: 'rgba(255,255,255,0.3)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '4.5rem',
+                    margin: '0 auto',
+                    border: '4px solid rgba(255,255,255,0.4)'
+                  }}>👩‍🏫</div>
+                </div>
+                
+                <div style={{
+                  textAlign: 'center',
+                  color: 'white'
+                }}>
+                  <h3 style={{ 
+                    margin: 0, 
+                    marginBottom: '1.5rem', 
+                    fontSize: '2.8rem',
+                    fontWeight: '700'
+                  }}>
+                    Expert Global Team
+                  </h3>
+                  <p style={{ 
+                    margin: 0, 
+                    opacity: 0.9,
+                    fontSize: '1.4rem',
+                    lineHeight: '1.6'
+                  }}>
+                    Professional translators, interpreters<br />
+                    & cultural consultants worldwide
+                  </p>
+                </div>
+              </div>
+              
+              {/* Larger, More Prominent Floating Elements */}
+              <div style={{
+                position: 'absolute',
+                top: '3%',
+                right: '-8%',
+                background: '#fbbf24',
+                borderRadius: '25px',
+                padding: '2.5rem',
+                color: '#1e293b',
+                fontWeight: '700',
+                textAlign: 'center',
+                boxShadow: '0 20px 50px rgba(251,191,36,0.5)',
+                transform: 'rotate(8deg)'
+              }}>
+                <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>200+</div>
+                <div style={{ fontSize: '1.1rem' }}>Successful</div>
+                <div style={{ fontSize: '1.1rem' }}>Projects</div>
+              </div>
+              
+              <div style={{
+                position: 'absolute',
+                bottom: '8%',
+                left: '-8%',
+                background: 'white',
+                borderRadius: '25px',
+                padding: '2.5rem',
+                color: '#1e293b',
+                fontWeight: '600',
+                textAlign: 'center',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.2)',
+                transform: 'rotate(-8deg)'
+              }}>
+                <div style={{ color: '#fbbf24', marginBottom: '0.75rem', fontSize: '1.8rem' }}>⭐⭐⭐⭐⭐</div>
+                <div style={{ fontSize: '1.8rem', fontWeight: '700', marginBottom: '0.5rem' }}>5.0</div>
+                <div style={{ fontSize: '1.1rem' }}>Client Rating</div>
+              </div>
             </div>
           </div>
         </div>
@@ -531,102 +1404,560 @@ const AppContent = React.memo(() => {
         </div>
       </section>
 
-      <section id="services" className="services">
-        <div className="container">
-          <div className="services-header">
-            <h2>{t.services.title}</h2>
-            <p>{t.services.subtitle}</p>
+      <section id="services" style={{
+        padding: '6rem 2rem',
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+        position: 'relative'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          {/* Section Header */}
+          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <h2 style={{
+              fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+              fontWeight: '800',
+              color: '#1e293b',
+              marginBottom: '1rem',
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>
+              {currentLanguage === 'ru' ? 'Наши услуги' : 'Our Services'}
+            </h2>
+            <p style={{
+              fontSize: '1.2rem',
+              color: '#64748b',
+              maxWidth: '600px',
+              margin: '0 auto',
+              lineHeight: '1.6'
+            }}>
+              {currentLanguage === 'ru' 
+                ? 'Профессиональные услуги русско-английского перевода и интерпретации, адаптированные под ваши бизнес-потребности'
+                : 'Professional Russian-English translation and interpretation services tailored to your business needs'
+              }
+            </p>
           </div>
-          <div className="services-grid">
-            <div className="service-card featured">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=250&fit=crop" alt="Virtual Meetings" />
+
+          {/* Services Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+            gap: '2rem',
+            marginBottom: '3rem'
+          }}>
+            {/* Virtual Meeting Interpretation - Most Popular */}
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '0',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              border: '3px solid #6366f1',
+              position: 'relative',
+              overflow: 'hidden',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}>
+              <div style={{
+                position: 'absolute',
+                top: '15px',
+                left: '15px',
+                background: '#6366f1',
+                color: 'white',
+                padding: '0.5rem 1rem',
+                borderRadius: '25px',
+                fontSize: '0.8rem',
+                fontWeight: '600',
+                textTransform: 'uppercase',
+                zIndex: 2
+              }}>
+                {currentLanguage === 'ru' ? 'САМЫЙ ПОПУЛЯРНЫЙ' : 'MOST POPULAR'}
               </div>
-              <div className="service-content">
-                <div className="service-badge">{currentLanguage === 'en' ? 'Most Popular' : 'Самый популярный'}</div>
-                <h3>{currentLanguage === 'en' ? 'Virtual Meeting Interpretation' : 'Устный перевод виртуальных встреч'}</h3>
-                <p>{currentLanguage === 'en' ? 'Real-time Russian-English interpretation for Zoom, Teams, and Google Meet sessions with crystal-clear audio quality.' : 'Устный перевод русский-английский в реальном времени для сессий Zoom, Teams и Google Meet с кристально чистым качеством звука.'}</p>
-                <ul className="service-features">
-                  <li>✓ {currentLanguage === 'en' ? 'HD Audio Quality' : 'HD качество звука'}</li>
-                  <li>✓ {currentLanguage === 'en' ? 'Screen Sharing Support' : 'Поддержка демонстрации экрана'}</li>
-                  <li>✓ {currentLanguage === 'en' ? '24/7 Availability' : 'Доступность 24/7'}</li>
-                </ul>
+              
+              <div style={{
+                background: 'linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%)',
+                padding: '3rem 2rem 2rem',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: '#6366f1',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.5rem',
+                  fontSize: '2rem',
+                  color: 'white',
+                  boxShadow: '0 10px 30px rgba(99,102,241,0.3)'
+                }}>
+                  💻
+                </div>
+                <h3 style={{
+                  fontSize: '1.4rem',
+                  fontWeight: '700',
+                  color: '#1e293b',
+                  margin: '0 0 1rem',
+                  lineHeight: '1.3'
+                }}>
+                  {currentLanguage === 'ru' ? 'Устный перевод виртуальных встреч' : 'Virtual Meeting Interpretation'}
+                </h3>
+                <p style={{
+                  fontSize: '1rem',
+                  color: '#64748b',
+                  margin: '0 0 1.5rem',
+                  lineHeight: '1.5'
+                }}>
+                  {currentLanguage === 'ru' 
+                    ? 'Устный перевод русский-английский в реальном времени для сессий Zoom, Teams и Google Meet с кристально чистым качеством звука.'
+                    : 'Real-time Russian-English interpretation for Zoom, Teams, and Google Meet sessions with crystal-clear audio quality.'
+                  }
+                </p>
+              </div>
+              
+              <div style={{ padding: '1.5rem 2rem 2rem' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  {(currentLanguage === 'ru' 
+                    ? ['HD качество звука', 'Поддержка демонстрации экрана', 'Доступность 24/7']
+                    : ['HD Audio Quality', 'Screen Sharing Support', '24/7 Availability']
+                  ).map((feature, index) => (
+                    <div key={index} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '0.75rem',
+                      fontSize: '0.95rem',
+                      color: '#374151'
+                    }}>
+                      <span style={{ color: '#10b981', marginRight: '0.75rem', fontSize: '1.1rem' }}>✓</span>
+                      {feature}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            
-            <div className="service-card">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&h=250&fit=crop" alt="Business Meetings" />
+
+            {/* In-Person Business Meetings */}
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '0',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+              overflow: 'hidden',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+                padding: '3rem 2rem 2rem',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: '#f59e0b',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.5rem',
+                  fontSize: '2rem',
+                  color: 'white',
+                  boxShadow: '0 10px 30px rgba(245,158,11,0.3)'
+                }}>
+                  🤝
+                </div>
+                <h3 style={{
+                  fontSize: '1.4rem',
+                  fontWeight: '700',
+                  color: '#1e293b',
+                  margin: '0 0 1rem',
+                  lineHeight: '1.3'
+                }}>
+                  {currentLanguage === 'ru' ? 'Личные деловые встречи' : 'In-Person Business Meetings'}
+                </h3>
+                <p style={{
+                  fontSize: '1rem',
+                  color: '#64748b',
+                  margin: '0 0 1.5rem',
+                  lineHeight: '1.5'
+                }}>
+                  {currentLanguage === 'ru' 
+                    ? 'Профессиональный устный перевод на месте для корпоративных встреч, переговоров и конференций по всему Мумбаи и Индии.'
+                    : 'Professional on-site interpretation for corporate meetings, negotiations, and conferences across Mumbai and India.'
+                  }
+                </p>
               </div>
-              <div className="service-content">
-                <h3>{currentLanguage === 'en' ? 'In-Person Business Meetings' : 'Личные деловые встречи'}</h3>
-                <p>{currentLanguage === 'en' ? 'Professional on-site interpretation for corporate meetings, negotiations, and conferences across Mumbai and India.' : 'Профессиональный устный перевод на месте для корпоративных встреч, переговоров и конференций по всему Мумбаи и Индии.'}</p>
-                <ul className="service-features">
-                  <li>✓ {currentLanguage === 'en' ? 'Ministerial Level Experience' : 'Опыт министерского уровня'}</li>
-                  <li>✓ {currentLanguage === 'en' ? 'Confidentiality Assured' : 'Гарантированная конфиденциальность'}</li>
-                  <li>✓ {currentLanguage === 'en' ? 'Industry Expertise' : 'Отраслевая экспертиза'}</li>
-                </ul>
+              
+              <div style={{ padding: '1.5rem 2rem 2rem' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  {(currentLanguage === 'ru' 
+                    ? ['Опыт министерского уровня', 'Гарантированная конфиденциальность', 'Отраслевая экспертиза']
+                    : ['Ministerial Level Experience', 'Confidentiality Assured', 'Industry Expertise']
+                  ).map((feature, index) => (
+                    <div key={index} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '0.75rem',
+                      fontSize: '0.95rem',
+                      color: '#374151'
+                    }}>
+                      <span style={{ color: '#10b981', marginRight: '0.75rem', fontSize: '1.1rem' }}>✓</span>
+                      {feature}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            
-            <div className="service-card">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=250&fit=crop" alt="Document Translation" />
+
+            {/* Certified Document Translation */}
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '0',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+              overflow: 'hidden',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)',
+                padding: '3rem 2rem 2rem',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: '#10b981',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.5rem',
+                  fontSize: '2rem',
+                  color: 'white',
+                  boxShadow: '0 10px 30px rgba(16,185,129,0.3)'
+                }}>
+                  📄
+                </div>
+                <h3 style={{
+                  fontSize: '1.4rem',
+                  fontWeight: '700',
+                  color: '#1e293b',
+                  margin: '0 0 1rem',
+                  lineHeight: '1.3'
+                }}>
+                  {currentLanguage === 'ru' ? 'Сертифицированный перевод документов' : 'Certified Document Translation'}
+                </h3>
+                <p style={{
+                  fontSize: '1rem',
+                  color: '#64748b',
+                  margin: '0 0 1.5rem',
+                  lineHeight: '1.5'
+                }}>
+                  {currentLanguage === 'ru' 
+                    ? 'Официальный перевод юридических документов, контрактов, сертификатов и технических руководств с государственной сертификацией.'
+                    : 'Official translation of legal documents, contracts, certificates, and technical manuals with government certification.'
+                  }
+                </p>
               </div>
-              <div className="service-content">
-                <h3>{currentLanguage === 'en' ? 'Certified Document Translation' : 'Сертифицированный перевод документов'}</h3>
-                <p>{currentLanguage === 'en' ? 'Official translation of legal documents, contracts, certificates, and technical manuals with government certification.' : 'Официальный перевод юридических документов, контрактов, сертификатов и технических руководств с государственной сертификацией.'}</p>
-                <ul className="service-features">
-                  <li>✓ {currentLanguage === 'en' ? 'Legal Certification' : 'Юридическая сертификация'}</li>
-                  <li>✓ {currentLanguage === 'en' ? 'Fast Turnaround' : 'Быстрое выполнение'}</li>
-                  <li>✓ {currentLanguage === 'en' ? 'Technical Accuracy' : 'Техническая точность'}</li>
-                </ul>
+              
+              <div style={{ padding: '1.5rem 2rem 2rem' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  {(currentLanguage === 'ru' 
+                    ? ['Юридическая сертификация', 'Быстрое выполнение', 'Техническая точность']
+                    : ['Legal Certification', 'Fast Turnaround', 'Technical Accuracy']
+                  ).map((feature, index) => (
+                    <div key={index} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '0.75rem',
+                      fontSize: '0.95rem',
+                      color: '#374151'
+                    }}>
+                      <span style={{ color: '#10b981', marginRight: '0.75rem', fontSize: '1.1rem' }}>✓</span>
+                      {feature}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            
-            <div className="service-card">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop" alt="Russian Language Training" />
+
+            {/* Russian Language Training */}
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '0',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+              overflow: 'hidden',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #fed7aa 0%, #fdba74 100%)',
+                padding: '3rem 2rem 2rem',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: '#ea580c',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.5rem',
+                  fontSize: '2rem',
+                  color: 'white',
+                  boxShadow: '0 10px 30px rgba(234,88,12,0.3)'
+                }}>
+                  🎓
+                </div>
+                <h3 style={{
+                  fontSize: '1.4rem',
+                  fontWeight: '700',
+                  color: '#1e293b',
+                  margin: '0 0 1rem',
+                  lineHeight: '1.3'
+                }}>
+                  {currentLanguage === 'ru' ? 'Обучение русскому языку' : 'Russian Language Training'}
+                </h3>
+                <p style={{
+                  fontSize: '1rem',
+                  color: '#64748b',
+                  margin: '0 0 1.5rem',
+                  lineHeight: '1.5'
+                }}>
+                  {currentLanguage === 'ru' 
+                    ? 'Комплексные курсы русского языка от начального до продвинутого уровня, включая деловой этикет и культурное обучение.'
+                    : 'Comprehensive Russian language courses from beginner to advanced levels, including business etiquette and cultural training.'
+                  }
+                </p>
               </div>
-              <div className="service-content">
-                <h3>{currentLanguage === 'en' ? 'Russian Language Training' : 'Обучение английскому языку'}</h3>
-                <p>{currentLanguage === 'en' ? 'Comprehensive Russian language courses from beginner to advanced levels, including business etiquette and cultural training.' : 'Комплексные курсы английского языка от начального до продвинутого уровня, включая деловой этикет и культурное обучение.'}</p>
-                <ul className="service-features">
-                  <li>✓ {currentLanguage === 'en' ? 'A1 to C1 Levels' : 'Уровни A1-C1'}</li>
-                  <li>✓ {currentLanguage === 'en' ? 'Cultural Etiquette' : 'Культурный этикет'}</li>
-                  <li>✓ {currentLanguage === 'en' ? 'Business Russian' : 'Деловой английский'}</li>
-                </ul>
+              
+              <div style={{ padding: '1.5rem 2rem 2rem' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  {(currentLanguage === 'ru' 
+                    ? ['Уровни A1-C1', 'Культурный этикет', 'Деловой русский']
+                    : ['A1 to C1 Levels', 'Cultural Etiquette', 'Business Russian']
+                  ).map((feature, index) => (
+                    <div key={index} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '0.75rem',
+                      fontSize: '0.95rem',
+                      color: '#374151'
+                    }}>
+                      <span style={{ color: '#10b981', marginRight: '0.75rem', fontSize: '1.1rem' }}>✓</span>
+                      {feature}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            
-            <div className="service-card">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=250&fit=crop" alt="Travel Support" />
+
+            {/* Executive Travel Support */}
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '0',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+              overflow: 'hidden',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%)',
+                padding: '3rem 2rem 2rem',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: '#8b5cf6',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.5rem',
+                  fontSize: '2rem',
+                  color: 'white',
+                  boxShadow: '0 10px 30px rgba(139,92,246,0.3)'
+                }}>
+                  ✈️
+                </div>
+                <h3 style={{
+                  fontSize: '1.4rem',
+                  fontWeight: '700',
+                  color: '#1e293b',
+                  margin: '0 0 1rem',
+                  lineHeight: '1.3'
+                }}>
+                  {currentLanguage === 'ru' ? 'Поддержка деловых поездок' : 'Executive Travel Support'}
+                </h3>
+                <p style={{
+                  fontSize: '1rem',
+                  color: '#64748b',
+                  margin: '0 0 1.5rem',
+                  lineHeight: '1.5'
+                }}>
+                  {currentLanguage === 'ru' 
+                    ? 'Персональные услуги переводчика для бизнес-руководителей, путешествующих в русскоговорящие страны или принимающих российские делегации.'
+                    : 'Personal interpreter services for business executives traveling to Russian-speaking countries or hosting Russian delegates.'
+                  }
+                </p>
               </div>
-              <div className="service-content">
-                <h3>{currentLanguage === 'en' ? 'Executive Travel Support' : 'Поддержка деловых поездок'}</h3>
-                <p>{currentLanguage === 'en' ? 'Personal interpreter services for business executives traveling to Russian-speaking countries or hosting Russian delegates.' : 'Персональные услуги переводчика для бизнес-руководителей, путешествующих в русскоговорящие страны или принимающих российские делегации.'}</p>
-                <ul className="service-features">
-                  <li>✓ {currentLanguage === 'en' ? 'Airport Assistance' : 'Помощь в аэропорту'}</li>
-                  <li>✓ {currentLanguage === 'en' ? 'Cultural Guidance' : 'Культурное руководство'}</li>
-                  <li>✓ {currentLanguage === 'en' ? '24/7 Support' : 'Поддержка 24/7'}</li>
-                </ul>
+              
+              <div style={{ padding: '1.5rem 2rem 2rem' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  {(currentLanguage === 'ru' 
+                    ? ['Помощь в аэропорту', 'Культурное руководство', 'Поддержка 24/7']
+                    : ['Airport Assistance', 'Cultural Guidance', '24/7 Support']
+                  ).map((feature, index) => (
+                    <div key={index} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '0.75rem',
+                      fontSize: '0.95rem',
+                      color: '#374151'
+                    }}>
+                      <span style={{ color: '#10b981', marginRight: '0.75rem', fontSize: '1.1rem' }}>✓</span>
+                      {feature}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            
-            <div className="service-card">
-              <div className="service-image">
-                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=250&fit=crop" alt="Entertainment Industry" />
+
+            {/* Entertainment Industry Support */}
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '0',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+              overflow: 'hidden',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #fecaca 0%, #fca5a5 100%)',
+                padding: '3rem 2rem 2rem',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: '#ef4444',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.5rem',
+                  fontSize: '2rem',
+                  color: 'white',
+                  boxShadow: '0 10px 30px rgba(239,68,68,0.3)'
+                }}>
+                  🎬
+                </div>
+                <h3 style={{
+                  fontSize: '1.4rem',
+                  fontWeight: '700',
+                  color: '#1e293b',
+                  margin: '0 0 1rem',
+                  lineHeight: '1.3'
+                }}>
+                  {currentLanguage === 'ru' ? 'Поддержка индустрии развлечений' : 'Entertainment Industry Support'}
+                </h3>
+                <p style={{
+                  fontSize: '1rem',
+                  color: '#64748b',
+                  margin: '0 0 1.5rem',
+                  lineHeight: '1.5'
+                }}>
+                  {currentLanguage === 'ru' 
+                    ? 'Специализированные услуги для российских артистов, моделей и исполнителей, работающих в Индии, включая чтение сценариев и координацию с агентствами.'
+                    : 'Specialized services for Russian artists, models, and performers working in India, including script reading and agency coordination.'
+                  }
+                </p>
               </div>
-              <div className="service-content">
-                <h3>{currentLanguage === 'en' ? 'Entertainment Industry Support' : 'Поддержка индустрии развлечений'}</h3>
-                <p>{currentLanguage === 'en' ? 'Specialized services for Russian artists, models, and performers working in India, including script reading and agency coordination.' : 'Специализированные услуги для российских артистов, моделей и исполнителей, работающих в Индии, включая чтение сценариев и координацию с агентствами.'}</p>
-                <ul className="service-features">
-                  <li>✓ {currentLanguage === 'en' ? 'Script Translation' : 'Перевод сценариев'}</li>
-                  <li>✓ {currentLanguage === 'en' ? 'Agency Coordination' : 'Координация с агентствами'}</li>
-                  <li>✓ {currentLanguage === 'en' ? 'Cultural Adaptation' : 'Культурная адаптация'}</li>
-                </ul>
+              
+              <div style={{ padding: '1.5rem 2rem 2rem' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  {(currentLanguage === 'ru' 
+                    ? ['Перевод сценариев', 'Координация с агентствами', 'Культурная адаптация']
+                    : ['Script Translation', 'Agency Coordination', 'Cultural Adaptation']
+                  ).map((feature, index) => (
+                    <div key={index} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: '0.75rem',
+                      fontSize: '0.95rem',
+                      color: '#374151'
+                    }}>
+                      <span style={{ color: '#10b981', marginRight: '0.75rem', fontSize: '1.1rem' }}>✓</span>
+                      {feature}
+                    </div>
+                  ))}
+                </div>
               </div>
+            </div>
+          </div>
+
+          {/* Call to Action */}
+          <div style={{
+            textAlign: 'center',
+            background: 'white',
+            borderRadius: '20px',
+            padding: '3rem',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+            border: '1px solid #e2e8f0'
+          }}>
+            <h3 style={{
+              fontSize: '1.8rem',
+              fontWeight: '700',
+              color: '#1e293b',
+              marginBottom: '1rem'
+            }}>
+              {currentLanguage === 'ru' ? 'Нужно индивидуальное решение?' : 'Need a Custom Solution?'}
+            </h3>
+            <p style={{
+              fontSize: '1.1rem',
+              color: '#64748b',
+              marginBottom: '2rem',
+              maxWidth: '500px',
+              margin: '0 auto 2rem'
+            }}>
+              {currentLanguage === 'ru' 
+                ? 'У каждого бизнеса уникальные потребности в переводе. Давайте обсудим, как мы можем помочь вам преодолеть языковые барьеры.'
+                : 'Every business has unique translation needs. Let\'s discuss how we can help you break language barriers.'
+              }
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button style={{
+                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                color: 'white',
+                padding: '1rem 2.5rem',
+                borderRadius: '12px',
+                border: 'none',
+                fontWeight: '600',
+                fontSize: '1.1rem',
+                cursor: 'pointer',
+                boxShadow: '0 8px 25px rgba(99,102,241,0.3)',
+                transition: 'all 0.3s ease'
+              }} onClick={() => { 
+                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }); 
+              }}>
+                {currentLanguage === 'ru' ? 'Получить индивидуальную цену' : 'Get Custom Quote'}
+              </button>
+              
+              <button style={{
+                background: 'transparent',
+                color: '#6366f1',
+                padding: '1rem 2.5rem',
+                borderRadius: '12px',
+                border: '2px solid #6366f1',
+                fontWeight: '600',
+                fontSize: '1.1rem',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }} onClick={() => { 
+                window.open('tel:+918789389223'); 
+              }}>
+                📞 {currentLanguage === 'ru' ? 'Позвонить сейчас' : 'Call Now'}
+              </button>
             </div>
           </div>
         </div>
