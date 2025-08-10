@@ -46,7 +46,8 @@ const SplashScreen = ({ onComplete, currentLanguage }) => {
         padding: '3rem',
         borderRadius: '20px',
         border: '1px solid rgba(30,58,138,0.1)',
-        boxShadow: '0 20px 40px rgba(30,58,138,0.1)'
+        boxShadow: '0 20px 40px rgba(30,58,138,0.1)',
+        animation: 'fadeInScale 0.8s ease-out 0s both'
       }}>
         <img 
           src="/images/download.webp" 
@@ -57,7 +58,8 @@ const SplashScreen = ({ onComplete, currentLanguage }) => {
             borderRadius: '20px',
             marginBottom: '2rem',
             boxShadow: '0 10px 30px rgba(30,58,138,0.2)',
-            border: '2px solid rgba(30,58,138,0.1)'
+            border: '2px solid rgba(30,58,138,0.1)',
+            animation: 'scaleIn 1s ease-out 0s both'
           }}
         />
         <h1 style={{
@@ -65,7 +67,8 @@ const SplashScreen = ({ onComplete, currentLanguage }) => {
           fontWeight: '900',
           marginBottom: '1rem',
           color: '#1e3a8a',
-          textShadow: 'none'
+          textShadow: 'none',
+          animation: 'fadeInUp 1s ease-out 0.3s both'
         }}>
           Language Liberty
         </h1>
@@ -73,7 +76,8 @@ const SplashScreen = ({ onComplete, currentLanguage }) => {
           fontSize: '1.3rem',
           opacity: 0.8,
           marginBottom: '1.5rem',
-          color: '#475569'
+          color: '#475569',
+          animation: 'fadeInUp 1s ease-out 0.6s both'
         }}>
           {currentLanguage === 'ru' 
             ? 'Профессиональные услуги русско-английского перевода'
@@ -82,7 +86,8 @@ const SplashScreen = ({ onComplete, currentLanguage }) => {
         </p>
         <div style={{
           fontSize: '2.5rem',
-          marginBottom: '1rem'
+          marginBottom: '1rem',
+          animation: 'bounceIn 1.2s ease-out 0.9s both'
         }}>
           🇺🇸 ⟷ 🇷🇺
         </div>
@@ -90,7 +95,8 @@ const SplashScreen = ({ onComplete, currentLanguage }) => {
           fontSize: '1rem',
           opacity: 0.7,
           fontStyle: 'italic',
-          color: '#64748b'
+          color: '#64748b',
+          animation: 'fadeIn 1s ease-out 1.2s both'
         }}>
           {currentLanguage === 'ru' 
             ? 'Преодолеваем языковые барьеры'
@@ -112,6 +118,8 @@ const AppContent = React.memo(() => {
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [feedbackData, setFeedbackData] = useState({ rating: 5, message: '', name: '' });
   const [testimonials, setTestimonials] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth <= 992 && window.innerWidth > 768);
 
   const [currentLanguage, setCurrentLanguage] = useState(() => {
     const browserLang = navigator.language.toLowerCase();
@@ -187,6 +195,17 @@ const AppContent = React.memo(() => {
     setCurrentImageIndex(prevIndex);
     setSelectedImage(GALLERY_IMAGES[prevIndex]);
   }, [currentImageIndex]);
+
+  // Responsive resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      setIsTablet(window.innerWidth <= 992 && window.innerWidth > 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     // Track page view
@@ -290,7 +309,7 @@ const AppContent = React.memo(() => {
       }}>
         {/* Main Navigation Only */}
         <nav style={{ padding: '1.25rem 0' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+          <div style={{ width: '100%', margin: '0 auto', padding: isMobile ? '0 1rem' : '0 3rem' }}>
             <div style={{ 
               display: 'flex', 
               justifyContent: 'space-between', 
@@ -513,19 +532,35 @@ const AppContent = React.memo(() => {
 
       {/* Meet Sabrina Section - Moved to Top */}
       <section id="about" style={{ 
-        padding: '6rem 2rem', 
+        padding: isMobile ? '3rem 1rem' : isTablet ? '4rem 2rem' : '6rem 3rem', 
         background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-        position: 'relative'
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        {/* Background decorative pattern */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          pointerEvents: 'none',
+          zIndex: 1
+        }}></div>
+        
+        <div style={{ width: '100%', margin: '0 auto', position: 'relative', zIndex: 2 }}>
           <div style={{ 
             display: 'grid', 
-            gridTemplateColumns: '1fr 400px', 
-            gap: '4rem', 
+            gridTemplateColumns: isMobile ? '1fr' : '0.8fr 1.2fr', 
+            gap: isMobile ? '3rem' : isTablet ? '4rem' : '6rem', 
             alignItems: 'center'
           }}>
             {/* Left Content */}
-            <div>
+            <div style={{
+              paddingLeft: '20px',
+              paddingRight: '10px'
+            }}>
               <div style={{ marginBottom: '1rem' }}>
                 <span style={{
                   fontSize: '0.9rem',
@@ -539,7 +574,7 @@ const AppContent = React.memo(() => {
               </div>
               
               <h1 style={{
-                fontSize: '3rem',
+                fontSize: isMobile ? '2rem' : isTablet ? '2.5rem' : '3rem',
                 fontWeight: '800',
                 color: '#1e293b',
                 marginBottom: '1.5rem',
@@ -707,57 +742,125 @@ const AppContent = React.memo(() => {
             </div>
             
             {/* Right Image */}
-            <div style={{ position: 'relative' }}>
+            <div style={{ position: 'relative', overflow: 'visible' }}>
               <div style={{
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                borderRadius: '20px',
-                padding: '1rem',
+                background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                borderRadius: '30px',
+                padding: '0.5rem',
                 transform: 'rotate(-2deg)',
-                boxShadow: '0 25px 50px rgba(99,102,241,0.3)'
+                boxShadow: '0 25px 50px rgba(59,130,246,0.3)',
+                transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                cursor: 'pointer',
+                overflow: 'visible'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'rotate(-1deg) translateY(-10px) scale(1.03)';
+                e.currentTarget.style.boxShadow = '0 35px 70px rgba(59,130,246,0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'rotate(-2deg) translateY(0px) scale(1)';
+                e.currentTarget.style.boxShadow = '0 25px 50px rgba(59,130,246,0.3)';
               }}>
                 <img 
                   src="/images/sabrina-profile.jpeg" 
                   alt="Sabrina Bhatt - Professional Russian Translator" 
                   style={{
-                    width: '100%',
-                    height: '500px',
+                    width: '110%',
+                    height: isMobile ? '600px' : isTablet ? '750px' : '850px',
                     objectFit: 'cover',
-                    borderRadius: '12px',
-                    transform: 'rotate(2deg)'
+                    borderRadius: '20px',
+                    transform: 'rotate(2deg) translateX(-5%)',
+                    transition: 'all 0.5s ease',
+                    filter: 'brightness(1.1) contrast(1.05)',
+                    animation: 'subtleFloat 4s ease-in-out infinite'
                   }}
                 />
               </div>
               
-              {/* Floating decorative elements */}
+              {/* Floating decorative elements with animations */}
               <div style={{
                 position: 'absolute',
                 top: '-20px',
                 right: '-20px',
-                background: '#fbbf24',
+                background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
                 borderRadius: '50%',
-                width: '80px',
-                height: '80px',
+                width: '90px',
+                height: '90px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '2rem',
-                boxShadow: '0 10px 25px rgba(251,191,36,0.3)'
+                fontSize: '2.2rem',
+                boxShadow: '0 15px 35px rgba(59,130,246,0.4)',
+                animation: 'float 3s ease-in-out infinite',
+                zIndex: 10,
+                border: '3px solid rgba(255,255,255,0.8)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.15) rotate(10deg)';
+                e.currentTarget.style.boxShadow = '0 20px 40px rgba(59,130,246,0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
+                e.currentTarget.style.boxShadow = '0 15px 35px rgba(59,130,246,0.4)';
               }}>
                 🏆
               </div>
               
               <div style={{
                 position: 'absolute',
-                bottom: '-10px',
-                left: '-30px',
-                background: 'white',
-                borderRadius: '15px',
-                padding: '1rem',
-                boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-                border: '2px solid #e2e8f0'
+                bottom: '-15px',
+                left: '-35px',
+                background: 'linear-gradient(135deg, white, #f8fafc)',
+                borderRadius: '20px',
+                padding: '1.5rem',
+                boxShadow: '0 15px 35px rgba(0,0,0,0.15)',
+                border: '3px solid #e2e8f0',
+                animation: 'floatReverse 4s ease-in-out infinite',
+                zIndex: 10,
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px) scale(1.05)';
+                e.currentTarget.style.boxShadow = '0 20px 45px rgba(0,0,0,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0px) scale(1)';
+                e.currentTarget.style.boxShadow = '0 15px 35px rgba(0,0,0,0.15)';
               }}>
-                <div style={{ fontWeight: '700', color: '#1e293b' }}>6+ Years</div>
-                <div style={{ color: '#6b7280', fontSize: '0.9rem' }}>Experience</div>
+                <div style={{ fontWeight: '800', color: '#1e293b', fontSize: '1.1rem' }}>6+ Years</div>
+                <div style={{ color: '#3b82f6', fontSize: '0.9rem', fontWeight: '600' }}>Experience</div>
+              </div>
+              
+              {/* Additional floating element - language indicator */}
+              <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '-50px',
+                background: 'linear-gradient(135deg, #2563eb, #1e40af)',
+                borderRadius: '50%',
+                width: '70px',
+                height: '70px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.8rem',
+                boxShadow: '0 12px 30px rgba(239,68,68,0.4)',
+                animation: 'floatAround 5s ease-in-out infinite',
+                zIndex: 10,
+                border: '3px solid rgba(255,255,255,0.9)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.2) rotate(-10deg)';
+                e.currentTarget.style.boxShadow = '0 18px 40px rgba(239,68,68,0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
+                e.currentTarget.style.boxShadow = '0 12px 30px rgba(239,68,68,0.4)';
+              }}>
+                🇷🇺
               </div>
             </div>
           </div>
@@ -766,16 +869,16 @@ const AppContent = React.memo(() => {
 
       <section id="home" style={{
         background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-        padding: '4rem 2rem',
-        minHeight: '70vh',
+        padding: isMobile ? '3rem 1rem' : isTablet ? '3rem 2rem' : '4rem 3rem',
+        minHeight: isMobile ? '60vh' : '70vh',
         display: 'flex',
         alignItems: 'center'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
+        <div style={{ width: '100%', margin: '0 auto' }}>
           <div style={{ 
             display: 'grid', 
-            gridTemplateColumns: '1fr 400px', 
-            gap: '4rem', 
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 400px', 
+            gap: isMobile ? '3rem' : isTablet ? '4rem' : '6rem', 
             alignItems: 'center'
           }}>
             {/* Left Content */}
@@ -793,7 +896,7 @@ const AppContent = React.memo(() => {
               </div>
               
               <h1 style={{
-                fontSize: '4rem',
+                fontSize: isMobile ? '2.5rem' : isTablet ? '3rem' : '4rem',
                 fontWeight: '900',
                 color: '#1e293b',
                 marginBottom: '1.5rem',
@@ -828,15 +931,21 @@ const AppContent = React.memo(() => {
               </p>
               
               {/* Hero CTAs */}
-              <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem' }}>
+              <div style={{ 
+                display: 'flex', 
+                gap: isMobile ? '0.5rem' : '1rem', 
+                marginBottom: '3rem',
+                flexDirection: isMobile ? 'column' : 'row',
+                alignItems: isMobile ? 'stretch' : 'flex-start'
+              }}>
                 <button style={{
                   background: '#6366f1',
                   color: 'white',
-                  padding: '1rem 2.5rem',
+                  padding: isMobile ? '0.8rem 1.5rem' : '1rem 2.5rem',
                   borderRadius: '12px',
                   border: 'none',
                   fontWeight: '700',
-                  fontSize: '1.1rem',
+                  fontSize: isMobile ? '1rem' : '1.1rem',
                   cursor: 'pointer',
                   boxShadow: '0 8px 25px rgba(99,102,241,0.3)',
                   transition: 'all 0.3s ease'
@@ -850,11 +959,11 @@ const AppContent = React.memo(() => {
                 <button style={{
                   background: 'white',
                   color: '#6366f1',
-                  padding: '1rem 2.5rem',
+                  padding: isMobile ? '0.8rem 1.5rem' : '1rem 2.5rem',
                   borderRadius: '12px',
                   border: '2px solid #6366f1',
                   fontWeight: '600',
-                  fontSize: '1.1rem',
+                  fontSize: isMobile ? '1rem' : '1.1rem',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease'
                 }} onClick={() => { 
@@ -902,9 +1011,9 @@ const AppContent = React.memo(() => {
                 color: 'white',
                 boxShadow: '0 25px 50px rgba(99,102,241,0.3)'
               }}>
-                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🇺🇸 ⟷ 🇷🇺</div>
+                <div style={{ fontSize: isMobile ? '2.5rem' : '4rem', marginBottom: '1rem' }}>🇺🇸 ⟷ 🇷🇺</div>
                 <h3 style={{ 
-                  fontSize: '1.5rem', 
+                  fontSize: isMobile ? '1.2rem' : '1.5rem', 
                   fontWeight: '700', 
                   marginBottom: '1rem',
                   margin: 0
@@ -973,21 +1082,20 @@ const AppContent = React.memo(() => {
       {/* Trusted by Global Brands Section - Full Screen with Better Spacing */}
       <section style={{
         background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-        padding: '8rem 4rem',
+        padding: isMobile ? '4rem 1rem' : isTablet ? '6rem 2rem' : '8rem 4rem',
         color: 'white',
-        minHeight: '100vh',
+        minHeight: isMobile ? '80vh' : '100vh',
         display: 'flex',
         alignItems: 'center'
       }}>
         <div style={{ 
           width: '100%',
-          maxWidth: '1600px',
-          margin: '0 auto'
+          padding: isMobile ? '0 1rem' : '0 3rem'
         }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: '1.2fr 0.8fr',
-            gap: '8rem',
+            gridTemplateColumns: isMobile ? '1fr' : '1.3fr 0.7fr',
+            gap: isMobile ? '4rem' : isTablet ? '6rem' : '10rem',
             alignItems: 'center'
           }}>
             {/* Left Content - More Spacious */}
@@ -1276,29 +1384,6 @@ const AppContent = React.memo(() => {
         </div>
       </section>
 
-      <section className="stats">
-        <div className="container">
-          <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-number">200+</div>
-              <div className="stat-label">{currentLanguage === 'en' ? 'Happy Clients' : 'Довольных клиентов'}</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">500+</div>
-              <div className="stat-label">{currentLanguage === 'en' ? 'Projects Completed' : 'Завершенных проектов'}</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">6+</div>
-              <div className="stat-label">{currentLanguage === 'en' ? 'Years Experience' : 'Лет опыта'}</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">24/7</div>
-              <div className="stat-label">{currentLanguage === 'en' ? 'Support Available' : 'Поддержка доступна'}</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="gallery">
         <div className="container">
           <h2>{t.gallery.title}</h2>
@@ -1405,11 +1490,11 @@ const AppContent = React.memo(() => {
       </section>
 
       <section id="services" style={{
-        padding: '6rem 2rem',
+        padding: isMobile ? '3rem 1rem' : isTablet ? '4rem 2rem' : '6rem 3rem',
         background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
         position: 'relative'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ width: '100%', margin: '0 auto' }}>
           {/* Section Header */}
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
             <h2 style={{
@@ -1441,9 +1526,11 @@ const AppContent = React.memo(() => {
           {/* Services Grid */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-            gap: '2rem',
-            marginBottom: '3rem'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: '2.5rem',
+            marginBottom: '3rem',
+            maxWidth: '1600px',
+            margin: '0 auto 3rem'
           }}>
             {/* Virtual Meeting Interpretation - Most Popular */}
             <div style={{
