@@ -2,7 +2,7 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import './App.css';
 import Header from './components/sections/Header';
 import About from './components/sections/About';
-import MobilePortfolio from './components/sections/MobilePortfolio';
+import MobilePortfolio from './components/sections/MobilePortfolio.simple';
 import Services from './components/sections/Services';
 import Gallery from './components/sections/Gallery';
 import Testimonials from './components/sections/Testimonials';

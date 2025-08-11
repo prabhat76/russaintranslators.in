@@ -1,17 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GALLERY_IMAGES } from '../../constants/content';
+
+// Simple analytics tracking function
+const trackEvent = (eventType, elementName, section, additionalData = {}) => {
+  try {
+    // Log to console and store in window object for debugging
+    const event = {
+      type: eventType,
+      elementName,
+      section,
+      timestamp: new Date().toISOString(),
+      ...additionalData
+    };
+    
+    console.log('Analytics Event:', event);
+    
+    // Store in window for debugging
+    window.analyticsEvents = window.analyticsEvents || [];
+    window.analyticsEvents.push(event);
+    
+    // If Adobe Analytics is available, use it
+    if (window.s && typeof window.s === 'object') {
+      window.s.linkTrackVars = 'events,prop1,prop2,prop3';
+      window.s.linkTrackEvents = 'event1';
+      window.s.events = 'event1';
+      window.s.prop1 = elementName;
+      window.s.prop2 = eventType;
+      window.s.prop3 = section;
+      window.s.tl(true, 'o', elementName);
+    }
+  } catch (error) {
+    console.error('Analytics tracking failed:', error);
+  }
+};
 
 const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
   const [showAllImages, setShowAllImages] = useState(false);
 
+  // Track page view when component mounts
+  useEffect(() => {
+    trackEvent('pageView', 'Gallery', 'portfolio', { language: currentLanguage });
+  }, [currentLanguage]);
+
+  // Handle image click with analytics
+  const handleImageClick = (index, image) => {
+    trackEvent('galleryInteraction', `gallery-image-${index}`, 'gallery', {
+      action: 'image_click',
+      imageName: image.title,
+      imageIndex: index
+    });
+    openModal(index);
+  };
+
+  // Handle show more/less with analytics
+  const handleToggleImages = () => {
+    const action = showAllImages ? 'show_less' : 'show_more';
+    trackEvent('click', 'gallery-toggle', 'gallery', { action });
+    setShowAllImages(!showAllImages);
+  };
+
   return (
     <section style={{
       padding: isMobile ? '4rem 1rem' : isTablet ? '5rem 2rem' : '6rem 4rem',
-      background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%)',
+      background: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
       position: 'relative',
-      minHeight: '100vh'
+      minHeight: '100vh',
+      color: 'white'
     }}>
-      {/* Gallery Wall Background */}
+      {/* Animated Background Pattern */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -19,21 +75,11 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
         right: 0,
         bottom: 0,
         background: `
-          repeating-linear-gradient(
-            0deg,
-            rgba(0,0,0,0.02) 0px,
-            rgba(0,0,0,0.02) 1px,
-            transparent 1px,
-            transparent 40px
-          ),
-          repeating-linear-gradient(
-            90deg,
-            rgba(0,0,0,0.02) 0px,
-            rgba(0,0,0,0.02) 1px,
-            transparent 1px,
-            transparent 40px
-          )
+          radial-gradient(circle at 20% 20%, rgba(59,130,246,0.1) 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, rgba(168,85,247,0.1) 0%, transparent 50%),
+          radial-gradient(circle at 40% 60%, rgba(34,197,94,0.05) 0%, transparent 50%)
         `,
+        animation: 'float 20s ease-in-out infinite',
         pointerEvents: 'none'
       }}></div>
 
@@ -43,34 +89,37 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
           <div style={{
             display: 'inline-block',
             padding: '0.5rem 2rem',
-            background: 'rgba(59,130,246,0.1)',
-            border: '2px solid #3b82f6',
+            background: 'rgba(59,130,246,0.2)',
+            border: '2px solid rgba(59,130,246,0.3)',
             borderRadius: '30px',
-            marginBottom: '2rem'
+            marginBottom: '2rem',
+            backdropFilter: 'blur(10px)'
           }}>
             <span style={{
               fontSize: '0.9rem',
-              color: '#3b82f6',
+              color: '#60a5fa',
               fontWeight: '700',
               textTransform: 'uppercase',
               letterSpacing: '0.1em'
             }}>
-              {currentLanguage === 'en' ? '🖼️ Professional Gallery Wall' : '🖼️ Профессиональная галерея'}
+              {currentLanguage === 'en' ? '🖼️ Professional Gallery' : '🖼️ Профессиональная галерея'}
             </span>
           </div>
           <h2 style={{
             fontSize: isMobile ? '2.5rem' : '4rem',
             fontWeight: '900',
-            color: '#1e293b',
             marginBottom: '1rem',
             lineHeight: '1.1',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
+            background: 'linear-gradient(135deg, #60a5fa, #a78bfa)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
           }}>
             {currentLanguage === 'en' ? 'Translation Portfolio' : 'Портфолио переводов'}
           </h2>
           <p style={{
             fontSize: '1.2rem',
-            color: '#64748b',
+            color: '#cbd5e1',
             maxWidth: '600px',
             margin: '0 auto'
           }}>
@@ -83,16 +132,24 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
         
         {/* Wall Gallery Grid */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: isMobile ? 'repeat(auto-fit, minmax(250px, 1fr))' : 
+          display: isMobile ? 'flex' : 'grid',
+          gridTemplateColumns: isMobile ? 'none' : 
                               isTablet ? 'repeat(auto-fit, minmax(300px, 1fr))' : 
                               'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: isMobile ? '2rem' : '2.5rem',
+          gap: isMobile ? '1.5rem' : '2.5rem',
           maxWidth: '1800px',
           margin: '0 auto',
-          gridAutoRows: 'max-content',
-          justifyItems: 'center',
-          alignItems: 'start'
+          gridAutoRows: isMobile ? 'none' : 'max-content',
+          justifyItems: isMobile ? 'none' : 'center',
+          alignItems: isMobile ? 'center' : 'start',
+          // Mobile horizontal scroll properties
+          overflowX: isMobile ? 'auto' : 'visible',
+          overflowY: 'visible',
+          padding: isMobile ? '0 1rem 1rem 1rem' : '0',
+          scrollSnapType: isMobile ? 'x mandatory' : 'none',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: isMobile ? 'none' : 'auto',
+          msOverflowStyle: isMobile ? 'none' : 'auto'
         }}>
           {(showAllImages ? GALLERY_IMAGES : GALLERY_IMAGES.slice(0, 10)).map((image, index) => {
             // Create different natural aspect ratios for variety
@@ -114,52 +171,50 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
             return (
               <div key={index} style={{
                 position: 'relative',
-                background: 'white',
-                padding: '20px',
-                borderRadius: '8px',
-                boxShadow: `
-                  0 4px 6px rgba(0,0,0,0.07),
-                  0 10px 15px rgba(0,0,0,0.08),
-                  inset 0 1px 0 rgba(255,255,255,0.9)
-                `,
-                border: '1px solid rgba(0,0,0,0.05)',
-                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                background: 'rgba(255,255,255,0.1)',
+                backdropFilter: 'blur(15px)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: isMobile ? '16px' : '20px',
+                overflow: 'hidden',
                 cursor: 'pointer',
-                transform: `rotate(${(Math.sin(index * 17) * 3)}deg)`,
+                transition: 'all 0.3s ease',
+                transform: isMobile ? 'none' : `rotate(${(Math.sin(index * 17) * 2)}deg)`,
                 transformOrigin: 'center center',
-                width: `${isMobile ? Math.min(imageSize.width * 0.8, 280) : imageSize.width}px`,
-                maxWidth: '100%'
+                width: isMobile ? '280px' : `${Math.min(imageSize.width, 320)}px`,
+                height: isMobile ? '350px' : 'auto',
+                minWidth: isMobile ? '280px' : 'auto',
+                maxWidth: isMobile ? '280px' : '100%',
+                flexShrink: isMobile ? 0 : 'initial',
+                scrollSnapAlign: isMobile ? 'start' : 'none',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'rotate(0deg) scale(1.02) translateY(-8px)';
-                e.currentTarget.style.boxShadow = `
-                  0 20px 25px rgba(0,0,0,0.15),
-                  0 30px 40px rgba(0,0,0,0.1),
-                  inset 0 1px 0 rgba(255,255,255,0.9)
-                `;
-                e.currentTarget.style.zIndex = '10';
+                if (isMobile) {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
+                } else {
+                  e.currentTarget.style.transform = 'rotate(0deg) translateY(-10px) scale(1.02)';
+                }
+                e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.4)';
+                e.currentTarget.style.borderColor = 'rgba(59,130,246,0.4)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = `rotate(${(Math.sin(index * 17) * 3)}deg) scale(1) translateY(0px)`;
-                e.currentTarget.style.boxShadow = `
-                  0 4px 6px rgba(0,0,0,0.07),
-                  0 10px 15px rgba(0,0,0,0.08),
-                  inset 0 1px 0 rgba(255,255,255,0.9)
-                `;
-                e.currentTarget.style.zIndex = '1';
+                if (isMobile) {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                } else {
+                  e.currentTarget.style.transform = `rotate(${(Math.sin(index * 17) * 2)}deg) translateY(0) scale(1)`;
+                }
+                e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
               }}
-              onClick={() => openModal(index)}>
+              onClick={() => handleImageClick(index, image)}>
                 
                 {/* Gallery Frame */}
                 <div style={{
                   position: 'relative',
                   width: '100%',
-                  height: `${isMobile ? Math.min(imageSize.height * 0.8, 350) : imageSize.height}px`,
-                  background: '#f8f9fa',
-                  border: '3px solid #e9ecef',
-                  borderRadius: '4px',
+                  height: isMobile ? '220px' : '250px',
                   overflow: 'hidden',
-                  marginBottom: '15px'
+                  marginBottom: isMobile ? '0' : '0'
                 }}>
                   <img 
                     src={image.src} 
@@ -168,90 +223,89 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
                       width: '100%',
                       height: '100%',
                       objectFit: 'cover',
-                      transition: 'all 0.4s ease',
-                      filter: 'brightness(0.95) contrast(1.05) saturate(1.1)'
+                      transition: 'transform 0.3s ease'
                     }}
                   />
                   
-                  {/* Photo Corner Tabs */}
+                  {/* Overlay Gradient */}
                   <div style={{
                     position: 'absolute',
-                    top: '-5px',
-                    left: '20px',
-                    width: '40px',
-                    height: '20px',
-                    background: 'rgba(255,255,255,0.9)',
-                    clipPath: 'polygon(0 0, 100% 0, 85% 100%, 15% 100%)',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '60px',
+                    background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
+                    pointerEvents: 'none'
                   }}></div>
+
+                  {/* Project Type Badge */}
                   <div style={{
                     position: 'absolute',
-                    top: '-5px',
-                    right: '20px',
-                    width: '40px',
-                    height: '20px',
-                    background: 'rgba(255,255,255,0.9)',
-                    clipPath: 'polygon(0 0, 100% 0, 85% 100%, 15% 100%)',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                  }}></div>
+                    top: '12px',
+                    right: '12px',
+                    background: 'rgba(59,130,246,0.9)',
+                    color: 'white',
+                    padding: '4px 12px',
+                    borderRadius: '12px',
+                    fontSize: '0.7rem',
+                    fontWeight: '600',
+                    backdropFilter: 'blur(10px)'
+                  }}>
+                    {index < 3 ? (currentLanguage === 'en' ? 'Business' : 'Бизнес') : 
+                     index < 6 ? (currentLanguage === 'en' ? 'Document' : 'Документ') : 
+                     (currentLanguage === 'en' ? 'Training' : 'Обучение')}
+                  </div>
                 </div>
 
                 {/* Gallery Label */}
                 <div style={{
-                  background: 'white',
-                  padding: '12px 15px',
-                  textAlign: 'center',
-                  borderTop: '1px solid #e9ecef'
-                }}>
-                  <h4 style={{
-                    fontSize: '1.1rem',
-                    fontWeight: '600',
-                    color: '#1e293b',
-                    marginBottom: '5px',
-                    fontFamily: 'serif'
-                  }}>
-                    {image.title}
-                  </h4>
-                  <p style={{
-                    fontSize: '0.85rem',
-                    color: '#64748b',
-                    margin: '5px 0',
-                    fontStyle: 'italic'
-                  }}>
-                    {image.desc}
-                  </p>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    color: '#94a3b8',
-                    marginTop: '8px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    fontWeight: '500'
-                  }}>
-                    {index < 3 ? (currentLanguage === 'en' ? 'Business Meeting' : 'Деловая встреча') : 
-                     index < 6 ? (currentLanguage === 'en' ? 'Document Translation' : 'Перевод документов') : 
-                     (currentLanguage === 'en' ? 'Training Session' : 'Учебная сессия')}
-                  </div>
-                </div>
-
-                {/* Gallery Number Plate */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: '-8px',
-                  right: '15px',
-                  background: '#3b82f6',
-                  color: 'white',
-                  width: '30px',
-                  height: '20px',
+                  padding: isMobile ? '1rem' : '1.5rem',
+                  height: isMobile ? '130px' : 'auto',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.75rem',
-                  fontWeight: '700',
-                  clipPath: 'polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%)',
-                  boxShadow: '0 2px 4px rgba(59,130,246,0.3)'
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
                 }}>
-                  {index + 1}
+                  <div>
+                    <h4 style={{
+                      fontSize: isMobile ? '1rem' : '1.2rem',
+                      fontWeight: '600',
+                      color: '#f1f5f9',
+                      marginBottom: '0.5rem',
+                      lineHeight: '1.3',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: isMobile ? 'nowrap' : 'normal'
+                    }}>
+                      {image.title}
+                    </h4>
+                    <p style={{
+                      fontSize: isMobile ? '0.8rem' : '0.9rem',
+                      color: '#cbd5e1',
+                      lineHeight: '1.4',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      margin: '0'
+                    }}>
+                      {image.desc}
+                    </p>
+                  </div>
+                  {!isMobile && (
+                    <div style={{
+                      fontSize: '0.75rem',
+                      color: '#94a3b8',
+                      marginTop: '1rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      fontWeight: '500'
+                    }}>
+                      {index < 3 ? (currentLanguage === 'en' ? 'Business Meeting' : 'Деловая встреча') : 
+                       index < 6 ? (currentLanguage === 'en' ? 'Document Translation' : 'Перевод документов') : 
+                       (currentLanguage === 'en' ? 'Training Session' : 'Учебная сессия')}
+                    </div>
+                  )}
                 </div>
               </div>
             );
@@ -265,7 +319,7 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
             marginTop: '4rem'
           }}>
             <button
-              onClick={() => setShowAllImages(!showAllImages)}
+              onClick={handleToggleImages}
               style={{
                 background: showAllImages 
                   ? 'linear-gradient(135deg, #64748b, #475569)' 
@@ -303,6 +357,40 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
           </div>
         )}
       </div>
+
+      {/* Mobile Gallery Scroll Indicator */}
+      {isMobile && (
+        <div style={{
+          textAlign: 'center',
+          marginTop: '2rem',
+          color: '#64748b',
+          fontSize: '0.9rem'
+        }}>
+          ← {currentLanguage === 'en' ? 'Swipe to see more' : 'Проведите пальцем, чтобы увидеть больше'} →
+        </div>
+      )}
+
+      {/* CSS for mobile scrollbar hiding and animations */}
+      <style>{`
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          50% {
+            transform: translateY(-10px) rotate(1deg);
+          }
+        }
+        
+        @media (max-width: 768px) {
+          div::-webkit-scrollbar {
+            display: none;
+          }
+          div {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        }
+      `}</style>
     </section>
   );
 };
