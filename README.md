@@ -1,104 +1,67 @@
-# Language Liberty - Russian Translation Services
+# Russian Translator Website
 
-A unique, modern React website template for professional Russian translation services featuring SEO analytics, interactive process flow, and LinkedIn integration.
+A modern, responsive React website for professional Russian translation services.
 
-## 🌟 Unique Features
+## Features
 
-- **Real-time SEO Analytics**: Live visitor tracking and performance metrics
-- **Interactive Process Flow**: Step-by-step "How It Works" section with animated cards
-- **LinkedIn Integration**: Embedded LinkedIn profile with professional networking
-- **Advanced SEO**: Google Analytics, structured data, and Open Graph tags
-- **Responsive Design**: Mobile-first approach with smooth animations
-- **Cultural Branding**: Russian-themed design elements and professional aesthetics
+- 🌐 **Bilingual Support**: English and Russian language switching
+- 📱 **Responsive Design**: Mobile, tablet, and desktop optimized
+- 🖼️ **Professional Gallery**: Interactive wall gallery showcasing translation work
+- 💬 **Live Chat**: Integrated chatbot for customer inquiries
+- ⭐ **Testimonials**: Customer feedback and ratings system
+- 🎨 **Modern UI**: Blue theme with smooth animations and transitions
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Tech Stack
 
-## 🚀 Quick Start
+- **Frontend**: React 18+ with modern hooks
+- **Backend**: Firebase Firestore for data storage
+- **Hosting**: Firebase Hosting
+- **Styling**: Inline CSS with responsive design
+- **Performance**: Lazy loading and optimized assets
 
-1. Install dependencies:
+## Quick Start
+
 ```bash
+# Install dependencies
 npm install
-```
 
-2. Start development server:
-```bash
+# Start development server
 npm start
+
+# Build for production
+npm run build
+
+# Deploy to Firebase
+npm run deploy
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) to view the site
+## Project Structure
 
-## 📊 SEO & Analytics Features
+```
+src/
+├── components/       # Reusable React components
+├── hooks/           # Custom React hooks
+├── constants/       # Static content and configuration
+├── contexts/        # React context providers
+├── services/        # External service integrations
+├── utils/          # Utility functions
+└── App.js          # Main application component
+```
 
-- **Google Analytics Integration**: Automatic page tracking and user behavior analysis
-- **Real-time Visitor Counter**: Dynamic analytics display with localStorage persistence
-- **Structured Data**: Schema.org markup for better search engine understanding
-- **Meta Tags Optimization**: Dynamic title, description, and keywords management
-- **Open Graph Tags**: Enhanced social media sharing
+## Development
 
-## 🔧 Available Scripts
+The application features a modern, professional design with:
+- Responsive navigation with mobile menu
+- Animated splash screen
+- Interactive gallery with "See More" functionality
+- Live feedback system
+- Professional testimonials carousel
+- Optimized performance with lazy loading
 
-In the project directory, you can run:
+## Deployment
 
-### `npm start`
+The project is configured for Firebase Hosting with automatic builds and deployments.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## License
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# Build fix
+Private project for Russian translation services.
