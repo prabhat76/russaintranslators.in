@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isDarkMode, theme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,24 +57,22 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
       right: 0,
       zIndex: 1000,
       background: isScrolled 
-        ? 'rgba(255, 255, 255, 0.95)' 
-        : 'rgba(255, 255, 255, 0.1)',
+        ? theme.glassStrong
+        : theme.glass,
       backdropFilter: 'blur(20px)',
-      borderBottom: isScrolled 
-        ? '1px solid rgba(226, 232, 240, 0.8)' 
-        : '1px solid rgba(255, 255, 255, 0.1)',
+      borderBottom: `1px solid ${isScrolled ? theme.border : 'rgba(255, 255, 255, 0.1)'}`,
       transition: 'all 0.3s ease',
-      boxShadow: isScrolled 
-        ? '0 4px 20px rgba(0, 0, 0, 0.1)' 
-        : 'none'
+      boxShadow: isScrolled ? theme.shadow : 'none'
     }}>
       <div style={{
-        maxWidth: '1400px',
+        maxWidth: '1200px', // Reduced from broader width
         margin: '0 auto',
-        padding: isMobile ? '1rem' : '1rem 2rem',
+        padding: isMobile ? '0.5rem 1rem' : '0.5rem 2rem', // Reduced padding to make header thinner
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        width: '100%',
+        height: isMobile ? '60px' : '70px' // Fixed thinner height
       }}>
         {/* Logo */}
         <div style={{
@@ -82,33 +82,36 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
         }}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <div style={{
-            width: '40px',
-            height: '40px',
-            background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-            borderRadius: '12px',
+            width: '32px', // Smaller for thinner header
+            height: '32px',
+            background: theme.gradient,
+            borderRadius: '8px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            marginRight: '12px',
-            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+            marginRight: '8px',
+            boxShadow: `0 4px 12px ${theme.primary}30`,
+            transition: 'all 0.3s ease'
           }}>
-            <span style={{ fontSize: '20px' }}>🇷🇺</span>
+            <span style={{ fontSize: '16px' }}>🇷🇺</span>
           </div>
           <div>
             <h1 style={{
-              fontSize: isMobile ? '1.2rem' : '1.5rem',
+              fontSize: isMobile ? '1rem' : '1.2rem', // Smaller for thinner header
               fontWeight: '800',
-              color: isScrolled ? '#1e293b' : 'white',
+              color: theme.text,
               margin: 0,
-              lineHeight: '1.2'
+              lineHeight: '1.1',
+              transition: 'color 0.3s ease'
             }}>
               {currentLanguage === 'en' ? 'Russian Translator' : 'Русский переводчик'}
             </h1>
             <p style={{
-              fontSize: '0.75rem',
-              color: isScrolled ? '#64748b' : 'rgba(255, 255, 255, 0.8)',
+              fontSize: '0.65rem', // Smaller for thinner header
+              color: theme.textSecondary,
               margin: 0,
-              fontWeight: '500'
+              fontWeight: '500',
+              transition: 'color 0.3s ease'
             }}>
               {currentLanguage === 'en' ? 'Professional Services' : 'Профессиональные услуги'}
             </p>
@@ -120,7 +123,7 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
           <nav style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '2rem'
+            gap: '1.5rem' // Slightly reduced gap
           }}>
             {navItems.map((item) => (
               <button
@@ -129,19 +132,19 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: isScrolled ? '#475569' : 'rgba(255, 255, 255, 0.9)',
-                  fontSize: '1rem',
+                  color: theme.textSecondary,
+                  fontSize: '0.9rem', // Smaller for thinner header
                   fontWeight: '500',
                   cursor: 'pointer',
-                  padding: '0.5rem 0',
+                  padding: '0.4rem 0', // Reduced padding
                   position: 'relative',
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = isScrolled ? '#3b82f6' : 'white';
+                  e.currentTarget.style.color = theme.primary;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = isScrolled ? '#475569' : 'rgba(255, 255, 255, 0.9)';
+                  e.currentTarget.style.color = theme.textSecondary;
                 }}
               >
                 {item.label}
@@ -154,7 +157,7 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '1rem'
+          gap: '0.75rem' // Reduced gap
         }}>
           {/* Enhanced Language Toggle */}
           <div 
@@ -166,30 +169,26 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
             }}>
             <div style={{
               position: 'relative',
-              background: isScrolled 
-                ? 'rgba(255, 255, 255, 0.9)' 
-                : 'rgba(255, 255, 255, 0.15)',
-              border: `2px solid ${isScrolled ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.3)'}`,
-              borderRadius: '30px',
-              padding: '4px',
+              background: theme.glass,
+              border: `2px solid ${theme.border}`,
+              borderRadius: '20px', // Smaller for thinner header
+              padding: '2px', // Reduced padding
               backdropFilter: 'blur(10px)',
-              boxShadow: isScrolled 
-                ? '0 4px 12px rgba(59, 130, 246, 0.1)' 
-                : '0 4px 12px rgba(0, 0, 0, 0.1)',
+              boxShadow: theme.shadow,
               overflow: 'hidden',
               transition: 'all 0.3s ease'
             }}>
               {/* Sliding Background */}
               <div style={{
                 position: 'absolute',
-                top: '4px',
-                left: currentLanguage === 'en' ? '4px' : '50%',
-                width: 'calc(50% - 4px)',
-                height: 'calc(100% - 8px)',
-                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-                borderRadius: '24px',
+                top: '2px',
+                left: currentLanguage === 'en' ? '2px' : '50%',
+                width: 'calc(50% - 2px)',
+                height: 'calc(100% - 4px)',
+                background: theme.gradient,
+                borderRadius: '18px',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: '0 2px 8px rgba(59, 130, 246, 0.4)',
+                boxShadow: `0 2px 8px ${theme.primary}40`,
                 zIndex: 1
               }}></div>
 
@@ -209,35 +208,33 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '6px',
+                    gap: '3px', // Smaller gap for thinner header
                     background: 'transparent',
                     border: 'none',
-                    borderRadius: '24px',
-                    padding: '8px 16px',
-                    fontSize: '0.9rem',
+                    borderRadius: '18px',
+                    padding: '4px 10px', // Smaller padding
+                    fontSize: '0.75rem', // Smaller font
                     fontWeight: '600',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
-                    color: currentLanguage === 'en' 
-                      ? 'white' 
-                      : (isScrolled ? '#64748b' : 'rgba(255, 255, 255, 0.8)'),
-                    minWidth: '60px'
+                    color: currentLanguage === 'en' ? 'white' : theme.textMuted,
+                    minWidth: '45px'
                   }}
                   onMouseEnter={(e) => {
                     if (currentLanguage !== 'en') {
-                      e.currentTarget.style.color = isScrolled ? '#3b82f6' : 'white';
+                      e.currentTarget.style.color = theme.primary;
                       e.currentTarget.style.transform = 'scale(1.05)';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (currentLanguage !== 'en') {
-                      e.currentTarget.style.color = isScrolled ? '#64748b' : 'rgba(255, 255, 255, 0.8)';
+                      e.currentTarget.style.color = theme.textMuted;
                       e.currentTarget.style.transform = 'scale(1)';
                     }
                   }}
                 >
                   <span style={{ 
-                    fontSize: '1.1rem',
+                    fontSize: '0.9rem', // Smaller flag for thinner header
                     filter: currentLanguage === 'en' ? 'none' : 'grayscale(50%)',
                     transition: 'filter 0.3s ease'
                   }}>🇺🇸</span>
@@ -254,35 +251,33 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '6px',
+                    gap: '3px',
                     background: 'transparent',
                     border: 'none',
-                    borderRadius: '24px',
-                    padding: '8px 16px',
-                    fontSize: '0.9rem',
+                    borderRadius: '18px',
+                    padding: '4px 10px',
+                    fontSize: '0.75rem',
                     fontWeight: '600',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
-                    color: currentLanguage === 'ru' 
-                      ? 'white' 
-                      : (isScrolled ? '#64748b' : 'rgba(255, 255, 255, 0.8)'),
-                    minWidth: '60px'
+                    color: currentLanguage === 'ru' ? 'white' : theme.textMuted,
+                    minWidth: '45px'
                   }}
                   onMouseEnter={(e) => {
                     if (currentLanguage !== 'ru') {
-                      e.currentTarget.style.color = isScrolled ? '#3b82f6' : 'white';
+                      e.currentTarget.style.color = theme.primary;
                       e.currentTarget.style.transform = 'scale(1.05)';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (currentLanguage !== 'ru') {
-                      e.currentTarget.style.color = isScrolled ? '#64748b' : 'rgba(255, 255, 255, 0.8)';
+                      e.currentTarget.style.color = theme.textMuted;
                       e.currentTarget.style.transform = 'scale(1)';
                     }
                   }}
                 >
                   <span style={{ 
-                    fontSize: '1.1rem',
+                    fontSize: '0.9rem', // Smaller flag for thinner header
                     filter: currentLanguage === 'ru' ? 'none' : 'grayscale(50%)',
                     transition: 'filter 0.3s ease'
                   }}>🇷🇺</span>
@@ -296,18 +291,18 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
                 bottom: '-35px',
                 left: '50%',
                 transform: 'translateX(-50%)',
-                background: 'rgba(30, 41, 59, 0.95)',
-                color: 'white',
+                background: theme.mode === 'dark' ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                color: theme.text,
                 padding: '4px 8px',
                 borderRadius: '6px',
-                fontSize: '0.75rem',
+                fontSize: '0.7rem',
                 fontWeight: '500',
                 whiteSpace: 'nowrap',
                 opacity: 0,
                 pointerEvents: 'none',
                 transition: 'opacity 0.3s ease',
                 backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                border: `1px solid ${theme.border}`,
                 zIndex: 1000
               }}
               className="language-tooltip"
@@ -322,7 +317,7 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
                   height: 0,
                   borderLeft: '4px solid transparent',
                   borderRight: '4px solid transparent',
-                  borderBottom: '4px solid rgba(30, 41, 59, 0.95)'
+                  borderBottom: `4px solid ${theme.mode === 'dark' ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)'}`
                 }}></div>
               </div>
             </div>
@@ -333,20 +328,27 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               style={{
-                background: isScrolled 
-                  ? 'rgba(59, 130, 246, 0.1)' 
-                  : 'rgba(255, 255, 255, 0.2)',
-                border: `1px solid ${isScrolled ? '#3b82f6' : 'rgba(255, 255, 255, 0.3)'}`,
-                borderRadius: '8px',
-                padding: '0.5rem',
-                color: isScrolled ? '#3b82f6' : 'white',
+                background: theme.surface,
+                border: `1px solid ${theme.border}`,
+                borderRadius: '6px',
+                padding: '0.3rem', // Smaller padding for thinner header
+                color: theme.text,
                 cursor: 'pointer',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = theme.surfaceHover;
+                e.currentTarget.style.borderColor = theme.borderHover;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = theme.surface;
+                e.currentTarget.style.borderColor = theme.border;
               }}
             >
               <div style={{
-                width: '20px',
-                height: '20px',
+                width: '18px', // Smaller for thinner header
+                height: '18px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-around'
@@ -388,13 +390,13 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
           top: '100%',
           left: 0,
           right: 0,
-          background: 'rgba(255, 255, 255, 0.98)',
+          background: theme.glassStrong,
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(226, 232, 240, 0.8)',
+          border: `1px solid ${theme.border}`,
           borderTop: 'none',
           borderRadius: '0 0 16px 16px',
           padding: '1rem',
-          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)'
+          boxShadow: theme.shadow
         }}>
           <nav style={{
             display: 'flex',
@@ -408,7 +410,7 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#475569',
+                  color: theme.textSecondary,
                   fontSize: '1.1rem',
                   fontWeight: '500',
                   cursor: 'pointer',
@@ -418,12 +420,12 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(59, 130, 246, 0.1)';
-                  e.currentTarget.style.color = '#3b82f6';
+                  e.currentTarget.style.background = theme.surfaceHover;
+                  e.currentTarget.style.color = theme.primary;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'none';
-                  e.currentTarget.style.color = '#475569';
+                  e.currentTarget.style.color = theme.textSecondary;
                 }}
               >
                 {item.label}

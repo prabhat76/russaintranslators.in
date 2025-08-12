@@ -181,12 +181,15 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
                 transform: isMobile ? 'none' : `rotate(${(Math.sin(index * 17) * 2)}deg)`,
                 transformOrigin: 'center center',
                 width: isMobile ? '280px' : `${Math.min(imageSize.width, 320)}px`,
-                height: isMobile ? '350px' : 'auto',
+                height: isMobile ? 'auto' : 'auto',
+                minHeight: isMobile ? '350px' : '400px',
                 minWidth: isMobile ? '280px' : 'auto',
                 maxWidth: isMobile ? '280px' : '100%',
                 flexShrink: isMobile ? 0 : 'initial',
                 scrollSnapAlign: isMobile ? 'start' : 'none',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+                boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+                display: 'flex',
+                flexDirection: 'column'
               }}
               onMouseEnter={(e) => {
                 if (isMobile) {
@@ -196,6 +199,13 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
                 }
                 e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.4)';
                 e.currentTarget.style.borderColor = 'rgba(59,130,246,0.4)';
+                
+                // Show overlay
+                const overlay = e.currentTarget.querySelector('.image-overlay');
+                if (overlay) {
+                  overlay.style.opacity = '1';
+                  overlay.querySelector('div').style.transform = 'scale(1)';
+                }
               }}
               onMouseLeave={(e) => {
                 if (isMobile) {
@@ -205,6 +215,13 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
                 }
                 e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
                 e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
+                
+                // Hide overlay
+                const overlay = e.currentTarget.querySelector('.image-overlay');
+                if (overlay) {
+                  overlay.style.opacity = '0';
+                  overlay.querySelector('div').style.transform = 'scale(0.9)';
+                }
               }}
               onClick={() => handleImageClick(index, image)}>
                 
@@ -212,18 +229,26 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
                 <div style={{
                   position: 'relative',
                   width: '100%',
-                  height: isMobile ? '220px' : '250px',
+                  height: isMobile ? 'auto' : 'auto',
+                  minHeight: isMobile ? '220px' : '250px',
                   overflow: 'hidden',
-                  marginBottom: isMobile ? '0' : '0'
+                  marginBottom: isMobile ? '0' : '0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'rgba(0,0,0,0.05)'
                 }}>
                   <img 
                     src={image.src} 
                     alt={image.title}
                     style={{
                       width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      transition: 'transform 0.3s ease'
+                      height: 'auto',
+                      maxHeight: isMobile ? '300px' : '350px',
+                      objectFit: 'contain',
+                      objectPosition: 'center',
+                      transition: 'transform 0.3s ease',
+                      borderRadius: '8px'
                     }}
                   />
                   
@@ -237,6 +262,39 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
                     background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
                     pointerEvents: 'none'
                   }}></div>
+
+                  {/* View Full Image Overlay */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0,0,0,0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    opacity: 0,
+                    transition: 'opacity 0.3s ease',
+                    pointerEvents: 'none',
+                    zIndex: 5
+                  }}
+                  className="image-overlay">
+                    <div style={{
+                      background: 'rgba(59,130,246,0.9)',
+                      color: 'white',
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '25px',
+                      fontSize: '0.9rem',
+                      fontWeight: '600',
+                      backdropFilter: 'blur(10px)',
+                      border: '2px solid rgba(255,255,255,0.3)',
+                      transform: 'scale(0.9)',
+                      transition: 'transform 0.3s ease'
+                    }}>
+                      🔍 {currentLanguage === 'en' ? 'View Full Image' : 'Посмотреть полное изображение'}
+                    </div>
+                  </div>
 
                   {/* Project Type Badge */}
                   <div style={{
@@ -255,15 +313,39 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
                      index < 6 ? (currentLanguage === 'en' ? 'Document' : 'Документ') : 
                      (currentLanguage === 'en' ? 'Training' : 'Обучение')}
                   </div>
+
+                  {/* Zoom Icon Indicator */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '12px',
+                    left: '12px',
+                    background: 'rgba(0,0,0,0.6)',
+                    color: 'white',
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1rem',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255,255,255,0.3)',
+                    transition: 'all 0.3s ease',
+                    opacity: 0.7
+                  }}>
+                    🔍
+                  </div>
                 </div>
 
                 {/* Gallery Label */}
                 <div style={{
                   padding: isMobile ? '1rem' : '1.5rem',
-                  height: isMobile ? '130px' : 'auto',
+                  minHeight: isMobile ? '120px' : '140px',
                   display: 'flex',
                   flexDirection: 'column',
-                  justifyContent: 'space-between'
+                  justifyContent: 'space-between',
+                  flex: '1',
+                  marginTop: 'auto'
                 }}>
                   <div>
                     <h4 style={{
@@ -367,6 +449,10 @@ const Gallery = ({ currentLanguage, isMobile, isTablet, openModal }) => {
           fontSize: '0.9rem'
         }}>
           ← {currentLanguage === 'en' ? 'Swipe to see more' : 'Проведите пальцем, чтобы увидеть больше'} →
+          <br />
+          <span style={{ fontSize: '0.8rem', marginTop: '0.5rem', display: 'block' }}>
+            📱 {currentLanguage === 'en' ? 'Tap any image to view full size' : 'Нажмите на любое изображение для полного просмотра'}
+          </span>
         </div>
       )}
 

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
 
 // Simple analytics tracking function
 const trackEvent = (eventType, elementName, section, additionalData = {}) => {
@@ -30,6 +31,8 @@ const trackEvent = (eventType, elementName, section, additionalData = {}) => {
 };
 
 const About = ({ currentLanguage, isMobile, isTablet }) => {
+  const { theme, isDarkMode } = useTheme();
+  
   // Track page view when component mounts
   useEffect(() => {
     trackEvent('pageView', 'About', 'about', { language: currentLanguage });
@@ -38,10 +41,10 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
   return (
     <section id="about" style={{ 
       padding: isMobile ? '4rem 1rem' : isTablet ? '5rem 2rem' : '6rem 4rem',
-      background: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
+      background: theme.background,
       position: 'relative',
       overflow: 'hidden',
-      color: 'white'
+      color: theme.text
     }}>
       {/* Animated Background Pattern */}
       <div style={{
@@ -51,9 +54,9 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
         right: 0,
         bottom: 0,
         background: `
-          radial-gradient(circle at 20% 20%, rgba(59,130,246,0.1) 0%, transparent 50%),
-          radial-gradient(circle at 80% 80%, rgba(168,85,247,0.1) 0%, transparent 50%),
-          radial-gradient(circle at 40% 60%, rgba(34,197,94,0.05) 0%, transparent 50%)
+          radial-gradient(circle at 20% 20%, ${theme.primary}20 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, ${theme.secondary || '#8b5cf6'}20 0%, transparent 50%),
+          radial-gradient(circle at 40% 60%, ${theme.success || '#10b981'}15 0%, transparent 50%)
         `,
         animation: 'float 20s ease-in-out infinite',
         pointerEvents: 'none',
@@ -77,15 +80,15 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
               <div style={{
                 display: 'inline-block',
                 padding: '0.5rem 1.5rem',
-                background: 'rgba(59,130,246,0.2)',
-                border: '2px solid rgba(59,130,246,0.3)',
+                background: `${theme.primary}40`,
+                border: `2px solid ${theme.primary}60`,
                 borderRadius: '25px',
                 marginBottom: '1rem',
                 backdropFilter: 'blur(10px)'
               }}>
                 <span style={{
                   fontSize: '0.8rem',
-                  color: '#60a5fa',
+                  color: theme.primary,
                   fontWeight: '700',
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em'
@@ -100,16 +103,21 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
               fontWeight: '800',
               marginBottom: '1rem',
               lineHeight: '1.1',
-              background: 'linear-gradient(135deg, #60a5fa, #a78bfa)',
+              color: theme.text, // Fallback color
+              background: isDarkMode 
+                ? 'linear-gradient(135deg, #60a5fa, #a78bfa)' 
+                : 'linear-gradient(135deg, #3b82f6, #6366f1)',
               WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
+              WebkitTextFillColor: 'transparent',
+              // Fallback for browsers that don't support background-clip
+              textShadow: isDarkMode ? 'none' : '0 2px 4px rgba(0,0,0,0.1)'
             }}>
               {currentLanguage === 'en' ? 'MEET SABRINA' : 'ЗНАКОМЬТЕСЬ - САБРИНА'}
             </h1>
             
             <h2 style={{
               fontSize: '1.3rem',
-              color: '#60a5fa',
+              color: theme.primary,
               fontWeight: '600',
               marginBottom: '1.5rem'
             }}>
@@ -121,7 +129,7 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
             
             <p style={{
               fontSize: '1.1rem',
-              color: '#cbd5e1',
+              color: theme.textSecondary,
               lineHeight: '1.7',
               marginBottom: '1.5rem'
             }}>
@@ -133,7 +141,7 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
             
             <p style={{
               fontSize: '1.1rem',
-              color: '#cbd5e1',
+              color: theme.textSecondary,
               lineHeight: '1.7',
               marginBottom: '2.5rem'
             }}>
@@ -153,17 +161,17 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(255,255,255,0.1)',
+                background: theme.glass || 'rgba(255,255,255,0.1)',
                 backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,255,255,0.2)',
+                border: `1px solid ${theme.border}`,
                 padding: '0.75rem 1.25rem',
                 borderRadius: '50px',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                boxShadow: theme.shadow
               }}>
                 <div style={{
                   width: '40px',
                   height: '40px',
-                  background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                  background: theme.gradient || `linear-gradient(135deg, ${theme.primary}, ${theme.secondary || '#8b5cf6'})`,
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
@@ -176,13 +184,13 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
                   <div style={{ 
                     fontSize: '0.9rem', 
                     fontWeight: '600', 
-                    color: '#f1f5f9' 
+                    color: theme.text 
                   }}>
                     {currentLanguage === 'en' ? 'Certified' : 'Сертифицирована'}
                   </div>
                   <div style={{ 
                     fontSize: '0.75rem', 
-                    color: '#cbd5e1' 
+                    color: theme.textSecondary 
                   }}>
                     {currentLanguage === 'en' ? '6+ Years' : '6+ лет'}
                   </div>
@@ -192,17 +200,17 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(255,255,255,0.1)',
+                background: theme.glass || 'rgba(255,255,255,0.1)',
                 backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,255,255,0.2)',
+                border: `1px solid ${theme.border}`,
                 padding: '0.75rem 1.25rem',
                 borderRadius: '50px',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                boxShadow: theme.shadow
               }}>
                 <div style={{
                   width: '40px',
                   height: '40px',
-                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  background: `linear-gradient(135deg, ${theme.success || '#10b981'}, #059669)`,
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
@@ -215,13 +223,13 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
                   <div style={{ 
                     fontSize: '0.9rem', 
                     fontWeight: '600', 
-                    color: '#f1f5f9' 
+                    color: theme.text 
                   }}>
                     {currentLanguage === 'en' ? 'Global' : 'Международный'}
                   </div>
                   <div style={{ 
                     fontSize: '0.75rem', 
-                    color: '#cbd5e1' 
+                    color: theme.textSecondary 
                   }}>
                     {currentLanguage === 'en' ? 'Multi-cultural' : 'Мультикультурный'}
                   </div>
@@ -232,7 +240,7 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
             {/* Action Buttons */}
             <div style={{ display: 'flex', gap: '1rem' }}>
               <button style={{
-                background: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
+                background: theme.gradient || `linear-gradient(135deg, ${theme.primary}, ${theme.primaryDark || theme.primary})`,
                 color: 'white',
                 padding: '0.875rem 2rem',
                 borderRadius: '12px',
@@ -240,7 +248,7 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
                 fontWeight: '600',
                 fontSize: '1rem',
                 cursor: 'pointer',
-                boxShadow: '0 8px 25px rgba(96,165,250,0.4)',
+                boxShadow: `0 8px 25px ${theme.primary}40`,
                 transition: 'all 0.3s ease',
                 backdropFilter: 'blur(10px)'
               }} onClick={() => { 
@@ -251,11 +259,11 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
               </button>
               
               <button style={{
-                background: 'rgba(255,255,255,0.1)',
-                color: '#f1f5f9',
+                background: theme.glass || 'rgba(255,255,255,0.1)',
+                color: theme.text,
                 padding: '0.875rem 2rem',
                 borderRadius: '12px',
-                border: '2px solid rgba(255,255,255,0.2)',
+                border: `2px solid ${theme.border}`,
                 fontWeight: '600',
                 fontSize: '1rem',
                 cursor: 'pointer',
@@ -276,15 +284,22 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
             overflow: 'visible',
             order: isMobile ? 1 : 2
           }}>
-            <div style={{
+            <div 
+            className={isMobile ? "mobile-image-container" : ""}
+            style={{
               background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
               borderRadius: '30px',
-              padding: '0.5rem',
-              transform: 'rotate(-2deg)',
+              padding: isMobile ? '0.3rem' : '0.5rem',
+              transform: isMobile ? 'rotate(0deg)' : 'rotate(-2deg)',
               boxShadow: '0 25px 50px rgba(59,130,246,0.3)',
               transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
               cursor: 'pointer',
-              overflow: 'visible'
+              overflow: 'visible',
+              width: isMobile ? '100%' : 'auto',
+              height: isMobile ? 'auto' : 'auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'rotate(-1deg) translateY(-10px) scale(1.03)';
@@ -296,15 +311,20 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
             }}>
               <img 
                 src="/images/sabrina-profile.jpeg" 
-                alt="Sabrina Bhatt - Professional Russian Translator" 
+                alt="Sabrina Bhatt - Professional Russian Translator"
+                className={isMobile ? "about-image" : ""} 
                 style={{
-                  width: '110%',
-                  height: isMobile ? '600px' : isTablet ? '750px' : '850px',
-                  objectFit: 'cover',
+                  width: isMobile ? '100%' : '110%',
+                  height: isMobile ? 'auto' : isTablet ? '750px' : '850px',
+                  minHeight: isMobile ? '500px' : 'auto',
+                  maxHeight: isMobile ? 'none' : '850px',
+                  objectFit: isMobile ? 'contain' : 'cover',
+                  objectPosition: isMobile ? 'center' : 'center',
                   borderRadius: '20px',
-                  transform: 'rotate(2deg) translateX(-5%)',
+                  transform: isMobile ? 'rotate(0deg)' : 'rotate(2deg) translateX(-5%)',
                   transition: 'all 0.5s ease',
-                  filter: 'brightness(1.1) contrast(1.05)'
+                  filter: 'brightness(1.1) contrast(1.05)',
+                  animation: isMobile ? 'mobileImageFloat 3s ease-in-out infinite' : 'none'
                 }}
               />
             </div>
@@ -312,20 +332,21 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
             {/* Floating decorative elements with animations */}
             <div style={{
               position: 'absolute',
-              top: '-20px',
-              right: '-20px',
+              top: isMobile ? '-15px' : '-20px',
+              right: isMobile ? '-15px' : '-20px',
               background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
               borderRadius: '50%',
-              width: '90px',
-              height: '90px',
+              width: isMobile ? '70px' : '90px',
+              height: isMobile ? '70px' : '90px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '2.2rem',
+              fontSize: isMobile ? '1.8rem' : '2.2rem',
               boxShadow: '0 15px 35px rgba(59,130,246,0.4)',
               zIndex: 10,
               border: '3px solid rgba(255,255,255,0.8)',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s ease',
+              animation: isMobile ? 'mobileFloat 2s ease-in-out infinite' : 'none'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'scale(1.15) rotate(10deg)';
@@ -340,16 +361,17 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
             
             <div style={{
               position: 'absolute',
-              bottom: '-15px',
-              left: '-35px',
+              bottom: isMobile ? '-10px' : '-15px',
+              left: isMobile ? '-20px' : '-35px',
               background: 'linear-gradient(135deg, white, #f8fafc)',
               borderRadius: '20px',
-              padding: '1.5rem',
+              padding: isMobile ? '1rem' : '1.5rem',
               boxShadow: '0 15px 35px rgba(0,0,0,0.15)',
               border: '3px solid #e2e8f0',
               zIndex: 10,
               transition: 'all 0.3s ease',
-              backdropFilter: 'blur(10px)'
+              backdropFilter: 'blur(10px)',
+              animation: isMobile ? 'mobileFloat 2.5s ease-in-out infinite' : 'none'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-5px) scale(1.05)';
@@ -366,20 +388,21 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
             {/* Additional floating element - language indicator */}
             <div style={{
               position: 'absolute',
-              top: '50%',
-              left: '-50px',
+              top: isMobile ? '40%' : '50%',
+              left: isMobile ? '-30px' : '-50px',
               background: 'linear-gradient(135deg, #2563eb, #1e40af)',
               borderRadius: '50%',
-              width: '70px',
-              height: '70px',
+              width: isMobile ? '60px' : '70px',
+              height: isMobile ? '60px' : '70px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '1.8rem',
+              fontSize: isMobile ? '1.5rem' : '1.8rem',
               boxShadow: '0 12px 30px rgba(239,68,68,0.4)',
               zIndex: 10,
               border: '3px solid rgba(255,255,255,0.9)',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s ease',
+              animation: isMobile ? 'mobileFloat 3s ease-in-out infinite' : 'none'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'scale(1.2) rotate(-10deg)';
@@ -394,6 +417,60 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
           </div>
         </div>
       </div>
+
+      {/* CSS Animations */}
+      <style>{`
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          50% {
+            transform: translateY(-10px) rotate(1deg);
+          }
+        }
+
+        @keyframes mobileImageFloat {
+          0%, 100% {
+            transform: translateY(0px) scale(1);
+          }
+          50% {
+            transform: translateY(-8px) scale(1.01);
+          }
+        }
+
+        @keyframes mobileFloat {
+          0%, 100% {
+            transform: translateY(0px) scale(1);
+          }
+          50% {
+            transform: translateY(-5px) scale(1.05);
+          }
+        }
+
+        /* Mobile image hover effect */
+        @media (max-width: 768px) {
+          .mobile-image-container:hover {
+            transform: translateY(-5px) scale(1.02) !important;
+            box-shadow: 0 30px 60px rgba(59,130,246,0.4) !important;
+          }
+          
+          /* Enhanced mobile animations */
+          .mobile-image-container {
+            animation: mobileImageFloat 4s ease-in-out infinite;
+          }
+        }
+
+        /* Responsive image sizing */
+        @media (max-width: 768px) {
+          .about-image {
+            width: 100% !important;
+            height: auto !important;
+            min-height: 400px !important;
+            max-height: 600px !important;
+            object-fit: contain !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import './App.css';
+import { ThemeProvider } from './contexts/ThemeContext';
 import Header from './components/sections/Header';
 import About from './components/sections/About';
 import MobilePortfolio from './components/sections/MobilePortfolio.simple';
@@ -338,7 +339,11 @@ function App() {
     );
   }
   
-  return <AppContent />;
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  );
 }
 
 export default App;
