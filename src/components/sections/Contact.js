@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Contact = ({ currentLanguage, isMobile, isTablet }) => {
+  const { theme } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -171,25 +173,25 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
     {
       icon: '📧',
       title: currentLanguage === 'en' ? 'Email' : 'Электронная почта',
-      content: 'contact@russian-translator.com',
+      content: 'sabrina@languageliberty.com',
       description: currentLanguage === 'en' ? 'Send us a message anytime' : 'Отправьте нам сообщение в любое время',
-      action: 'mailto:contact@russian-translator.com',
+      action: 'mailto:sabrina@languageliberty.com',
       color: '#3b82f6'
     },
     {
       icon: '📱',
       title: currentLanguage === 'en' ? 'Phone' : 'Телефон',
-      content: '+1 (555) 123-4567',
+      content: '+91-8789389223',
       description: currentLanguage === 'en' ? 'Call for immediate assistance' : 'Звоните для немедленной помощи',
-      action: 'tel:+15551234567',
+      action: 'tel:+918789389223',
       color: '#10b981'
     },
     {
-      icon: '�',
+      icon: '💬',
       title: currentLanguage === 'en' ? 'WhatsApp' : 'WhatsApp',
-      content: '+1 (555) 987-6543',
+      content: '+91-8789389223',
       description: currentLanguage === 'en' ? 'Quick chat for urgent requests' : 'Быстрый чат для срочных запросов',
-      action: 'https://wa.me/15559876543',
+      action: 'https://wa.me/918789389223',
       color: '#25d366'
     },
     {
@@ -247,8 +249,8 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
   return (
     <section style={{
       padding: isMobile ? '4rem 1rem' : isTablet ? '5rem 2rem' : '6rem 4rem',
-      background: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
-      color: 'white',
+      background: theme.background,
+      color: theme.text,
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -273,15 +275,15 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
           <div style={{
             display: 'inline-block',
             padding: '0.5rem 2rem',
-            background: 'rgba(59,130,246,0.2)',
-            border: '2px solid rgba(59,130,246,0.3)',
+            background: `${theme.primary}40`,
+            border: `2px solid ${theme.primary}60`,
             borderRadius: '30px',
             marginBottom: '2rem',
             backdropFilter: 'blur(10px)'
           }}>
             <span style={{
               fontSize: '0.9rem',
-              color: '#60a5fa',
+              color: theme.primary,
               fontWeight: '700',
               textTransform: 'uppercase',
               letterSpacing: '0.1em'
@@ -294,7 +296,8 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
             fontWeight: '900',
             marginBottom: '1rem',
             lineHeight: '1.1',
-            background: 'linear-gradient(135deg, #60a5fa, #a78bfa)',
+            color: theme.text,
+            background: theme.gradient || `linear-gradient(135deg, ${theme.primary}, ${theme.accent})`,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
           }}>
@@ -302,7 +305,7 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
           </h2>
           <p style={{
             fontSize: '1.2rem',
-            color: '#cbd5e1',
+            color: theme.textSecondary,
             maxWidth: '600px',
             margin: '0 auto'
           }}>

@@ -4,15 +4,57 @@ import { useTheme } from '../../contexts/ThemeContext';
 const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isDarkMode, theme } = useTheme();
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const { theme } = useTheme();
 
   useEffect(() => {
+    let scrollTimeout;
+    
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+      
+      // Set scrolled state
+      setIsScrolled(currentScrollY > 50);
+      
+      // Auto-hide logic
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down - hide header after a small delay
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          setIsVisible(false);
+        }, 150);
+      } else if (currentScrollY < lastScrollY) {
+        // Scrolling up - show header immediately
+        clearTimeout(scrollTimeout);
+        setIsVisible(true);
+      }
+      
+      // Always show header at top of page
+      if (currentScrollY <= 50) {
+        clearTimeout(scrollTimeout);
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+
+    const handleMouseMove = (e) => {
+      // Show header when mouse is near the top of the screen
+      if (e.clientY <= 50) {
+        setIsVisible(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+      clearTimeout(scrollTimeout);
+    };
+  }, [lastScrollY]);
 
   // Load saved language preference on component mount
   useEffect(() => {
@@ -61,7 +103,8 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
         : theme.glass,
       backdropFilter: 'blur(20px)',
       borderBottom: `1px solid ${isScrolled ? theme.border : 'rgba(255, 255, 255, 0.1)'}`,
-      transition: 'all 0.3s ease',
+      transform: (isVisible || isMenuOpen) ? 'translateY(0)' : 'translateY(-100%)',
+      transition: 'all 0.3s ease-in-out',
       boxShadow: isScrolled ? theme.shadow : 'none'
     }}>
       <div style={{
