@@ -1,148 +1,65 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+// Simple Masonry CSS for Pinterest-style grid
+const masonryStyles = `
+.masonry-grid {
+  display: flex;
+  gap: 1.5rem;
+}
+.masonry-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .masonry-grid { flex-direction: column; }
+  .masonry-column { width: 100%; }
+}
+`;
 const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [visibleItems, setVisibleItems] = useState(6);
   const portfolioRef = useRef(null);
 
   // Portfolio items data
-  const portfolioItems = [
-    {
-      id: 1,
-      title: currentLanguage === 'en' ? 'Legal Contract Translation' : 'Перевод юридического договора',
-      category: 'legal',
-      description: currentLanguage === 'en' 
-        ? 'Complex international business contract with precise legal terminology'
-        : 'Сложный международный деловой договор с точной юридической терминологией',
-      client: currentLanguage === 'en' ? 'Global Corp Ltd.' : 'Глобал Корп Лтд.',
-      pages: 45,
-      timeframe: currentLanguage === 'en' ? '3 days' : '3 дня',
-      languages: 'EN → RU',
-      image: '/images/sabrina-work-1.jpeg',
-      tags: ['Contract', 'Business', 'Legal'],
-      year: 2024
-    },
-    {
-      id: 2,
-      title: currentLanguage === 'en' ? 'Medical Research Documentation' : 'Медицинская исследовательская документация',
-      category: 'medical',
-      description: currentLanguage === 'en'
-        ? 'Clinical trial protocols and pharmaceutical research papers'
-        : 'Протоколы клинических испытаний и фармацевтические исследовательские работы',
-      client: currentLanguage === 'en' ? 'MedTech Solutions' : 'МедТех Солюшнз',
-      pages: 120,
-      timeframe: currentLanguage === 'en' ? '7 days' : '7 дней',
-      languages: 'RU → EN',
-      image: '/images/sabrina-work-2.jpeg',
-      tags: ['Medical', 'Research', 'Scientific'],
-      year: 2024
-    },
-    {
-      id: 3,
-      title: currentLanguage === 'en' ? 'Technical Manual Translation' : 'Перевод технического руководства',
-      category: 'technical',
-      description: currentLanguage === 'en'
-        ? 'Industrial equipment operation and maintenance manual'
-        : 'Руководство по эксплуатации и обслуживанию промышленного оборудования',
-      client: currentLanguage === 'en' ? 'TechnoMach Industries' : 'ТехноМаш Индастриз',
-      pages: 85,
-      timeframe: currentLanguage === 'en' ? '5 days' : '5 дней',
-      languages: 'EN → RU',
-      image: '/images/sabrina-work-3.jpeg',
-      tags: ['Technical', 'Industrial', 'Manual'],
-      year: 2024
-    },
-    {
-      id: 4,
-      title: currentLanguage === 'en' ? 'Marketing Campaign Localization' : 'Локализация маркетинговой кампании',
-      category: 'marketing',
-      description: currentLanguage === 'en'
-        ? 'Brand messaging and advertising materials for Russian market'
-        : 'Брендинговые сообщения и рекламные материалы для российского рынка',
-      client: currentLanguage === 'en' ? 'Creative Agency Plus' : 'Креатив Эйдженси Плюс',
-      pages: 25,
-      timeframe: currentLanguage === 'en' ? '2 days' : '2 дня',
-      languages: 'EN → RU',
-      image: '/images/sabrina-work-4.jpeg',
-      tags: ['Marketing', 'Branding', 'Creative'],
-      year: 2024
-    },
-    {
-      id: 5,
-      title: currentLanguage === 'en' ? 'Academic Research Paper' : 'Академическая исследовательская работа',
-      category: 'academic',
-      description: currentLanguage === 'en'
-        ? 'Scholarly article on international relations and diplomacy'
-        : 'Научная статья по международным отношениям и дипломатии',
-      client: currentLanguage === 'en' ? 'International University' : 'Международный университет',
-      pages: 35,
-      timeframe: currentLanguage === 'en' ? '4 days' : '4 дня',
-      languages: 'RU → EN',
-      image: '/images/sabrina-work-5.jpeg',
-      tags: ['Academic', 'Research', 'Scholarly'],
-      year: 2024
-    },
-    {
-      id: 6,
-      title: currentLanguage === 'en' ? 'Financial Report Translation' : 'Перевод финансового отчета',
-      category: 'business',
-      description: currentLanguage === 'en'
-        ? 'Annual financial statements and investment documentation'
-        : 'Годовая финансовая отчетность и инвестиционная документация',
-      client: currentLanguage === 'en' ? 'Investment Group LLC' : 'Инвестиционная Группа ООО',
-      pages: 55,
-      timeframe: currentLanguage === 'en' ? '3 days' : '3 дня',
-      languages: 'EN → RU',
-      image: '/images/sabrina-work-6.jpeg',
-      tags: ['Finance', 'Business', 'Investment'],
-      year: 2024
-    },
-    {
-      id: 7,
-      title: currentLanguage === 'en' ? 'Software Documentation' : 'Документация программного обеспечения',
-      category: 'technical',
-      description: currentLanguage === 'en'
-        ? 'User guides and API documentation for software platform'
-        : 'Руководства пользователя и документация API для программной платформы',
-      client: currentLanguage === 'en' ? 'SoftDev Technologies' : 'СофтДев Технолоджис',
-      pages: 95,
-      timeframe: currentLanguage === 'en' ? '6 days' : '6 дней',
-      languages: 'EN → RU',
-      image: '/images/sabrina-work-7.jpeg',
-      tags: ['Software', 'Technical', 'Documentation'],
-      year: 2024
-    },
-    {
-      id: 8,
-      title: currentLanguage === 'en' ? 'Literary Translation Project' : 'Проект художественного перевода',
-      category: 'literary',
-      description: currentLanguage === 'en'
-        ? 'Contemporary Russian novel translation for international publication'
-        : 'Перевод современного русского романа для международной публикации',
-      client: currentLanguage === 'en' ? 'Publishing House International' : 'Издательский дом Интернэшнл',
-      pages: 200,
-      timeframe: currentLanguage === 'en' ? '14 days' : '14 дней',
-      languages: 'RU → EN',
-      image: '/images/sabrina-work-8.jpeg',
-      tags: ['Literary', 'Novel', 'Publishing'],
-      year: 2024
-    },
-    {
-      id: 9,
-      title: currentLanguage === 'en' ? 'Educational Curriculum' : 'Образовательная программа',
-      category: 'academic',
-      description: currentLanguage === 'en'
-        ? 'University course materials and educational content'
-        : 'Материалы университетского курса и образовательный контент',
-      client: currentLanguage === 'en' ? 'Education Excellence' : 'Образование Эксселенс',
-      pages: 75,
-      timeframe: currentLanguage === 'en' ? '5 days' : '5 дней',
-      languages: 'EN → RU',
-      image: '/images/sabrina-work-9.jpeg',
-      tags: ['Education', 'Curriculum', 'Academic'],
-      year: 2024
-    }
+  // All images in /public/images for the masonry grid
+  const imageFiles = [
+    'sabrina-work-1.jpeg',
+    'sabrina-work-2.jpeg',
+    'sabrina-work-3.jpeg',
+    'sabrina-work-4.jpeg',
+    'sabrina-work-5.jpeg',
+    'sabrina-work-6.jpeg',
+    'sabrina-work-7.jpeg',
+    'sabrina-work-8.jpeg',
+    'sabrina-work-9.jpeg',
+    'sabrina-work-10.jpeg',
+    'sabrina-work-1 copy.jpeg',
+    'sabrina-work-1 copy 2.jpeg',
+    'sabrina-work-1 copy 3.jpeg',
+    'sabrina-work-1 copy 4.jpeg',
+    'sabrina-work-1 copy 5.jpeg',
+    'sabrina-work-1 copy 6.jpeg',
+    'sabrina-work-1 copy 7.jpeg',
+    'sabrina-work-1 copy 8.jpeg'
   ];
+
+  const portfolioItems = imageFiles.map((img, idx) => ({
+    id: idx + 1,
+    title: currentLanguage === 'en' ? `Project #${idx + 1}` : `Проект №${idx + 1}`,
+    category: ['legal','medical','technical','marketing','academic','business','literary'][idx % 7],
+    description: currentLanguage === 'en'
+      ? 'Sample translation project with real client deliverables.'
+      : 'Пример переводческого проекта с реальными результатами для клиента.',
+    client: currentLanguage === 'en' ? `Client ${idx + 1}` : `Клиент ${idx + 1}`,
+    pages: 20 + (idx * 5) % 100,
+    timeframe: currentLanguage === 'en' ? `${2 + (idx % 7)} days` : `${2 + (idx % 7)} дня`,
+    languages: idx % 2 === 0 ? 'EN → RU' : 'RU → EN',
+    image: `/images/${img}`,
+    tags: ['Translation', 'Professional', 'Portfolio'],
+    year: 2024
+  }));
 
   const categories = [
     { id: 'all', label: currentLanguage === 'en' ? 'All Projects' : 'Все проекты', icon: '📁' },
@@ -220,7 +137,8 @@ const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
         position: 'relative',
         overflow: 'hidden'
       }}>
-      
+  {/* Masonry CSS */}
+  <style>{masonryStyles}</style>
       {/* Background Pattern */}
       <div style={{
         position: 'absolute',
@@ -296,7 +214,6 @@ const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
               key={category.id}
               onClick={() => {
                 setActiveFilter(category.id);
-                setVisibleItems(6);
               }}
               style={{
                 background: activeFilter === category.id 
@@ -334,177 +251,152 @@ const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
           ))}
         </div>
 
-        {/* Portfolio Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-          gap: '2rem',
-          maxWidth: '1400px',
-          margin: '0 auto 3rem'
-        }}>
-          {visiblePortfolioItems.map((item, index) => (
-            <div
-              key={item.id}
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(15px)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                borderRadius: '24px',
-                overflow: 'hidden',
-                transition: 'all 0.4s ease',
-                cursor: 'pointer',
-                animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-10px) scale(1.02)';
-                e.currentTarget.style.boxShadow = '0 25px 50px rgba(0,0,0,0.3)';
-                e.currentTarget.style.borderColor = 'rgba(59,130,246,0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
-              }}
-            >
-              {/* Project Image */}
-              <div style={{
-                position: 'relative',
-                height: '200px',
-                overflow: 'hidden'
-              }}>
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    transition: 'transform 0.4s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.1)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
-                />
-                
-                {/* Category Badge */}
-                <div style={{
-                  position: 'absolute',
-                  top: '1rem',
-                  right: '1rem',
-                  background: 'rgba(59,130,246,0.9)',
-                  color: 'white',
-                  padding: '0.25rem 0.75rem',
-                  borderRadius: '12px',
-                  fontSize: '0.8rem',
-                  fontWeight: '600',
-                  backdropFilter: 'blur(10px)'
-                }}>
-                  {categories.find(cat => cat.id === item.category)?.icon} {categories.find(cat => cat.id === item.category)?.label}
-                </div>
 
-                {/* Languages Badge */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: '1rem',
-                  left: '1rem',
-                  background: 'rgba(34,197,94,0.9)',
-                  color: 'white',
-                  padding: '0.25rem 0.75rem',
-                  borderRadius: '12px',
-                  fontSize: '0.8rem',
-                  fontWeight: '600',
-                  backdropFilter: 'blur(10px)'
-                }}>
-                  {item.languages}
-                </div>
-              </div>
-
-              {/* Project Details */}
-              <div style={{ padding: '2rem' }}>
-                <h3 style={{
-                  fontSize: '1.3rem',
-                  fontWeight: '700',
-                  color: '#f1f5f9',
-                  marginBottom: '0.75rem',
-                  lineHeight: '1.3'
-                }}>
-                  {item.title}
-                </h3>
-                
-                <p style={{
-                  fontSize: '0.95rem',
-                  color: '#cbd5e1',
-                  lineHeight: '1.6',
-                  marginBottom: '1.5rem'
-                }}>
-                  {item.description}
-                </p>
-
-                {/* Project Meta */}
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '1rem',
-                  marginBottom: '1rem',
-                  fontSize: '0.85rem'
-                }}>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    color: '#94a3b8'
-                  }}>
-                    <span>📄</span>
-                    <span>{item.pages} {currentLanguage === 'en' ? 'pages' : 'страниц'}</span>
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    color: '#94a3b8'
-                  }}>
-                    <span>⏱️</span>
-                    <span>{item.timeframe}</span>
-                  </div>
-                </div>
-
-                {/* Client */}
-                <div style={{
-                  fontSize: '0.9rem',
-                  color: '#60a5fa',
-                  fontWeight: '600',
-                  marginBottom: '1rem'
-                }}>
-                  {currentLanguage === 'en' ? 'Client:' : 'Клиент:'} {item.client}
-                </div>
-
-                {/* Tags */}
-                <div style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: '0.5rem'
-                }}>
-                  {item.tags.map((tag, tagIndex) => (
-                    <span
-                      key={tagIndex}
-                      style={{
-                        background: 'rgba(168,85,247,0.2)',
-                        color: '#c4b5fd',
+        {/* Masonry Portfolio Grid */}
+        <div className="masonry-grid" style={{maxWidth: '1400px', margin: '0 auto 3rem'}}>
+          {[0,1,2].map(col => (
+            <div className="masonry-column" key={col}>
+              {visiblePortfolioItems
+                .filter((_, idx) => idx % 3 === col)
+                .map((item, index) => (
+                  <div
+                    key={item.id}
+                    style={{
+                      background: 'rgba(255,255,255,0.1)',
+                      backdropFilter: 'blur(15px)',
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      borderRadius: '24px',
+                      overflow: 'hidden',
+                      transition: 'all 0.4s ease',
+                      cursor: 'pointer',
+                      animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
+                    }}
+                  >
+                    {/* Project Image */}
+                    <div style={{
+                      position: 'relative',
+                      minHeight: '220px',
+                      maxHeight: '340px',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: '#1e293b'
+                    }}>
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        style={{
+                          width: '100%',
+                          height: 'auto',
+                          objectFit: 'cover',
+                          transition: 'transform 0.4s ease',
+                          borderRadius: '0',
+                          display: 'block'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = 'scale(1.08)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      />
+                      {/* Category Badge */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '1rem',
+                        right: '1rem',
+                        background: 'rgba(59,130,246,0.9)',
+                        color: 'white',
                         padding: '0.25rem 0.75rem',
                         borderRadius: '12px',
-                        fontSize: '0.75rem',
-                        fontWeight: '500',
-                        border: '1px solid rgba(168,85,247,0.3)'
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
+                        fontSize: '0.8rem',
+                        fontWeight: '600',
+                        backdropFilter: 'blur(10px)'
+                      }}>
+                        {categories.find(cat => cat.id === item.category)?.icon} {categories.find(cat => cat.id === item.category)?.label}
+                      </div>
+                      {/* Languages Badge */}
+                      <div style={{
+                        position: 'absolute',
+                        bottom: '1rem',
+                        left: '1rem',
+                        background: 'rgba(34,197,94,0.9)',
+                        color: 'white',
+                        padding: '0.25rem 0.75rem',
+                        borderRadius: '12px',
+                        fontSize: '0.8rem',
+                        fontWeight: '600',
+                        backdropFilter: 'blur(10px)'
+                      }}>
+                        {item.languages}
+                      </div>
+                    </div>
+                    {/* Project Details */}
+                    <div style={{ padding: '1.5rem' }}>
+                      <h3 style={{
+                        fontSize: '1.15rem',
+                        fontWeight: '700',
+                        color: '#f1f5f9',
+                        marginBottom: '0.5rem',
+                        lineHeight: '1.3'
+                      }}>
+                        {item.title}
+                      </h3>
+                      <p style={{
+                        fontSize: '0.92rem',
+                        color: '#cbd5e1',
+                        lineHeight: '1.5',
+                        marginBottom: '1rem'
+                      }}>
+                        {item.description}
+                      </p>
+                      {/* Project Meta */}
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        fontSize: '0.8rem',
+                        color: '#94a3b8',
+                        marginBottom: '0.5rem'
+                      }}>
+                        <span>📄 {item.pages} {currentLanguage === 'en' ? 'pages' : 'страниц'}</span>
+                        <span>⏱️ {item.timeframe}</span>
+                      </div>
+                      {/* Client */}
+                      <div style={{
+                        fontSize: '0.85rem',
+                        color: '#60a5fa',
+                        fontWeight: '600',
+                        marginBottom: '0.5rem'
+                      }}>
+                        {currentLanguage === 'en' ? 'Client:' : 'Клиент:'} {item.client}
+                      </div>
+                      {/* Tags */}
+                      <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '0.4rem'
+                      }}>
+                        {item.tags.map((tag, tagIndex) => (
+                          <span
+                            key={tagIndex}
+                            style={{
+                              background: 'rgba(168,85,247,0.2)',
+                              color: '#c4b5fd',
+                              padding: '0.18rem 0.6rem',
+                              borderRadius: '10px',
+                              fontSize: '0.7rem',
+                              fontWeight: '500',
+                              border: '1px solid rgba(168,85,247,0.3)'
+                            }}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
             </div>
           ))}
         </div>

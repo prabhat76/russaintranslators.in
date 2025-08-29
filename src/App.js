@@ -3,7 +3,7 @@ import './App.css';
 import { ThemeProvider } from './contexts/ThemeContext';
 import Header from './components/sections/Header';
 import About from './components/sections/About';
-import MobilePortfolio from './components/sections/MobilePortfolio.simple';
+import Portfolio from './components/sections/Portfolio';
 import Services from './components/sections/Services';
 import Gallery from './components/sections/Gallery';
 import Testimonials from './components/sections/Testimonials';
@@ -13,17 +13,12 @@ import { GALLERY_IMAGES } from './constants/content';
 
 const Chatbot = lazy(() => import('./components/Chatbot'));
 
-// Splash Screen Component
-const SplashScreen = ({ onComplete, currentLanguage }) => {
-  React.useEffect(() => {
-    console.log('SplashScreen mounted');
+// Splash Screen Component (memoized for performance)
+const SplashScreen = React.memo(({ onComplete, currentLanguage }) => {
+  useEffect(() => {
     const timer = setTimeout(() => {
-      console.log('SplashScreen timer complete');
-      if (onComplete) {
-        onComplete();
-      }
-    }, 2500); // 2.5 seconds
-    
+      if (onComplete) onComplete();
+    }, 2500);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
@@ -44,134 +39,48 @@ const SplashScreen = ({ onComplete, currentLanguage }) => {
       textAlign: 'center',
       fontFamily: 'Arial, sans-serif'
     }}>
-      <div style={{
-        background: 'rgba(30,58,138,0.05)',
-        padding: '3rem',
-        borderRadius: '20px',
-        border: '1px solid rgba(30,58,138,0.1)',
-        boxShadow: '0 20px 40px rgba(30,58,138,0.1)',
-        animation: 'fadeInScale 0.8s ease-out 0s both'
+      <img
+        src="/images/handshake-flags.png"
+        alt="India and Russia handshake"
+        style={{
+          width: '240px',
+          height: '240px',
+          marginBottom: '2rem',
+          animation: 'zoomInOut 2.2s ease-in-out infinite',
+          willChange: 'transform',
+          contain: 'strict'
+        }}
+        loading="eager"
+        decoding="async"
+      />
+      <h1 style={{
+        fontSize: '2.2rem',
+        fontWeight: '800',
+        marginBottom: '0.7rem',
+        color: '#1e3a8a',
+        letterSpacing: '0.01em',
+        textTransform: 'uppercase'
       }}>
-        <img 
-          src="/images/download.webp" 
-          alt="Language Liberty Logo" 
-          style={{
-            width: '120px',
-            height: '120px',
-            borderRadius: '20px',
-            marginBottom: '2rem',
-            boxShadow: '0 10px 30px rgba(30,58,138,0.2)',
-            border: '2px solid rgba(30,58,138,0.1)',
-            animation: 'scaleIn 1s ease-out 0s both'
-          }}
-        />
-        <h1 style={{
-          fontSize: '3.5rem',
-          fontWeight: '900',
-          marginBottom: '1rem',
-          color: '#1e3a8a',
-          textShadow: 'none',
-          animation: 'fadeInUp 1s ease-out 0.3s both'
-        }}>
-          Language Liberty
-        </h1>
-        <p style={{
-          fontSize: '1.3rem',
-          opacity: 0.8,
-          marginBottom: '1.5rem',
-          color: '#475569',
-          animation: 'fadeInUp 1s ease-out 0.6s both'
-        }}>
-          {currentLanguage === 'ru' 
-            ? 'Профессиональные услуги русско-английского перевода'
-            : 'Professional Russian-English Translation Services'
-          }
-        </p>
-        <div style={{
-          fontSize: '2.5rem',
-          marginBottom: '1rem',
-          animation: 'bounceIn 1.2s ease-out 0.9s both'
-        }}>
-          🇺🇸 ⟷ 🇷🇺
-        </div>
-        <div style={{
-          fontSize: '1rem',
-          opacity: 0.7,
-          fontStyle: 'italic',
-          color: '#64748b',
-          animation: 'fadeIn 1s ease-out 1.2s both'
-        }}>
-          {currentLanguage === 'ru' 
-            ? 'Загрузка переводческих услуг...'
-            : 'Loading translation services...'
-          }
-        </div>
+        LANGUAGE LIBERTY
+      </h1>
+      <div style={{
+        fontSize: '1.1rem',
+        color: '#475569',
+        opacity: 0.85
+      }}>
+        Your Russian Translator & Interpreter
       </div>
-
-      {/* Splash Screen Animations */}
       <style>{`
-        @keyframes fadeInScale {
-          from {
-            opacity: 0;
-            transform: scale(0.8);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-        
-        @keyframes scaleIn {
-          from {
-            transform: scale(0.5) rotate(-10deg);
-            opacity: 0;
-          }
-          to {
-            transform: scale(1) rotate(0deg);
-            opacity: 1;
-          }
-        }
-        
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes bounceIn {
-          0% {
-            opacity: 0;
-            transform: scale(0.3);
-          }
-          50% {
-            transform: scale(1.05);
-          }
-          70% {
-            transform: scale(0.9);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-        
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
+        @keyframes zoomInOut {
+          0% { transform: scale(1); }
+          40% { transform: scale(1.12); }
+          60% { transform: scale(0.96); }
+          100% { transform: scale(1); }
         }
       `}</style>
     </div>
   );
-};
+});
 
 // Main App Content Component
 const AppContent = React.memo(() => {
@@ -241,12 +150,14 @@ const AppContent = React.memo(() => {
         />
       </div>
 
-      {/* Mobile Portfolio Section */}
-      <MobilePortfolio 
-        currentLanguage={currentLanguage}
-        isMobile={isMobile}
-        isTablet={isTablet}
-      />
+      {/* Portfolio Section */}
+      <div id="portfolio">
+        <Portfolio 
+          currentLanguage={currentLanguage}
+          isMobile={isMobile}
+          isTablet={isTablet}
+        />
+      </div>
 
       {/* Services Section */}
       <div id="services">
