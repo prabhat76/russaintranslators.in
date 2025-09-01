@@ -140,7 +140,7 @@ const AppContent = React.memo(() => {
         />
       </div>
 
-      {/* Gallery Section */}
+      {/* Gallery Section
       <div id="gallery">
         <Gallery 
           currentLanguage={currentLanguage}
@@ -148,7 +148,7 @@ const AppContent = React.memo(() => {
           isTablet={isTablet}
           openModal={openModal}
         />
-      </div>
+      </div> */}
 
       {/* Portfolio Section */}
       <div id="portfolio">

@@ -1,20 +1,70 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-// Simple Masonry CSS for Pinterest-style grid
+// Pinterest-style Masonry CSS - Exact Pinterest Layout
 const masonryStyles = `
 .masonry-grid {
-  display: flex;
-  gap: 1.5rem;
+  column-count: 4;
+  column-gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
-.masonry-column {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+.masonry-item {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 16px;
+  break-inside: avoid;
+  overflow: hidden;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(0,0,0,0.05);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(0,0,0,0.1);
+  cursor: pointer;
+  position: relative;
 }
-@media (max-width: 900px) {
-  .masonry-grid { flex-direction: column; }
-  .masonry-column { width: 100%; }
+.masonry-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(59,130,246,0.3);
+  background: rgba(0,0,0,0.08);
+  border-color: rgba(59,130,246,0.4);
+}
+.masonry-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px 16px 0 0;
+  transition: transform 0.3s ease;
+}
+.masonry-item:hover img {
+  transform: scale(1.02);
+}
+@media (max-width: 1200px) {
+  .masonry-grid { 
+    column-count: 3;
+    column-gap: 12px;
+    padding: 0 12px;
+  }
+  .masonry-item { margin-bottom: 12px; }
+}
+@media (max-width: 768px) {
+  .masonry-grid { 
+    column-count: 2;
+    column-gap: 8px;
+    padding: 0 8px;
+  }
+  .masonry-item { 
+    margin-bottom: 8px;
+    border-radius: 12px;
+  }
+  .masonry-item img { border-radius: 12px 12px 0 0; }
+}
+@media (max-width: 480px) {
+  .masonry-grid { 
+    column-count: 1;
+    column-gap: 0;
+    padding: 0;
+  }
 }
 `;
 const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
@@ -83,7 +133,7 @@ const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
     setVisibleItems(prev => Math.min(prev + 3, filteredItems.length));
   };
 
-  // Add CSS animations
+  // Add CSS animations and hover effects
   useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `
@@ -119,6 +169,14 @@ const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
           transform: translateX(0);
         }
       }
+      
+      .masonry-item:hover .pinterest-overlay {
+        opacity: 1 !important;
+      }
+      
+      .masonry-item .pinterest-overlay {
+        transition: opacity 0.3s ease;
+      }
     `;
     document.head.appendChild(style);
     
@@ -132,8 +190,8 @@ const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
       ref={portfolioRef}
       style={{
         padding: isMobile ? '4rem 1rem' : isTablet ? '5rem 2rem' : '6rem 4rem',
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
-        color: 'white',
+        background: '#ffffff',
+        color: '#2d3748',
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -157,40 +215,23 @@ const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
       <div style={{ position: 'relative', zIndex: 2 }}>
         {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <div style={{
-            display: 'inline-block',
-            padding: '0.5rem 2rem',
-            background: 'rgba(59,130,246,0.2)',
-            border: '2px solid rgba(59,130,246,0.3)',
-            borderRadius: '30px',
-            marginBottom: '2rem',
-            backdropFilter: 'blur(10px)'
-          }}>
-            <span style={{
-              fontSize: '0.9rem',
-              color: '#60a5fa',
-              fontWeight: '700',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em'
-            }}>
-              {currentLanguage === 'en' ? '🎯 Translation Portfolio' : '🎯 Портфолио переводов'}
-            </span>
-          </div>
           <h2 style={{
             fontSize: isMobile ? '2.5rem' : '4rem',
             fontWeight: '900',
             marginBottom: '1rem',
             lineHeight: '1.1',
-            background: 'linear-gradient(135deg, #60a5fa, #a78bfa)',
+            color: '#1e40af',
+            background: 'linear-gradient(135deg, #3b82f6, #1e40af)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+            backgroundClip: 'text',
+            textShadow: 'none'
           }}>
             {currentLanguage === 'en' ? 'Our Recent Work' : 'Наши недавние работы'}
           </h2>
           <p style={{
             fontSize: '1.2rem',
-            color: '#cbd5e1',
+            color: '#6b7280',
             maxWidth: '700px',
             margin: '0 auto'
           }}>
@@ -217,31 +258,32 @@ const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
               }}
               style={{
                 background: activeFilter === category.id 
-                  ? 'linear-gradient(135deg, #3b82f6, #8b5cf6)'
-                  : 'rgba(255,255,255,0.1)',
-                border: `1px solid ${activeFilter === category.id ? 'rgba(59,130,246,0.5)' : 'rgba(255,255,255,0.2)'}`,
+                  ? 'linear-gradient(135deg, #3b82f6, #1e40af)'
+                  : 'rgba(59,130,246,0.1)',
+                border: `1px solid ${activeFilter === category.id ? '#3b82f6' : 'rgba(59,130,246,0.3)'}`,
                 borderRadius: '25px',
                 padding: '0.75rem 1.5rem',
-                color: 'white',
+                color: activeFilter === category.id ? 'white' : '#3b82f6',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 fontSize: '0.9rem',
                 fontWeight: '600',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem',
-                backdropFilter: 'blur(10px)'
+                gap: '0.5rem'
               }}
               onMouseEnter={(e) => {
                 if (activeFilter !== category.id) {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
+                  e.currentTarget.style.background = 'rgba(59,130,246,0.2)';
                   e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.color = '#1e40af';
                 }
               }}
               onMouseLeave={(e) => {
                 if (activeFilter !== category.id) {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                  e.currentTarget.style.background = 'rgba(59,130,246,0.1)';
                   e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.color = '#3b82f6';
                 }
               }}
             >
@@ -252,151 +294,116 @@ const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
         </div>
 
 
-        {/* Masonry Portfolio Grid */}
-        <div className="masonry-grid" style={{maxWidth: '1400px', margin: '0 auto 3rem'}}>
-          {[0,1,2].map(col => (
-            <div className="masonry-column" key={col}>
-              {visiblePortfolioItems
-                .filter((_, idx) => idx % 3 === col)
-                .map((item, index) => (
-                  <div
-                    key={item.id}
-                    style={{
-                      background: 'rgba(255,255,255,0.1)',
-                      backdropFilter: 'blur(15px)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      borderRadius: '24px',
-                      overflow: 'hidden',
-                      transition: 'all 0.4s ease',
-                      cursor: 'pointer',
-                      animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
-                    }}
-                  >
-                    {/* Project Image */}
-                    <div style={{
-                      position: 'relative',
-                      minHeight: '220px',
-                      maxHeight: '340px',
-                      overflow: 'hidden',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      background: '#1e293b'
-                    }}>
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        style={{
-                          width: '100%',
-                          height: 'auto',
-                          objectFit: 'cover',
-                          transition: 'transform 0.4s ease',
-                          borderRadius: '0',
-                          display: 'block'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'scale(1.08)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = 'scale(1)';
-                        }}
-                      />
-                      {/* Category Badge */}
-                      <div style={{
-                        position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                        background: 'rgba(59,130,246,0.9)',
-                        color: 'white',
-                        padding: '0.25rem 0.75rem',
-                        borderRadius: '12px',
-                        fontSize: '0.8rem',
-                        fontWeight: '600',
-                        backdropFilter: 'blur(10px)'
-                      }}>
-                        {categories.find(cat => cat.id === item.category)?.icon} {categories.find(cat => cat.id === item.category)?.label}
-                      </div>
-                      {/* Languages Badge */}
-                      <div style={{
-                        position: 'absolute',
-                        bottom: '1rem',
-                        left: '1rem',
-                        background: 'rgba(34,197,94,0.9)',
-                        color: 'white',
-                        padding: '0.25rem 0.75rem',
-                        borderRadius: '12px',
-                        fontSize: '0.8rem',
-                        fontWeight: '600',
-                        backdropFilter: 'blur(10px)'
-                      }}>
-                        {item.languages}
-                      </div>
-                    </div>
-                    {/* Project Details */}
-                    <div style={{ padding: '1.5rem' }}>
-                      <h3 style={{
-                        fontSize: '1.15rem',
-                        fontWeight: '700',
-                        color: '#f1f5f9',
-                        marginBottom: '0.5rem',
-                        lineHeight: '1.3'
-                      }}>
-                        {item.title}
-                      </h3>
-                      <p style={{
-                        fontSize: '0.92rem',
-                        color: '#cbd5e1',
-                        lineHeight: '1.5',
-                        marginBottom: '1rem'
-                      }}>
-                        {item.description}
-                      </p>
-                      {/* Project Meta */}
-                      <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        fontSize: '0.8rem',
-                        color: '#94a3b8',
-                        marginBottom: '0.5rem'
-                      }}>
-                        <span>📄 {item.pages} {currentLanguage === 'en' ? 'pages' : 'страниц'}</span>
-                        <span>⏱️ {item.timeframe}</span>
-                      </div>
-                      {/* Client */}
-                      <div style={{
-                        fontSize: '0.85rem',
-                        color: '#60a5fa',
-                        fontWeight: '600',
-                        marginBottom: '0.5rem'
-                      }}>
-                        {currentLanguage === 'en' ? 'Client:' : 'Клиент:'} {item.client}
-                      </div>
-                      {/* Tags */}
-                      <div style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: '0.4rem'
-                      }}>
-                        {item.tags.map((tag, tagIndex) => (
-                          <span
-                            key={tagIndex}
-                            style={{
-                              background: 'rgba(168,85,247,0.2)',
-                              color: '#c4b5fd',
-                              padding: '0.18rem 0.6rem',
-                              borderRadius: '10px',
-                              fontSize: '0.7rem',
-                              fontWeight: '500',
-                              border: '1px solid rgba(168,85,247,0.3)'
-                            }}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+        {/* True Pinterest-style Masonry Portfolio Grid */}
+        <div className="masonry-grid" style={{marginBottom: '3rem'}}>
+          {visiblePortfolioItems.map((item, index) => (
+            <div
+              key={item.id}
+              className="masonry-item"
+              style={{
+                animation: `fadeInUp 0.6s ease-out ${index * 0.05}s both`
+              }}
+            >
+              {/* Project Image */}
+              <div style={{
+                position: 'relative',
+                overflow: 'hidden'
+              }}>
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    minHeight: `${180 + (index % 6) * 60}px`,
+                    maxHeight: `${320 + (index % 4) * 80}px`,
+                    objectFit: 'cover'
+                  }}
+                  loading="lazy"
+                />
+                
+                {/* Pinterest-style Overlay on Hover */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'rgba(0,0,0,0.4)',
+                  opacity: 0,
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontSize: '1.1rem',
+                  fontWeight: '600'
+                }}
+                className="pinterest-overlay">
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>�</div>
+                    {currentLanguage === 'en' ? 'Pin to Board' : 'Сохранить'}
                   </div>
-                ))}
+                </div>
+                
+                {/* Category Badge */}
+                <div style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  background: 'rgba(255,255,255,0.95)',
+                  color: '#1e40af',
+                  padding: '4px 8px',
+                  borderRadius: '12px',
+                  fontSize: '0.7rem',
+                  fontWeight: '700',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+                }}>
+                  {categories.find(cat => cat.id === item.category)?.icon}
+                </div>
+              </div>
+              
+              {/* Minimal Project Info */}
+              <div style={{ padding: '12px' }}>
+                <h3 style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '600',
+                  color: '#2d3748',
+                  marginBottom: '6px',
+                  lineHeight: '1.3',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {item.title}
+                </h3>
+                
+                <p style={{
+                  fontSize: '0.8rem',
+                  color: '#6b7280',
+                  lineHeight: '1.4',
+                  marginBottom: '8px',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden'
+                }}>
+                  {item.description}
+                </p>
+                
+                {/* Language Badge */}
+                <div style={{
+                  display: 'inline-block',
+                  background: 'rgba(34,197,94,0.2)',
+                  color: '#4ade80',
+                  padding: '2px 6px',
+                  borderRadius: '8px',
+                  fontSize: '0.7rem',
+                  fontWeight: '600'
+                }}>
+                  {item.languages}
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -435,79 +442,6 @@ const Portfolio = ({ currentLanguage, isMobile, isTablet }) => {
             </button>
           </div>
         )}
-
-        {/* Portfolio Stats */}
-        <div style={{
-          marginTop: '4rem',
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr 1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
-          gap: '2rem',
-          maxWidth: '1000px',
-          margin: '4rem auto 0'
-        }}>
-          {[
-            {
-              icon: '📊',
-              number: '500+',
-              label: currentLanguage === 'en' ? 'Projects Completed' : 'Завершенных проектов'
-            },
-            {
-              icon: '🏢',
-              number: '200+',
-              label: currentLanguage === 'en' ? 'Happy Clients' : 'Довольных клиентов'
-            },
-            {
-              icon: '🌍',
-              number: '50+',
-              label: currentLanguage === 'en' ? 'Countries Served' : 'Обслуженных стран'
-            },
-            {
-              icon: '⭐',
-              number: '99%',
-              label: currentLanguage === 'en' ? 'Client Satisfaction' : 'Удовлетворенность клиентов'
-            }
-          ].map((stat, index) => (
-            <div
-              key={index}
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                borderRadius: '20px',
-                padding: '2rem 1rem',
-                textAlign: 'center',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
-                e.currentTarget.style.transform = 'translateY(-5px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>
-                {stat.icon}
-              </div>
-              <div style={{
-                fontSize: '2.5rem',
-                fontWeight: '900',
-                color: '#60a5fa',
-                marginBottom: '0.5rem'
-              }}>
-                {stat.number}
-              </div>
-              <div style={{
-                fontSize: '1rem',
-                color: '#cbd5e1',
-                fontWeight: '500'
-              }}>
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );

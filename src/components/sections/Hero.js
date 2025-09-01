@@ -18,7 +18,7 @@ const Hero = ({ currentLanguage, isMobile, isTablet }) => {
   return (
     <section style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%)',
+      background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 25%, #60a5fa 50%, #93c5fd 75%, #dbeafe 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -34,9 +34,9 @@ const Hero = ({ currentLanguage, isMobile, isTablet }) => {
         right: 0,
         bottom: 0,
         background: `
-          radial-gradient(circle at 20% 20%, rgba(59,130,246,0.15) 0%, transparent 50%),
-          radial-gradient(circle at 80% 80%, rgba(168,85,247,0.15) 0%, transparent 50%),
-          radial-gradient(circle at 40% 60%, rgba(34,197,94,0.1) 0%, transparent 50%)
+          radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, rgba(30,64,175,0.2) 0%, transparent 50%),
+          radial-gradient(circle at 40% 60%, rgba(59,130,246,0.15) 0%, transparent 50%)
         `,
         animation: 'float 20s ease-in-out infinite'
       }}></div>
@@ -48,7 +48,7 @@ const Hero = ({ currentLanguage, isMobile, isTablet }) => {
         left: '10%',
         width: '100px',
         height: '100px',
-        background: 'rgba(59,130,246,0.1)',
+        background: 'rgba(255,255,255,0.15)',
         borderRadius: '50%',
         animation: 'float 15s ease-in-out infinite'
       }}></div>
@@ -229,30 +229,32 @@ const Hero = ({ currentLanguage, isMobile, isTablet }) => {
           alignItems: 'center',
           animation: 'fadeInUp 1s ease-out 0.8s both'
         }}>
-          <button
+                    <button
             onClick={scrollToContact}
             style={{
-              background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-              color: 'white',
+              background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+              color: '#1e40af',
               border: 'none',
               padding: '1.25rem 3rem',
               borderRadius: '50px',
               fontSize: '1.2rem',
-              fontWeight: '600',
+              fontWeight: '700',
               cursor: 'pointer',
               transition: 'all 0.4s ease',
-              boxShadow: '0 15px 35px rgba(59,130,246,0.4)',
+              boxShadow: '0 15px 35px rgba(255,255,255,0.3)',
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
               width: isMobile ? '100%' : 'auto'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-5px) scale(1.05)';
-              e.currentTarget.style.boxShadow = '0 25px 50px rgba(59,130,246,0.5)';
+              e.currentTarget.style.boxShadow = '0 25px 50px rgba(255,255,255,0.4)';
+              e.currentTarget.style.background = 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'translateY(0) scale(1)';
-              e.currentTarget.style.boxShadow = '0 15px 35px rgba(59,130,246,0.4)';
+              e.currentTarget.style.boxShadow = '0 15px 35px rgba(255,255,255,0.3)';
+              e.currentTarget.style.background = 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)';
             }}
           >
             {currentLanguage === 'en' ? 'Get Free Quote' : 'Получить бесплатную оценку'}

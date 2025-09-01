@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
 
 const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const { theme } = useTheme();
 
@@ -15,7 +14,6 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
       const currentScrollY = window.scrollY;
       
       // Set scrolled state
-      setIsScrolled(currentScrollY > 50);
       
       // Auto-hide logic
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
@@ -98,75 +96,80 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
       left: 0,
       right: 0,
       zIndex: 1000,
-      background: isScrolled 
-        ? theme.glassStrong
-        : theme.glass,
-      backdropFilter: 'blur(20px)',
-      borderBottom: `1px solid ${isScrolled ? theme.border : 'rgba(255, 255, 255, 0.1)'}`,
+      background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
       transform: (isVisible || isMenuOpen) ? 'translateY(0)' : 'translateY(-100%)',
-      transition: 'all 0.3s ease-in-out',
-      boxShadow: isScrolled ? theme.shadow : 'none'
+      transition: 'all 0.3s ease-in-out'
     }}>
+      {/* Centered Logo Section */}
       <div style={{
-        maxWidth: '1200px', // Reduced from broader width
-        margin: '0 auto',
-        padding: isMobile ? '0.5rem 1rem' : '0.5rem 2rem', // Reduced padding to make header thinner
         display: 'flex',
+        justifyContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-        height: isMobile ? '60px' : '70px' // Fixed thinner height
+        padding: isMobile ? '1.5rem 1rem 1rem 1rem' : '2rem 1.5rem 1.5rem 1.5rem',
+        cursor: 'pointer',
+        borderBottom: '1px solid #e2e8f0'
+      }}
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <img 
+          src="/images/download.webp" 
+          alt="Language Liberty Logo" 
+          style={{
+            width: isMobile ? '60px' : '80px',
+            height: isMobile ? '60px' : '80px',
+            borderRadius: '16px',
+            marginRight: '20px',
+            boxShadow: '0 8px 25px rgba(59,130,246,0.3)',
+            transition: 'all 0.3s ease',
+            objectFit: 'cover'
+          }}
+        />
+        <div style={{ textAlign: 'left' }}>
+          <h1 style={{
+            fontSize: isMobile ? '1.8rem' : '2.8rem',
+            fontWeight: '900',
+            color: '#1e40af',
+            margin: 0,
+            lineHeight: '1.1',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+            background: 'linear-gradient(135deg, #1e40af, #3b82f6)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}>
+            Language Liberty
+          </h1>
+          <p style={{
+            fontSize: isMobile ? '0.9rem' : '1.2rem',
+            color: '#64748b',
+            margin: '8px 0 0 0',
+            fontWeight: '600',
+            letterSpacing: '0.5px'
+          }}>
+            Your Russian Language Translator and Interpreter
+          </p>
+        </div>
+      </div>
+
+      {/* Navigation Row */}
+      <div style={{
+        background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
+        padding: isMobile ? '0.8rem 1rem' : '1rem 2rem'
       }}>
-        {/* Logo */}
         <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
           display: 'flex',
           alignItems: 'center',
-          cursor: 'pointer'
-        }}
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <div style={{
-            width: '32px', // Smaller for thinner header
-            height: '32px',
-            background: theme.gradient,
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginRight: '8px',
-            boxShadow: `0 4px 12px ${theme.primary}30`,
-            transition: 'all 0.3s ease'
-          }}>
-            <span style={{ fontSize: '16px' }}>🇷🇺</span>
-          </div>
-          <div>
-            <h1 style={{
-              fontSize: isMobile ? '1rem' : '1.2rem', // Smaller for thinner header
-              fontWeight: '800',
-              color: theme.text,
-              margin: 0,
-              lineHeight: '1.1',
-              transition: 'color 0.3s ease'
-            }}>
-              {currentLanguage === 'en' ? 'Russian Translator' : 'Русский переводчик'}
-            </h1>
-            <p style={{
-              fontSize: '0.65rem', // Smaller for thinner header
-              color: theme.textSecondary,
-              margin: 0,
-              fontWeight: '500',
-              transition: 'color 0.3s ease'
-            }}>
-              {currentLanguage === 'en' ? 'Professional Services' : 'Профессиональные услуги'}
-            </p>
-          </div>
-        </div>
-
+          justifyContent: 'space-between',
+          minHeight: '50px'
+        }}>
         {/* Desktop Navigation */}
         {!isMobile && (
           <nav style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '1.5rem' // Slightly reduced gap
+            gap: '2rem',
+            margin: '0 auto'
           }}>
             {navItems.map((item) => (
               <button
@@ -176,10 +179,10 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
                   background: 'none',
                   border: 'none',
                   color: theme.textSecondary,
-                  fontSize: '0.9rem', // Smaller for thinner header
+                  fontSize: '1rem',
                   fontWeight: '500',
                   cursor: 'pointer',
-                  padding: '0.4rem 0', // Reduced padding
+                  padding: '0.5rem 0',
                   position: 'relative',
                   transition: 'all 0.3s ease'
                 }}
@@ -200,7 +203,8 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.75rem' // Reduced gap
+          gap: '1rem',
+          marginLeft: isMobile ? 'auto' : '0'
         }}>
           {/* Enhanced Language Toggle */}
           <div 
@@ -423,6 +427,7 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
               </div>
             </button>
           )}
+        </div>
         </div>
       </div>
 
