@@ -101,59 +101,11 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
       transform: (isVisible || isMenuOpen) ? 'translateY(0)' : 'translateY(-100%)',
       transition: 'all 0.3s ease-in-out'
     }}>
-      {/* Centered Logo Section */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: isMobile ? '1.5rem 1rem 1rem 1rem' : '2rem 1.5rem 1.5rem 1.5rem',
-        cursor: 'pointer',
-        borderBottom: '1px solid #e2e8f0'
-      }}
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-        <img 
-          src="/images/download.webp" 
-          alt="Language Liberty Logo" 
-          style={{
-            width: isMobile ? '60px' : '80px',
-            height: isMobile ? '60px' : '80px',
-            borderRadius: '16px',
-            marginRight: '20px',
-            boxShadow: '0 8px 25px rgba(59,130,246,0.3)',
-            transition: 'all 0.3s ease',
-            objectFit: 'cover'
-          }}
-        />
-        <div style={{ textAlign: 'left' }}>
-          <h1 style={{
-            fontSize: isMobile ? '1.8rem' : '2.8rem',
-            fontWeight: '900',
-            color: '#1e40af',
-            margin: 0,
-            lineHeight: '1.1',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
-            background: 'linear-gradient(135deg, #1e40af, #3b82f6)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
-            Language Liberty
-          </h1>
-          <p style={{
-            fontSize: isMobile ? '0.9rem' : '1.2rem',
-            color: '#64748b',
-            margin: '8px 0 0 0',
-            fontWeight: '600',
-            letterSpacing: '0.5px'
-          }}>
-            Your Russian Language Translator and Interpreter
-          </p>
-        </div>
-      </div>
-
       {/* Navigation Row */}
       <div style={{
         background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
-        padding: isMobile ? '0.8rem 1rem' : '1rem 2rem'
+        padding: isMobile ? '0.8rem 1rem' : '1rem 2rem',
+        boxShadow: '0 10px 30px rgba(30, 64, 175, 0.3)',
       }}>
         <div style={{
           maxWidth: '1200px',
@@ -178,19 +130,23 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: theme.textSecondary,
-                  fontSize: '1rem',
-                  fontWeight: '500',
+                  color: '#ffffff',
+                  fontSize: '1.1rem',
+                  fontWeight: '600',
                   cursor: 'pointer',
                   padding: '0.5rem 0',
                   position: 'relative',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = theme.primary;
+                  e.currentTarget.style.color = '#93c5fd';
+                  e.currentTarget.style.transform = 'translateY(-3px)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = theme.textSecondary;
+                  e.currentTarget.style.color = '#ffffff';
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
                 {item.label}
@@ -483,7 +439,7 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
         </div>
       )}
 
-      {/* Language Toggle Hover Effect CSS */}
+      {/* CSS Animations */}
       <style>{`
         .language-toggle-container:hover .language-tooltip {
           opacity: 1 !important;
@@ -493,6 +449,32 @@ const Header = ({ currentLanguage, setCurrentLanguage, isMobile, isTablet }) => 
           .language-tooltip {
             display: none !important;
           }
+        }
+        
+        @keyframes pulseScale {
+          0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+          }
+          50% {
+            transform: scale(1.08);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.6);
+          }
+        }
+        
+        .nav-item::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0%;
+          height: 2px;
+          background: #93c5fd;
+          transition: width 0.3s ease;
+        }
+        
+        .nav-item:hover::after {
+          width: 100%;
         }
       `}</style>
     </header>

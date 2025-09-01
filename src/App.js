@@ -2,10 +2,10 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import './App.css';
 import { ThemeProvider } from './contexts/ThemeContext';
 import Header from './components/sections/Header';
+import Hero from './components/sections/Hero';
 import About from './components/sections/About';
 import Portfolio from './components/sections/Portfolio';
 import Services from './components/sections/Services';
-import Gallery from './components/sections/Gallery';
 import Testimonials from './components/sections/Testimonials';
 import Contact from './components/sections/Contact';
 import Modal from './components/ui/Modal';
@@ -108,10 +108,6 @@ const AppContent = React.memo(() => {
   }, []);
 
   // Modal functions
-  const openModal = (index) => {
-    setSelectedImage(index);
-  };
-
   const closeModal = () => {
     setSelectedImage(null);
   };
@@ -131,6 +127,18 @@ const AppContent = React.memo(() => {
         isTablet={isTablet}
       />
 
+      {/* Hero Section with Animations */}
+      <Hero 
+        content={{
+          hero: {
+            title: currentLanguage === 'en' ? 'Expert Russian Translation Services' : 'Экспертные услуги перевода',
+            subtitle: currentLanguage === 'en' ? 'Professional, accurate, and culturally-aware Russian translation services' : 'Профессиональные, точные и культурно-ориентированные услуги перевода',
+            cta: currentLanguage === 'en' ? 'Get a Free Quote' : 'Получить бесплатную цену'
+          }
+        }}
+        currentLanguage={currentLanguage}
+      />
+
       {/* About Section (Meet Sabrina) */}
       <div id="about">
         <About 
@@ -140,18 +148,8 @@ const AppContent = React.memo(() => {
         />
       </div>
 
-      {/* Gallery Section
-      <div id="gallery">
-        <Gallery 
-          currentLanguage={currentLanguage}
-          isMobile={isMobile}
-          isTablet={isTablet}
-          openModal={openModal}
-        />
-      </div> */}
-
       {/* Portfolio Section */}
-      <div id="portfolio">
+      <div id="gallery">
         <Portfolio 
           currentLanguage={currentLanguage}
           isMobile={isMobile}
