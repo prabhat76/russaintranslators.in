@@ -1,8 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useTheme } from '../../contexts/ThemeContext';
+import React, { useState, useRef } from 'react';
 
 const Contact = ({ currentLanguage, isMobile, isTablet }) => {
-  const { theme } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,64 +16,6 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
   const [formErrors, setFormErrors] = useState({});
   const [isTyping, setIsTyping] = useState({});
   const formRef = useRef(null);
-
-  // Add CSS animations
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes slideInUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      
-      @keyframes bounce {
-        0%, 20%, 53%, 80%, 100% {
-          transform: translateY(0);
-        }
-        40%, 43% {
-          transform: translateY(-15px);
-        }
-        70% {
-          transform: translateY(-7px);
-        }
-        90% {
-          transform: translateY(-3px);
-        }
-      }
-      
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      
-      @keyframes pulse {
-        0% {
-          box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
-        }
-        70% {
-          box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
-        }
-        100% {
-          box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
-        }
-      }
-    `;
-    document.head.appendChild(style);
-    
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
 
   const validateForm = () => {
     const errors = {};
@@ -113,7 +53,7 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
     setIsSubmitting(true);
     setFormErrors({});
     
-    // Simulate form submission with better animation
+    // Simulate form submission
     setTimeout(() => {
       setSubmitSuccess(true);
       setFormData({ 
@@ -176,7 +116,7 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
       content: 'sabrina@languageliberty.com',
       description: currentLanguage === 'en' ? 'Send us a message anytime' : 'Отправьте нам сообщение в любое время',
       action: 'mailto:sabrina@languageliberty.com',
-      color: '#3b82f6'
+      color: 'var(--primary-accent, #3b82f6)'
     },
     {
       icon: '📱',
@@ -184,7 +124,7 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
       content: '+91-8789389223',
       description: currentLanguage === 'en' ? 'Call for immediate assistance' : 'Звоните для немедленной помощи',
       action: 'tel:+918789389223',
-      color: '#10b981'
+      color: 'var(--success-color, #10b981)'
     },
     {
       icon: '💬',
@@ -195,18 +135,18 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
       color: '#25d366'
     },
     {
-      icon: '�🕒',
+      icon: '🕒',
       title: currentLanguage === 'en' ? 'Business Hours' : 'Рабочие часы',
       content: currentLanguage === 'en' ? 'Mon-Fri: 9AM-6PM EST' : 'Пн-Пт: 9:00-18:00 EST',
       description: currentLanguage === 'en' ? 'Available for urgent requests 24/7' : 'Доступны для срочных запросов 24/7',
-      color: '#8b5cf6'
+      color: 'var(--warning-color, #f59e0b)'
     },
     {
       icon: '🌍',
       title: currentLanguage === 'en' ? 'Response Time' : 'Время ответа',
       content: currentLanguage === 'en' ? 'Within 1 hour' : 'В течение 1 часа',
       description: currentLanguage === 'en' ? 'Fast and professional response' : 'Быстрый и профессиональный ответ',
-      color: '#f59e0b'
+      color: 'var(--info-color, #8b5cf6)'
     },
     {
       icon: '🎯',
@@ -214,7 +154,7 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
       content: currentLanguage === 'en' ? 'Free 15-min call' : 'Бесплатный 15-минутный звонок',
       description: currentLanguage === 'en' ? 'Discuss your project requirements' : 'Обсудите требования к вашему проекту',
       action: 'https://calendly.com/russian-translator',
-      color: '#ef4444'
+      color: 'var(--danger-color, #ef4444)'
     }
   ];
 
@@ -247,14 +187,12 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
   ];
 
   return (
-    <section style={{
-      padding: isMobile ? '4rem 1rem' : isTablet ? '5rem 2rem' : '6rem 4rem',
-      background: theme.background,
-      color: theme.text,
-      position: 'relative',
-      overflow: 'hidden'
+    <section id="contact" className="section bg-secondary" style={{
+      background: 'var(--bg-secondary, #f8fafc)',
+      padding: 'var(--spacing-xl, 3rem) 0',
+      position: 'relative'
     }}>
-      {/* Background Pattern */}
+      {/* Subtle Background Pattern */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -262,56 +200,21 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
         right: 0,
         bottom: 0,
         background: `
-          radial-gradient(circle at 25% 25%, rgba(59,130,246,0.1) 0%, transparent 50%),
-          radial-gradient(circle at 75% 75%, rgba(168,85,247,0.1) 0%, transparent 50%),
-          radial-gradient(circle at 50% 50%, rgba(34,197,94,0.05) 0%, transparent 50%)
+          radial-gradient(circle at 25% 25%, var(--primary-ultra-light, rgba(59, 130, 246, 0.03)) 0%, transparent 50%),
+          radial-gradient(circle at 75% 75%, var(--primary-ultra-light, rgba(59, 130, 246, 0.02)) 0%, transparent 50%)
         `,
         pointerEvents: 'none'
       }}></div>
 
-      <div style={{ position: 'relative', zIndex: 2 }}>
-        {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <div style={{
-            display: 'inline-block',
-            padding: '0.5rem 2rem',
-            background: `${theme.primary}40`,
-            border: `2px solid ${theme.primary}60`,
-            borderRadius: '30px',
-            marginBottom: '2rem',
-            backdropFilter: 'blur(10px)'
-          }}>
-            <span style={{
-              fontSize: '0.9rem',
-              color: theme.primary,
-              fontWeight: '700',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em'
-            }}>
-              {currentLanguage === 'en' ? '📞 Get In Touch' : '📞 Свяжитесь с нами'}
-            </span>
-          </div>
-          <h2 style={{
-            fontSize: isMobile ? '2.5rem' : '4rem',
-            fontWeight: '900',
-            marginBottom: '1rem',
-            lineHeight: '1.1',
-            color: theme.text,
-            background: theme.gradient || `linear-gradient(135deg, ${theme.primary}, ${theme.accent})`,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
+      <div className="container">
+        <div className="section-header">
+          <h2 className="section-title">
             {currentLanguage === 'en' ? 'Contact Us' : 'Связаться с нами'}
           </h2>
-          <p style={{
-            fontSize: '1.2rem',
-            color: theme.textSecondary,
-            maxWidth: '600px',
-            margin: '0 auto'
-          }}>
+          <p className="section-subtitle">
             {currentLanguage === 'en' 
-              ? 'Ready to start your translation project? Get in touch for a free consultation and quote'
-              : 'Готовы начать свой переводческий проект? Свяжитесь с нами для бесплатной консультации и расценок'
+              ? 'Ready to start your translation project? Get in touch for a free consultation and professional quote within 1 hour'
+              : 'Готовы начать свой переводческий проект? Свяжитесь с нами для бесплатной консультации и профессиональной расценки в течение 1 часа'
             }
           </p>
         </div>
@@ -319,34 +222,33 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
         <div style={{
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr' : '1fr 1fr',
-          gap: '4rem',
-          maxWidth: '1400px',
-          margin: '0 auto'
+          gap: 'var(--spacing-xl, 3rem)',
+          position: 'relative',
+          zIndex: 2
         }}>
           {/* Contact Information */}
           <div>
             <h3 style={{
-              fontSize: '2rem',
+              fontSize: '1.875rem',
               fontWeight: '700',
-              marginBottom: '2rem',
-              color: '#f1f5f9'
+              marginBottom: 'var(--spacing-lg, 2rem)',
+              color: 'var(--primary-color, #1e293b)'
             }}>
               {currentLanguage === 'en' ? 'Contact Information' : 'Контактная информация'}
             </h3>
             
             <div style={{
               display: 'grid',
-              gap: '1.5rem',
-              marginBottom: '3rem'
+              gap: 'var(--spacing-md, 1.5rem)',
+              marginBottom: 'var(--spacing-xl, 3rem)'
             }}>
               {contactInfo.map((info, index) => (
-                <div key={index} style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  backdropFilter: 'blur(15px)',
-                  border: `1px solid ${info.color}30`,
-                  borderRadius: '20px',
-                  padding: '2rem',
-                  transition: 'all 0.4s ease',
+                <div key={index} className="card" style={{
+                  background: 'var(--bg-primary, white)',
+                  border: '1px solid var(--secondary-light, #94a3b8)',
+                  borderRadius: 'var(--radius-lg, 20px)',
+                  padding: 'var(--spacing-lg, 2rem)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   cursor: info.action ? 'pointer' : 'default',
                   position: 'relative',
                   overflow: 'hidden'
@@ -361,26 +263,24 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                   }
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
-                  e.currentTarget.style.transform = 'translateX(10px) scale(1.02)';
-                  e.currentTarget.style.borderColor = `${info.color}60`;
-                  e.currentTarget.style.boxShadow = `0 15px 35px ${info.color}20`;
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = 'var(--shadow-xl, 0 20px 40px rgba(0, 0, 0, 0.15))';
+                  e.currentTarget.style.borderColor = 'var(--primary-accent, #3b82f6)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                  e.currentTarget.style.transform = 'translateX(0) scale(1)';
-                  e.currentTarget.style.borderColor = `${info.color}30`;
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'var(--shadow-lg, 0 10px 25px rgba(0, 0, 0, 0.1))';
+                  e.currentTarget.style.borderColor = 'var(--secondary-light, #94a3b8)';
                 }}>
                   
-                  {/* Background gradient */}
+                  {/* Background accent */}
                   <div style={{
                     position: 'absolute',
                     top: 0,
                     right: 0,
                     width: '100px',
                     height: '100px',
-                    background: `linear-gradient(135deg, ${info.color}20, transparent)`,
+                    background: `linear-gradient(135deg, ${info.color}10, transparent)`,
                     borderRadius: '50%',
                     transform: 'translate(30%, -30%)'
                   }}></div>
@@ -388,29 +288,29 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                   <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    marginBottom: '1rem',
+                    marginBottom: 'var(--spacing-sm, 1rem)',
                     position: 'relative',
                     zIndex: 2
                   }}>
                     <div style={{
                       width: '50px',
                       height: '50px',
-                      borderRadius: '12px',
+                      borderRadius: 'var(--radius-md, 12px)',
                       background: `linear-gradient(135deg, ${info.color}, ${info.color}80)`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontSize: '1.5rem',
-                      marginRight: '1rem',
-                      boxShadow: `0 8px 20px ${info.color}30`
+                      marginRight: 'var(--spacing-sm, 1rem)',
+                      boxShadow: `0 4px 12px ${info.color}20`
                     }}>
                       {info.icon}
                     </div>
                     <div>
                       <h4 style={{
-                        fontSize: '1.2rem',
+                        fontSize: '1.125rem',
                         fontWeight: '700',
-                        color: '#f1f5f9',
+                        color: 'var(--primary-color, #1e293b)',
                         margin: 0,
                         marginBottom: '0.25rem'
                       }}>
@@ -427,18 +327,19 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                     </div>
                   </div>
                   <p style={{
-                    fontSize: '0.9rem',
-                    color: '#cbd5e1',
+                    fontSize: '0.875rem',
+                    color: 'var(--text-secondary, #475569)',
                     margin: 0,
                     position: 'relative',
-                    zIndex: 2
+                    zIndex: 2,
+                    lineHeight: '1.6'
                   }}>
                     {info.description}
                   </p>
                   
                   {info.action && (
                     <div style={{
-                      marginTop: '1rem',
+                      marginTop: 'var(--spacing-sm, 1rem)',
                       fontSize: '0.8rem',
                       color: info.color,
                       fontWeight: '500',
@@ -453,47 +354,44 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
               ))}
             </div>
 
-            {/* Social Links */}
-            <div style={{
-              background: 'rgba(255,255,255,0.05)',
-              borderRadius: '16px',
-              padding: '2rem',
-              border: '1px solid rgba(255,255,255,0.1)'
+            {/* Trust Indicators */}
+            <div className="card" style={{
+              background: 'var(--bg-primary, white)',
+              borderRadius: 'var(--radius-lg, 20px)',
+              padding: 'var(--spacing-lg, 2rem)',
+              border: '1px solid var(--secondary-light, #94a3b8)'
             }}>
               <h4 style={{
-                fontSize: '1.2rem',
-                fontWeight: '600',
-                color: '#f1f5f9',
-                marginBottom: '1rem'
+                fontSize: '1.25rem',
+                fontWeight: '700',
+                color: 'var(--primary-color, #1e293b)',
+                marginBottom: 'var(--spacing-md, 1.5rem)'
               }}>
-                {currentLanguage === 'en' ? 'Follow Us' : 'Подписывайтесь на нас'}
+                {currentLanguage === 'en' ? 'Why Choose Language Liberty?' : 'Почему выбирают Language Liberty?'}
               </h4>
               <div style={{
-                display: 'flex',
-                gap: '1rem'
+                display: 'grid',
+                gap: 'var(--spacing-sm, 1rem)'
               }}>
-                {['LinkedIn', 'Twitter', 'Facebook'].map((platform, index) => (
-                  <div key={platform} style={{
-                    width: '50px',
-                    height: '50px',
-                    background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-                    borderRadius: '12px',
+                {[
+                  { icon: '🏆', text: currentLanguage === 'en' ? 'Certified Professional Translator' : 'Сертифицированный профессиональный переводчик' },
+                  { icon: '⚡', text: currentLanguage === 'en' ? '24/7 Emergency Translation Service' : '24/7 экстренный переводческий сервис' },
+                  { icon: '🔒', text: currentLanguage === 'en' ? '100% Confidential & Secure' : '100% конфиденциально и безопасно' },
+                  { icon: '✅', text: currentLanguage === 'en' ? 'Quality Guaranteed or Money Back' : 'Гарантия качества или возврат денег' }
+                ].map((item, index) => (
+                  <div key={index} style={{
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    fontSize: '1.2rem'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-5px) scale(1.1)';
-                    e.currentTarget.style.boxShadow = '0 10px 25px rgba(59,130,246,0.4)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                    e.currentTarget.style.boxShadow = 'none';
+                    gap: 'var(--spacing-sm, 1rem)'
                   }}>
-                    {platform === 'LinkedIn' ? '💼' : platform === 'Twitter' ? '🐦' : '📘'}
+                    <span style={{ fontSize: '1.25rem' }}>{item.icon}</span>
+                    <span style={{ 
+                      fontSize: '0.875rem', 
+                      color: 'var(--text-secondary, #475569)',
+                      fontWeight: '500'
+                    }}>
+                      {item.text}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -503,63 +401,49 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
           {/* Contact Form */}
           <div 
             ref={formRef}
+            className="card"
             style={{
-              background: 'rgba(255,255,255,0.1)',
-              backdropFilter: 'blur(15px)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              borderRadius: '32px',
-              padding: isMobile ? '2.5rem' : '3.5rem',
+              background: 'var(--bg-primary, white)',
+              border: '1px solid var(--secondary-light, #94a3b8)',
+              borderRadius: 'var(--radius-lg, 20px)',
+              padding: isMobile ? 'var(--spacing-lg, 2rem)' : 'var(--spacing-xl, 3rem)',
               position: 'relative',
               overflow: 'hidden'
             }}>
-            
-            {/* Animated background pattern */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: `
-                radial-gradient(circle at 20% 20%, rgba(59,130,246,0.1) 0%, transparent 30%),
-                radial-gradient(circle at 80% 80%, rgba(168,85,247,0.1) 0%, transparent 30%)
-              `,
-              pointerEvents: 'none'
-            }}></div>
             
             <div style={{ position: 'relative', zIndex: 2 }}>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                marginBottom: '2.5rem'
+                marginBottom: 'var(--spacing-lg, 2rem)'
               }}>
                 <div style={{
                   width: '60px',
                   height: '60px',
-                  borderRadius: '16px',
-                  background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                  borderRadius: 'var(--radius-md, 12px)',
+                  background: 'var(--gradient-primary, linear-gradient(135deg, #1e293b 0%, #334155 100%))',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '2rem',
-                  marginRight: '1.5rem',
-                  boxShadow: '0 10px 25px rgba(59,130,246,0.3)'
+                  marginRight: 'var(--spacing-md, 1.5rem)',
+                  boxShadow: 'var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08))'
                 }}>
                   💌
                 </div>
                 <div>
                   <h3 style={{
-                    fontSize: '2.2rem',
-                    fontWeight: '800',
-                    color: '#f1f5f9',
+                    fontSize: '1.875rem',
+                    fontWeight: '700',
+                    color: 'var(--primary-color, #1e293b)',
                     margin: 0,
                     marginBottom: '0.5rem'
                   }}>
                     {currentLanguage === 'en' ? 'Get Your Quote' : 'Получите расценки'}
                   </h3>
                   <p style={{
-                    fontSize: '1rem',
-                    color: '#cbd5e1',
+                    fontSize: '0.875rem',
+                    color: 'var(--text-muted, #64748b)',
                     margin: 0
                   }}>
                     {currentLanguage === 'en' 
@@ -572,30 +456,30 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
 
               {submitSuccess ? (
                 <div style={{
-                  background: 'linear-gradient(135deg, rgba(34,197,94,0.2), rgba(16,185,129,0.2))',
-                  border: '1px solid rgba(34,197,94,0.4)',
-                  borderRadius: '24px',
-                  padding: '4rem 2rem',
+                  background: 'linear-gradient(135deg, rgba(34,197,94,0.1), rgba(16,185,129,0.1))',
+                  border: '1px solid var(--success-color, #10b981)',
+                  borderRadius: 'var(--radius-lg, 20px)',
+                  padding: 'var(--spacing-xl, 3rem)',
                   textAlign: 'center',
-                  color: '#86efac',
-                  animation: 'slideInUp 0.6s ease-out'
+                  color: 'var(--success-color, #10b981)'
                 }}>
                   <div style={{ 
-                    fontSize: '5rem', 
-                    marginBottom: '1.5rem',
-                    animation: 'bounce 1s ease-out'
+                    fontSize: '4rem', 
+                    marginBottom: 'var(--spacing-md, 1.5rem)'
                   }}>✅</div>
                   <h4 style={{ 
-                    fontSize: '2rem', 
-                    marginBottom: '1rem',
-                    fontWeight: '700'
+                    fontSize: '1.5rem', 
+                    marginBottom: 'var(--spacing-sm, 1rem)',
+                    fontWeight: '700',
+                    color: 'var(--primary-color, #1e293b)'
                   }}>
                     {currentLanguage === 'en' ? 'Message Sent Successfully!' : 'Сообщение успешно отправлено!'}
                   </h4>
                   <p style={{ 
-                    fontSize: '1.2rem', 
-                    marginBottom: '1.5rem',
-                    lineHeight: '1.6'
+                    fontSize: '1rem', 
+                    marginBottom: 'var(--spacing-md, 1.5rem)',
+                    lineHeight: '1.6',
+                    color: 'var(--text-secondary, #475569)'
                   }}>
                     {currentLanguage === 'en' 
                       ? 'Thank you for contacting us! We\'ll get back to you within 1 hour with a detailed quote and project timeline.'
@@ -605,28 +489,30 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                   <div style={{
                     display: 'flex',
                     justifyContent: 'center',
-                    gap: '1rem',
+                    gap: 'var(--spacing-sm, 1rem)',
                     flexWrap: 'wrap'
                   }}>
                     <div style={{
-                      background: 'rgba(34,197,94,0.2)',
-                      borderRadius: '12px',
+                      background: 'rgba(34,197,94,0.1)',
+                      borderRadius: 'var(--radius-md, 12px)',
                       padding: '0.75rem 1.5rem',
-                      fontSize: '0.9rem',
+                      fontSize: '0.875rem',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.5rem'
+                      gap: '0.5rem',
+                      border: '1px solid rgba(34,197,94,0.2)'
                     }}>
                       📧 {currentLanguage === 'en' ? 'Email confirmation sent' : 'Подтверждение по email отправлено'}
                     </div>
                     <div style={{
-                      background: 'rgba(34,197,94,0.2)',
-                      borderRadius: '12px',
+                      background: 'rgba(34,197,94,0.1)',
+                      borderRadius: 'var(--radius-md, 12px)',
                       padding: '0.75rem 1.5rem',
-                      fontSize: '0.9rem',
+                      fontSize: '0.875rem',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.5rem'
+                      gap: '0.5rem',
+                      border: '1px solid rgba(34,197,94,0.2)'
                     }}>
                       ⏱️ {currentLanguage === 'en' ? 'Response within 1 hour' : 'Ответ в течение 1 часа'}
                     </div>
@@ -638,8 +524,8 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                   <div style={{
                     display: 'grid',
                     gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-                    gap: '1.5rem',
-                    marginBottom: '1.5rem'
+                    gap: 'var(--spacing-md, 1.5rem)',
+                    marginBottom: 'var(--spacing-md, 1.5rem)'
                   }}>
                     <div style={{ position: 'relative' }}>
                       <input
@@ -649,28 +535,25 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
+                        className="form-control"
                         style={{
                           width: '100%',
-                          padding: '1.25rem',
-                          borderRadius: '16px',
-                          border: `2px solid ${formErrors.name ? '#ef4444' : 'rgba(255,255,255,0.2)'}`,
-                          background: isTyping.name 
-                            ? 'rgba(59,130,246,0.1)' 
-                            : 'rgba(255,255,255,0.1)',
-                          color: 'white',
+                          padding: 'var(--spacing-sm, 1rem)',
+                          borderRadius: 'var(--radius-md, 12px)',
+                          border: `2px solid ${formErrors.name ? 'var(--danger-color, #ef4444)' : 'var(--secondary-light, #94a3b8)'}`,
+                          background: 'var(--bg-secondary, #f8fafc)',
+                          color: 'var(--primary-color, #1e293b)',
                           fontSize: '1rem',
                           transition: 'all 0.3s ease',
-                          boxShadow: formErrors.name ? '0 0 0 3px rgba(239,68,68,0.1)' : 'none'
+                          fontFamily: 'var(--font-family, Inter, sans-serif)'
                         }}
                         onFocus={(e) => {
-                          e.currentTarget.style.borderColor = '#60a5fa';
-                          e.currentTarget.style.background = 'rgba(59,130,246,0.15)';
-                          e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,165,250,0.1)';
+                          e.currentTarget.style.borderColor = 'var(--primary-accent, #3b82f6)';
+                          e.currentTarget.style.boxShadow = '0 0 0 3px var(--primary-ultra-light, rgba(59, 130, 246, 0.1))';
                         }}
                         onBlur={(e) => {
-                          e.currentTarget.style.borderColor = formErrors.name ? '#ef4444' : 'rgba(255,255,255,0.2)';
-                          e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                          e.currentTarget.style.boxShadow = formErrors.name ? '0 0 0 3px rgba(239,68,68,0.1)' : 'none';
+                          e.currentTarget.style.borderColor = formErrors.name ? 'var(--danger-color, #ef4444)' : 'var(--secondary-light, #94a3b8)';
+                          e.currentTarget.style.boxShadow = 'none';
                         }}
                       />
                       {formErrors.name && (
@@ -679,7 +562,7 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                           top: '100%',
                           left: 0,
                           fontSize: '0.8rem',
-                          color: '#fca5a5',
+                          color: 'var(--danger-color, #ef4444)',
                           marginTop: '0.25rem',
                           display: 'flex',
                           alignItems: 'center',
@@ -698,28 +581,25 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                         value={formData.email}
                         onChange={handleInputChange}
                         required
+                        className="form-control"
                         style={{
                           width: '100%',
-                          padding: '1.25rem',
-                          borderRadius: '16px',
-                          border: `2px solid ${formErrors.email ? '#ef4444' : 'rgba(255,255,255,0.2)'}`,
-                          background: isTyping.email 
-                            ? 'rgba(59,130,246,0.1)' 
-                            : 'rgba(255,255,255,0.1)',
-                          color: 'white',
+                          padding: 'var(--spacing-sm, 1rem)',
+                          borderRadius: 'var(--radius-md, 12px)',
+                          border: `2px solid ${formErrors.email ? 'var(--danger-color, #ef4444)' : 'var(--secondary-light, #94a3b8)'}`,
+                          background: 'var(--bg-secondary, #f8fafc)',
+                          color: 'var(--primary-color, #1e293b)',
                           fontSize: '1rem',
                           transition: 'all 0.3s ease',
-                          boxShadow: formErrors.email ? '0 0 0 3px rgba(239,68,68,0.1)' : 'none'
+                          fontFamily: 'var(--font-family, Inter, sans-serif)'
                         }}
                         onFocus={(e) => {
-                          e.currentTarget.style.borderColor = '#60a5fa';
-                          e.currentTarget.style.background = 'rgba(59,130,246,0.15)';
-                          e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,165,250,0.1)';
+                          e.currentTarget.style.borderColor = 'var(--primary-accent, #3b82f6)';
+                          e.currentTarget.style.boxShadow = '0 0 0 3px var(--primary-ultra-light, rgba(59, 130, 246, 0.1))';
                         }}
                         onBlur={(e) => {
-                          e.currentTarget.style.borderColor = formErrors.email ? '#ef4444' : 'rgba(255,255,255,0.2)';
-                          e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                          e.currentTarget.style.boxShadow = formErrors.email ? '0 0 0 3px rgba(239,68,68,0.1)' : 'none';
+                          e.currentTarget.style.borderColor = formErrors.email ? 'var(--danger-color, #ef4444)' : 'var(--secondary-light, #94a3b8)';
+                          e.currentTarget.style.boxShadow = 'none';
                         }}
                       />
                       {formErrors.email && (
@@ -728,7 +608,7 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                           top: '100%',
                           left: 0,
                           fontSize: '0.8rem',
-                          color: '#fca5a5',
+                          color: 'var(--danger-color, #ef4444)',
                           marginTop: '0.25rem',
                           display: 'flex',
                           alignItems: 'center',
@@ -744,8 +624,8 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                   <div style={{
                     display: 'grid',
                     gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-                    gap: '1.5rem',
-                    marginBottom: '1.5rem'
+                    gap: 'var(--spacing-md, 1.5rem)',
+                    marginBottom: 'var(--spacing-md, 1.5rem)'
                   }}>
                     <input
                       type="tel"
@@ -753,25 +633,25 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                       placeholder={currentLanguage === 'en' ? 'Phone Number (optional)' : 'Номер телефона (необязательно)'}
                       value={formData.phone}
                       onChange={handleInputChange}
+                      className="form-control"
                       style={{
                         width: '100%',
-                        padding: '1.25rem',
-                        borderRadius: '16px',
-                        border: '2px solid rgba(255,255,255,0.2)',
-                        background: isTyping.phone 
-                          ? 'rgba(59,130,246,0.1)' 
-                          : 'rgba(255,255,255,0.1)',
-                        color: 'white',
+                        padding: 'var(--spacing-sm, 1rem)',
+                        borderRadius: 'var(--radius-md, 12px)',
+                        border: '2px solid var(--secondary-light, #94a3b8)',
+                        background: 'var(--bg-secondary, #f8fafc)',
+                        color: 'var(--primary-color, #1e293b)',
                         fontSize: '1rem',
-                        transition: 'all 0.3s ease'
+                        transition: 'all 0.3s ease',
+                        fontFamily: 'var(--font-family, Inter, sans-serif)'
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = '#60a5fa';
-                        e.currentTarget.style.background = 'rgba(59,130,246,0.15)';
+                        e.currentTarget.style.borderColor = 'var(--primary-accent, #3b82f6)';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px var(--primary-ultra-light, rgba(59, 130, 246, 0.1))';
                       }}
                       onBlur={(e) => {
-                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                        e.currentTarget.style.borderColor = 'var(--secondary-light, #94a3b8)';
+                        e.currentTarget.style.boxShadow = 'none';
                       }}
                     />
                     
@@ -781,63 +661,62 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                       placeholder={currentLanguage === 'en' ? 'Company/Organization (optional)' : 'Компания/Организация (необязательно)'}
                       value={formData.company}
                       onChange={handleInputChange}
+                      className="form-control"
                       style={{
                         width: '100%',
-                        padding: '1.25rem',
-                        borderRadius: '16px',
-                        border: '2px solid rgba(255,255,255,0.2)',
-                        background: isTyping.company 
-                          ? 'rgba(59,130,246,0.1)' 
-                          : 'rgba(255,255,255,0.1)',
-                        color: 'white',
+                        padding: 'var(--spacing-sm, 1rem)',
+                        borderRadius: 'var(--radius-md, 12px)',
+                        border: '2px solid var(--secondary-light, #94a3b8)',
+                        background: 'var(--bg-secondary, #f8fafc)',
+                        color: 'var(--primary-color, #1e293b)',
                         fontSize: '1rem',
-                        transition: 'all 0.3s ease'
+                        transition: 'all 0.3s ease',
+                        fontFamily: 'var(--font-family, Inter, sans-serif)'
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = '#60a5fa';
-                        e.currentTarget.style.background = 'rgba(59,130,246,0.15)';
+                        e.currentTarget.style.borderColor = 'var(--primary-accent, #3b82f6)';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px var(--primary-ultra-light, rgba(59, 130, 246, 0.1))';
                       }}
                       onBlur={(e) => {
-                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                        e.currentTarget.style.borderColor = 'var(--secondary-light, #94a3b8)';
+                        e.currentTarget.style.boxShadow = 'none';
                       }}
                     />
                   </div>
 
                   {/* Service Selection */}
-                  <div style={{ marginBottom: '1.5rem', position: 'relative' }}>
+                  <div style={{ marginBottom: 'var(--spacing-md, 1.5rem)', position: 'relative' }}>
                     <select
                       name="service"
                       value={formData.service}
                       onChange={handleInputChange}
                       required
+                      className="form-control"
                       style={{
                         width: '100%',
-                        padding: '1.25rem',
-                        borderRadius: '16px',
-                        border: `2px solid ${formErrors.service ? '#ef4444' : 'rgba(255,255,255,0.2)'}`,
-                        background: 'rgba(255,255,255,0.1)',
-                        color: 'white',
+                        padding: 'var(--spacing-sm, 1rem)',
+                        borderRadius: 'var(--radius-md, 12px)',
+                        border: `2px solid ${formErrors.service ? 'var(--danger-color, #ef4444)' : 'var(--secondary-light, #94a3b8)'}`,
+                        background: 'var(--bg-secondary, #f8fafc)',
+                        color: 'var(--primary-color, #1e293b)',
                         fontSize: '1rem',
                         transition: 'all 0.3s ease',
-                        boxShadow: formErrors.service ? '0 0 0 3px rgba(239,68,68,0.1)' : 'none'
+                        fontFamily: 'var(--font-family, Inter, sans-serif)'
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = '#60a5fa';
-                        e.currentTarget.style.background = 'rgba(59,130,246,0.15)';
-                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,165,250,0.1)';
+                        e.currentTarget.style.borderColor = 'var(--primary-accent, #3b82f6)';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px var(--primary-ultra-light, rgba(59, 130, 246, 0.1))';
                       }}
                       onBlur={(e) => {
-                        e.currentTarget.style.borderColor = formErrors.service ? '#ef4444' : 'rgba(255,255,255,0.2)';
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                        e.currentTarget.style.boxShadow = formErrors.service ? '0 0 0 3px rgba(239,68,68,0.1)' : 'none';
+                        e.currentTarget.style.borderColor = formErrors.service ? 'var(--danger-color, #ef4444)' : 'var(--secondary-light, #94a3b8)';
+                        e.currentTarget.style.boxShadow = 'none';
                       }}
                     >
-                      <option value="" style={{ background: '#1e293b', color: 'white' }}>
+                      <option value="">
                         {currentLanguage === 'en' ? 'Select Service *' : 'Выберите услугу *'}
                       </option>
                       {services.map((service) => (
-                        <option key={service.value} value={service.value} style={{ background: '#1e293b', color: 'white' }}>
+                        <option key={service.value} value={service.value}>
                           {service.icon} {service.label}
                         </option>
                       ))}
@@ -848,7 +727,7 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                         top: '100%',
                         left: 0,
                         fontSize: '0.8rem',
-                        color: '#fca5a5',
+                        color: 'var(--danger-color, #ef4444)',
                         marginTop: '0.25rem',
                         display: 'flex',
                         alignItems: 'center',
@@ -863,37 +742,39 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                   <div style={{
                     display: 'grid',
                     gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-                    gap: '1.5rem',
-                    marginBottom: '1.5rem'
+                    gap: 'var(--spacing-md, 1.5rem)',
+                    marginBottom: 'var(--spacing-md, 1.5rem)'
                   }}>
                     <select
                       name="urgency"
                       value={formData.urgency}
                       onChange={handleInputChange}
+                      className="form-control"
                       style={{
                         width: '100%',
-                        padding: '1.25rem',
-                        borderRadius: '16px',
-                        border: '2px solid rgba(255,255,255,0.2)',
-                        background: 'rgba(255,255,255,0.1)',
-                        color: 'white',
+                        padding: 'var(--spacing-sm, 1rem)',
+                        borderRadius: 'var(--radius-md, 12px)',
+                        border: '2px solid var(--secondary-light, #94a3b8)',
+                        background: 'var(--bg-secondary, #f8fafc)',
+                        color: 'var(--primary-color, #1e293b)',
                         fontSize: '1rem',
-                        transition: 'all 0.3s ease'
+                        transition: 'all 0.3s ease',
+                        fontFamily: 'var(--font-family, Inter, sans-serif)'
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = '#60a5fa';
-                        e.currentTarget.style.background = 'rgba(59,130,246,0.15)';
+                        e.currentTarget.style.borderColor = 'var(--primary-accent, #3b82f6)';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px var(--primary-ultra-light, rgba(59, 130, 246, 0.1))';
                       }}
                       onBlur={(e) => {
-                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                        e.currentTarget.style.borderColor = 'var(--secondary-light, #94a3b8)';
+                        e.currentTarget.style.boxShadow = 'none';
                       }}
                     >
-                      <option value="" style={{ background: '#1e293b', color: 'white' }}>
+                      <option value="">
                         {currentLanguage === 'en' ? 'Delivery Timeline' : 'Сроки доставки'}
                       </option>
                       {urgencyOptions.map((option) => (
-                        <option key={option.value} value={option.value} style={{ background: '#1e293b', color: 'white' }}>
+                        <option key={option.value} value={option.value}>
                           {option.icon} {option.label}
                         </option>
                       ))}
@@ -903,30 +784,32 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                       name="wordCount"
                       value={formData.wordCount}
                       onChange={handleInputChange}
+                      className="form-control"
                       style={{
                         width: '100%',
-                        padding: '1.25rem',
-                        borderRadius: '16px',
-                        border: '2px solid rgba(255,255,255,0.2)',
-                        background: 'rgba(255,255,255,0.1)',
-                        color: 'white',
+                        padding: 'var(--spacing-sm, 1rem)',
+                        borderRadius: 'var(--radius-md, 12px)',
+                        border: '2px solid var(--secondary-light, #94a3b8)',
+                        background: 'var(--bg-secondary, #f8fafc)',
+                        color: 'var(--primary-color, #1e293b)',
                         fontSize: '1rem',
-                        transition: 'all 0.3s ease'
+                        transition: 'all 0.3s ease',
+                        fontFamily: 'var(--font-family, Inter, sans-serif)'
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = '#60a5fa';
-                        e.currentTarget.style.background = 'rgba(59,130,246,0.15)';
+                        e.currentTarget.style.borderColor = 'var(--primary-accent, #3b82f6)';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px var(--primary-ultra-light, rgba(59, 130, 246, 0.1))';
                       }}
                       onBlur={(e) => {
-                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                        e.currentTarget.style.borderColor = 'var(--secondary-light, #94a3b8)';
+                        e.currentTarget.style.boxShadow = 'none';
                       }}
                     >
-                      <option value="" style={{ background: '#1e293b', color: 'white' }}>
+                      <option value="">
                         {currentLanguage === 'en' ? 'Estimated Word Count' : 'Примерное количество слов'}
                       </option>
                       {wordCountOptions.map((option) => (
-                        <option key={option.value} value={option.value} style={{ background: '#1e293b', color: 'white' }}>
+                        <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
                       ))}
@@ -934,7 +817,7 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                   </div>
 
                   {/* Message */}
-                  <div style={{ marginBottom: '2rem', position: 'relative' }}>
+                  <div style={{ marginBottom: 'var(--spacing-lg, 2rem)', position: 'relative' }}>
                     <textarea
                       name="message"
                       placeholder={currentLanguage === 'en' ? 'Describe your project, special requirements, source language, target format, etc. *' : 'Опишите ваш проект, особые требования, исходный язык, целевой формат и т.д. *'}
@@ -942,31 +825,27 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                       onChange={handleInputChange}
                       required
                       rows="5"
+                      className="form-control"
                       style={{
                         width: '100%',
-                        padding: '1.25rem',
-                        borderRadius: '16px',
-                        border: `2px solid ${formErrors.message ? '#ef4444' : 'rgba(255,255,255,0.2)'}`,
-                        background: isTyping.message 
-                          ? 'rgba(59,130,246,0.1)' 
-                          : 'rgba(255,255,255,0.1)',
-                        color: 'white',
+                        padding: 'var(--spacing-sm, 1rem)',
+                        borderRadius: 'var(--radius-md, 12px)',
+                        border: `2px solid ${formErrors.message ? 'var(--danger-color, #ef4444)' : 'var(--secondary-light, #94a3b8)'}`,
+                        background: 'var(--bg-secondary, #f8fafc)',
+                        color: 'var(--primary-color, #1e293b)',
                         fontSize: '1rem',
                         resize: 'vertical',
-                        fontFamily: 'inherit',
+                        fontFamily: 'var(--font-family, Inter, sans-serif)',
                         transition: 'all 0.3s ease',
-                        boxShadow: formErrors.message ? '0 0 0 3px rgba(239,68,68,0.1)' : 'none',
                         minHeight: '120px'
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = '#60a5fa';
-                        e.currentTarget.style.background = 'rgba(59,130,246,0.15)';
-                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,165,250,0.1)';
+                        e.currentTarget.style.borderColor = 'var(--primary-accent, #3b82f6)';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px var(--primary-ultra-light, rgba(59, 130, 246, 0.1))';
                       }}
                       onBlur={(e) => {
-                        e.currentTarget.style.borderColor = formErrors.message ? '#ef4444' : 'rgba(255,255,255,0.2)';
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                        e.currentTarget.style.boxShadow = formErrors.message ? '0 0 0 3px rgba(239,68,68,0.1)' : 'none';
+                        e.currentTarget.style.borderColor = formErrors.message ? 'var(--danger-color, #ef4444)' : 'var(--secondary-light, #94a3b8)';
+                        e.currentTarget.style.boxShadow = 'none';
                       }}
                     />
                     {formErrors.message && (
@@ -975,7 +854,7 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                         top: '100%',
                         left: 0,
                         fontSize: '0.8rem',
-                        color: '#fca5a5',
+                        color: 'var(--danger-color, #ef4444)',
                         marginTop: '0.25rem',
                         display: 'flex',
                         alignItems: 'center',
@@ -990,40 +869,41 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
+                    className="btn btn-primary"
                     style={{
                       width: '100%',
                       background: isSubmitting 
-                        ? 'rgba(100,116,139,0.5)' 
-                        : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                        ? 'var(--secondary-color, #64748b)' 
+                        : 'var(--gradient-primary, linear-gradient(135deg, #1e293b 0%, #334155 100%))',
                       color: 'white',
                       border: 'none',
-                      padding: '1.5rem 2rem',
-                      borderRadius: '16px',
-                      fontSize: '1.2rem',
+                      padding: 'var(--spacing-md, 1.5rem) var(--spacing-lg, 2rem)',
+                      borderRadius: 'var(--radius-md, 12px)',
+                      fontSize: '1.125rem',
                       fontWeight: '700',
                       cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                      transition: 'all 0.3s ease',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       opacity: isSubmitting ? 0.7 : 1,
                       position: 'relative',
                       overflow: 'hidden'
                     }}
                     onMouseEnter={(e) => {
                       if (!isSubmitting) {
-                        e.currentTarget.style.transform = 'translateY(-3px)';
-                        e.currentTarget.style.boxShadow = '0 20px 40px rgba(59,130,246,0.4)';
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = 'var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08))';
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (!isSubmitting) {
                         e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.boxShadow = 'var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05))';
                       }
                     }}
                   >
                     {isSubmitting && (
                       <div style={{
                         position: 'absolute',
-                        left: '1.5rem',
+                        left: 'var(--spacing-md, 1.5rem)',
                         top: '50%',
                         transform: 'translateY(-50%)',
                         width: '20px',
@@ -1050,16 +930,16 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
 
                   {/* Additional Info */}
                   <div style={{
-                    marginTop: '2rem',
-                    padding: '1.5rem',
-                    background: 'rgba(59,130,246,0.1)',
+                    marginTop: 'var(--spacing-lg, 2rem)',
+                    padding: 'var(--spacing-md, 1.5rem)',
+                    background: 'rgba(59,130,246,0.05)',
                     border: '1px solid rgba(59,130,246,0.2)',
-                    borderRadius: '16px',
-                    fontSize: '0.9rem',
-                    color: '#cbd5e1',
+                    borderRadius: 'var(--radius-md, 12px)',
+                    fontSize: '0.875rem',
+                    color: 'var(--text-muted, #64748b)',
                     textAlign: 'center'
                   }}>
-                    <div style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>🔒</div>
+                    <div style={{ marginBottom: 'var(--spacing-sm, 1rem)', fontSize: '1.5rem' }}>🔒</div>
                     <p style={{ margin: 0, lineHeight: '1.6' }}>
                       {currentLanguage === 'en' 
                         ? 'Your information is secure and will only be used to provide you with translation services. We respond to all inquiries within 1 hour during business hours.'
@@ -1073,6 +953,18 @@ const Contact = ({ currentLanguage, isMobile, isTablet }) => {
           </div>
         </div>
       </div>
+
+      {/* Inline CSS for animations */}
+      <style>{`
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </section>
   );
 };

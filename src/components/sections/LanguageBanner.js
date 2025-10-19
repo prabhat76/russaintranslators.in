@@ -28,8 +28,8 @@ const LanguageBanner = ({ currentLanguage }) => {
         width: '100%',
         height: '100%',
         zIndex: 0,
-        opacity: 0.15,
-        backgroundImage: 'url(/images/handshake-flags.svg)',
+        opacity: 0.12,
+        backgroundImage: 'url(/images/download.webp)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         animation: 'float 15s ease-in-out infinite'
@@ -78,8 +78,8 @@ const LanguageBanner = ({ currentLanguage }) => {
           animation: 'float 8s ease-in-out infinite'
         }}>
           <img 
-            src="/images/handshake-flags.svg" 
-            alt="Russia-India Translation" 
+            src="/images/download.webp" 
+            alt="Russia-India Translation - Professional Unity" 
             className="flag-image"
             style={{
               width: '100%',
@@ -87,7 +87,8 @@ const LanguageBanner = ({ currentLanguage }) => {
               borderRadius: '20px',
               boxShadow: '0 20px 50px rgba(30,64,175,0.3)',
               transform: 'rotate(-2deg)',
-              transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+              transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              objectFit: 'cover'
             }}
           />
           

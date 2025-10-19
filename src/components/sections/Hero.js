@@ -18,14 +18,14 @@ const Hero = ({ content, currentLanguage }) => {
 
   return (
     <section id="hero" className="hero" style={{
-      background: '#f5f8ff',
-      color: '#1e3a8a',
+      background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%)',
+      color: 'var(--primary-color)',
       minHeight: '90vh',
-      paddingTop: '80px', // Add padding to account for header
+      paddingTop: '80px',
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Subtle Background Pattern */}
+      {/* Enhanced Background Pattern */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -33,10 +33,35 @@ const Hero = ({ content, currentLanguage }) => {
         right: 0,
         bottom: 0,
         background: `
-          radial-gradient(circle at 20% 20%, rgba(59,130,246,0.03) 0%, transparent 40%),
-          radial-gradient(circle at 80% 80%, rgba(30,64,175,0.04) 0%, transparent 40%)
+          radial-gradient(ellipse at 20% 30%, rgba(59,130,246,0.04) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 70%, rgba(30,58,138,0.03) 0%, transparent 60%),
+          linear-gradient(45deg, transparent 40%, rgba(59,130,246,0.01) 50%, transparent 60%)
         `,
         zIndex: 1
+      }}></div>
+      
+      {/* Premium Decorative Elements */}
+      <div style={{
+        position: 'absolute',
+        top: '15%',
+        left: '8%',
+        width: '150px',
+        height: '150px',
+        border: '1px solid rgba(59,130,246,0.08)',
+        borderRadius: '50%',
+        zIndex: 1,
+        animation: 'float 6s ease-in-out infinite'
+      }}></div>
+      <div style={{
+        position: 'absolute',
+        bottom: '20%',
+        right: '10%',
+        width: '100px',
+        height: '100px',
+        border: '1px solid rgba(71,85,105,0.06)',
+        borderRadius: '50%',
+        zIndex: 1,
+        animation: 'float 8s ease-in-out infinite reverse'
       }}></div>
       
       {/* Decorative Circles */}
@@ -106,21 +131,26 @@ const Hero = ({ content, currentLanguage }) => {
             <div style={{
               width: '100%',
               position: 'relative',
-              borderRadius: '12px',
+              borderRadius: '20px',
               overflow: 'hidden',
+              background: 'linear-gradient(145deg, rgba(59, 130, 246, 0.05), rgba(30, 64, 175, 0.08))',
+              padding: '8px',
+              backdropFilter: 'blur(10px)',
             }}>
               <img 
                 src="/images/download.webp" 
-                alt="Language Liberty Flag" 
+                alt="Professional Translation Services - International Unity and Collaboration" 
                 style={{
                   width: '100%',
+                  height: 'auto',
                   display: 'block',
-                  animation: 'pulse 6s ease-in-out infinite',
-                  boxShadow: '0 25px 50px rgba(30, 58, 138, 0.3)',
-                  borderRadius: '12px',
-                  border: '5px solid #ffffff',
+                  animation: 'imageEnhance 8s ease-in-out infinite, premiumGlow 6s ease-in-out infinite',
+                  boxShadow: '0 30px 60px rgba(30, 58, 138, 0.4), 0 15px 30px rgba(59, 130, 246, 0.2)',
+                  borderRadius: '16px',
+                  border: '3px solid rgba(255, 255, 255, 0.9)',
                   transform: 'translateY(0px)',
-                  transition: 'transform 0.5s ease-out'
+                  transition: 'all 0.5s ease-out',
+                  objectFit: 'cover',
                 }} 
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-10px)';

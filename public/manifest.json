@@ -4,22 +4,22 @@
   "description": "Professional Russian translation and interpretation services in Mumbai",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "images/handshake-flags.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/png"
     },
     {
-      "src": "favicon.svg",
+      "src": "images/handshake-flags.svg",
       "type": "image/svg+xml",
       "sizes": "any"
     },
     {
-      "src": "logo192.png",
+      "src": "images/handshake-flags.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "images/handshake-flags.png",
       "type": "image/png",
       "sizes": "512x512"
     }

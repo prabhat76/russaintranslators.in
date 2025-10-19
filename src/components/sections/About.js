@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useTheme } from '../../contexts/ThemeContext';
 
 // Simple analytics tracking function
 const trackEvent = (eventType, elementName, section, additionalData = {}) => {
@@ -31,22 +30,19 @@ const trackEvent = (eventType, elementName, section, additionalData = {}) => {
 };
 
 const About = ({ currentLanguage, isMobile, isTablet }) => {
-  const { theme, isDarkMode } = useTheme();
-  
   // Track page view when component mounts
   useEffect(() => {
     trackEvent('pageView', 'About', 'about', { language: currentLanguage });
   }, [currentLanguage]);
 
   return (
-    <section id="about" style={{ 
-      padding: isMobile ? '4rem 1rem' : isTablet ? '5rem 2rem' : '6rem 4rem',
-      background: theme.background,
+    <section id="about" className="section bg-secondary" style={{ 
+      background: 'linear-gradient(135deg, var(--bg-secondary, #f8fafc) 0%, #f1f5f9 50%, #e2e8f0 100%)',
+      padding: 'var(--spacing-xl, 3rem) 0',
       position: 'relative',
-      overflow: 'hidden',
-      color: theme.text
+      overflow: 'hidden'
     }}>
-      {/* Animated Background Pattern */}
+      {/* Enhanced Background Pattern */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -54,423 +50,394 @@ const About = ({ currentLanguage, isMobile, isTablet }) => {
         right: 0,
         bottom: 0,
         background: `
-          radial-gradient(circle at 20% 20%, ${theme.primary}20 0%, transparent 50%),
-          radial-gradient(circle at 80% 80%, ${theme.secondary || '#8b5cf6'}20 0%, transparent 50%),
-          radial-gradient(circle at 40% 60%, ${theme.success || '#10b981'}15 0%, transparent 50%)
+          radial-gradient(ellipse at 25% 25%, rgba(59, 130, 246, 0.06) 0%, transparent 60%),
+          radial-gradient(ellipse at 75% 75%, rgba(30, 64, 175, 0.04) 0%, transparent 70%),
+          linear-gradient(45deg, transparent 30%, rgba(71, 85, 105, 0.02) 50%, transparent 70%)
         `,
-        animation: 'float 20s ease-in-out infinite',
         pointerEvents: 'none',
         zIndex: 1
       }}></div>
       
-      <div style={{ width: '100%', margin: '0 auto', position: 'relative', zIndex: 2 }}>
-        <div style={{ 
+      {/* Floating Decorative Elements */}
+      <div style={{
+        position: 'absolute',
+        top: '10%',
+        right: '5%',
+        width: '80px',
+        height: '80px',
+        border: '1px solid rgba(59, 130, 246, 0.1)',
+        borderRadius: '50%',
+        zIndex: 1,
+        animation: 'float 8s ease-in-out infinite'
+      }}></div>
+      <div style={{
+        position: 'absolute',
+        bottom: '15%',
+        left: '8%',
+        width: '60px',
+        height: '60px',
+        border: '1px solid rgba(71, 85, 105, 0.08)',
+        borderRadius: '50%',
+        zIndex: 1,
+        animation: 'float 10s ease-in-out infinite reverse'
+      }}></div>
+      
+      <div className="container">
+        <div className="section-header">
+          <h2 className="section-title">Meet Sabrina Bhatt</h2>
+          <p className="section-subtitle">
+            Your trusted Russian translation expert with multicultural experience bridging Russia and India
+          </p>
+        </div>
+        
+        <div className="grid grid-2" style={{ 
           display: 'grid', 
-          gridTemplateColumns: isMobile ? '1fr' : '0.8fr 1.2fr', 
-          gap: isMobile ? '3rem' : isTablet ? '4rem' : '6rem', 
-          alignItems: 'center'
+          gridTemplateColumns: isMobile ? '1fr' : '350px 1fr', 
+          gap: 'var(--spacing-xl, 3rem)', 
+          alignItems: 'start',
+          position: 'relative',
+          zIndex: 2
         }}>
-          {/* Left Content - Order 2 on mobile, 1 on desktop */}
-          <div style={{
-            paddingLeft: '20px',
-            paddingRight: '10px',
-            order: isMobile ? 2 : 1
-          }}>
-            <div style={{ marginBottom: '2rem' }}>
-              <div style={{
-                display: 'inline-block',
-                padding: '0.5rem 1.5rem',
-                background: `${theme.primary}40`,
-                border: `2px solid ${theme.primary}60`,
-                borderRadius: '25px',
-                marginBottom: '1rem',
-                backdropFilter: 'blur(10px)'
-              }}>
-                <span style={{
-                  fontSize: '0.8rem',
-                  color: theme.primary,
-                  fontWeight: '700',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em'
-                }}>
-                  {currentLanguage === 'en' ? '👋 About Your Translator' : '👋 О вашем переводчике'}
-                </span>
-              </div>
-            </div>
-            
-            <h1 style={{
-              fontSize: isMobile ? '2rem' : isTablet ? '2.5rem' : '3rem',
-              fontWeight: '800',
-              marginBottom: '1rem',
-              lineHeight: '1.1',
-              color: theme.text, // Fallback color
-              background: isDarkMode 
-                ? 'linear-gradient(135deg, #60a5fa, #a78bfa)' 
-                : 'linear-gradient(135deg, #3b82f6, #6366f1)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              // Fallback for browsers that don't support background-clip
-              textShadow: isDarkMode ? 'none' : '0 2px 4px rgba(0,0,0,0.1)'
-            }}>
-              {currentLanguage === 'en' ? 'MEET SABRINA' : 'ЗНАКОМЬТЕСЬ - САБРИНА'}
-            </h1>
-            
-            <h2 style={{
-              fontSize: '1.3rem',
-              color: theme.primary,
-              fontWeight: '600',
-              marginBottom: '1.5rem'
-            }}>
-              {currentLanguage === 'en' 
-                ? 'Professional Russian-English Translation Services'
-                : 'Профессиональные услуги русско-английского перевода'
-              }
-            </h2>
-            
-            <p style={{
-              fontSize: '1.1rem',
-              color: theme.textSecondary,
-              lineHeight: '1.7',
-              marginBottom: '1.5rem'
-            }}>
-              {currentLanguage === 'en' 
-                ? 'Born to a Russian mother and an Indian father, I bridge communication gaps between Russian-speaking countries and the world. With education in Russia, Uzbekistan, and India, I bring authentic cultural understanding to every translation project.' 
-                : 'Рожденная от русской матери и индийского отца, я устраняю коммуникационные барьеры между русскоговорящими странами и миром. Получив образование в России, Узбекистане и Индии, я привношу подлинное культурное понимание в каждый переводческий проект.'
-              }
-            </p>
-            
-            <p style={{
-              fontSize: '1.1rem',
-              color: theme.textSecondary,
-              lineHeight: '1.7',
-              marginBottom: '2.5rem'
-            }}>
-              {currentLanguage === 'en'
-                ? 'With 6+ years of professional experience, I specialize in business interpretation, document translation, and cultural consultation for companies expanding into Russian markets.'
-                : 'Имея более 6 лет профессионального опыта, я специализируюсь на деловом переводе, переводе документов и культурных консультациях для компаний, расширяющихся на российские рынки.'
-              }
-            </p>
-            
-            {/* Credentials */}
-            <div style={{ 
-              display: 'flex', 
-              gap: '1rem', 
-              marginBottom: '2.5rem',
-              flexWrap: 'wrap'
-            }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                background: theme.glass || 'rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${theme.border}`,
-                padding: '0.75rem 1.25rem',
-                borderRadius: '50px',
-                boxShadow: theme.shadow
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: theme.gradient || `linear-gradient(135deg, ${theme.primary}, ${theme.secondary || '#8b5cf6'})`,
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginRight: '0.75rem'
-                }}>
-                  <span style={{ fontSize: '1.2rem' }}>🎓</span>
-                </div>
-                <div>
-                  <div style={{ 
-                    fontSize: '0.9rem', 
-                    fontWeight: '600', 
-                    color: theme.text 
-                  }}>
-                    {currentLanguage === 'en' ? 'Certified' : 'Сертифицирована'}
-                  </div>
-                  <div style={{ 
-                    fontSize: '0.75rem', 
-                    color: theme.textSecondary 
-                  }}>
-                    {currentLanguage === 'en' ? '6+ Years' : '6+ лет'}
-                  </div>
-                </div>
-              </div>
-              
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                background: theme.glass || 'rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${theme.border}`,
-                padding: '0.75rem 1.25rem',
-                borderRadius: '50px',
-                boxShadow: theme.shadow
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: `linear-gradient(135deg, ${theme.success || '#10b981'}, #059669)`,
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginRight: '0.75rem'
-                }}>
-                  <span style={{ fontSize: '1.2rem' }}>🌍</span>
-                </div>
-                <div>
-                  <div style={{ 
-                    fontSize: '0.9rem', 
-                    fontWeight: '600', 
-                    color: theme.text 
-                  }}>
-                    {currentLanguage === 'en' ? 'Global' : 'Международный'}
-                  </div>
-                  <div style={{ 
-                    fontSize: '0.75rem', 
-                    color: theme.textSecondary 
-                  }}>
-                    {currentLanguage === 'en' ? 'Multi-cultural' : 'Мультикультурный'}
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <button style={{
-                background: theme.gradient || `linear-gradient(135deg, ${theme.primary}, ${theme.primaryDark || theme.primary})`,
-                color: 'white',
-                padding: '0.875rem 2rem',
-                borderRadius: '12px',
-                border: 'none',
-                fontWeight: '600',
-                fontSize: '1rem',
-                cursor: 'pointer',
-                boxShadow: `0 8px 25px ${theme.primary}40`,
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
-              }} onClick={() => { 
-                trackEvent('click', 'quote-button', 'about', { action: 'meet_sabrina_quote' }); 
-                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); 
-              }}>
-                {currentLanguage === 'en' ? 'GET QUOTE' : 'ПОЛУЧИТЬ ЦЕНУ'}
-              </button>
-              
-              <button style={{
-                background: theme.glass || 'rgba(255,255,255,0.1)',
-                color: theme.text,
-                padding: '0.875rem 2rem',
-                borderRadius: '12px',
-                border: `2px solid ${theme.border}`,
-                fontWeight: '600',
-                fontSize: '1rem',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
-              }} onClick={() => { 
-                trackEvent('click', 'portfolio-button', 'about', { action: 'view_portfolio' }); 
-                document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' }); 
-              }}>
-                {currentLanguage === 'en' ? 'VIEW PORTFOLIO' : 'ПОРТФОЛИО'}
-              </button>
-            </div>
-          </div>
-          
-          {/* Right Image - Order 1 on mobile, 2 on desktop */}
+          {/* Profile Image Section */}
           <div style={{ 
-            position: 'relative', 
-            overflow: 'visible',
-            order: isMobile ? 1 : 2
+            position: 'relative',
+            textAlign: 'center'
           }}>
-            <div 
-            className={isMobile ? "mobile-image-container" : ""}
-            style={{
-              background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-              borderRadius: '30px',
-              padding: isMobile ? '0.3rem' : '0.5rem',
-              transform: isMobile ? 'rotate(0deg)' : 'rotate(-2deg)',
-              boxShadow: '0 25px 50px rgba(59,130,246,0.3)',
-              transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-              cursor: 'pointer',
-              overflow: 'visible',
-              width: isMobile ? '100%' : 'auto',
-              height: isMobile ? 'auto' : 'auto',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'rotate(-1deg) translateY(-10px) scale(1.03)';
-              e.currentTarget.style.boxShadow = '0 35px 70px rgba(59,130,246,0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'rotate(-2deg) translateY(0px) scale(1)';
-              e.currentTarget.style.boxShadow = '0 25px 50px rgba(59,130,246,0.3)';
+            <div style={{
+              position: 'relative',
+              display: 'inline-block'
             }}>
               <img 
                 src="/images/sabrina-profile.jpeg" 
                 alt="Sabrina Bhatt - Professional Russian Translator"
-                className={isMobile ? "about-image" : ""} 
                 style={{
-                  width: isMobile ? '100%' : '110%',
-                  height: isMobile ? 'auto' : isTablet ? '750px' : '850px',
-                  minHeight: isMobile ? '500px' : 'auto',
-                  maxHeight: isMobile ? 'none' : '850px',
-                  objectFit: isMobile ? 'contain' : 'cover',
-                  objectPosition: isMobile ? 'center' : 'center',
-                  borderRadius: '20px',
-                  transform: isMobile ? 'rotate(0deg)' : 'rotate(2deg) translateX(-5%)',
-                  transition: 'all 0.5s ease',
-                  filter: 'brightness(1.1) contrast(1.05)',
-                  animation: isMobile ? 'mobileImageFloat 3s ease-in-out infinite' : 'none'
+                  width: '100%',
+                  height: 'auto',
+                  borderRadius: 'var(--radius-lg, 20px)',
+                  boxShadow: 'var(--shadow-lg, 0 10px 25px rgba(0, 0, 0, 0.1))',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-5px)';
+                  e.target.style.boxShadow = 'var(--shadow-xl, 0 20px 40px rgba(0, 0, 0, 0.15))';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'var(--shadow-lg, 0 10px 25px rgba(0, 0, 0, 0.1))';
                 }}
               />
+              
+              {/* Experience Badge */}
+              <div style={{
+                position: 'absolute',
+                top: '-10px',
+                right: '-10px',
+                background: 'var(--gradient-primary, linear-gradient(135deg, #1e293b 0%, #334155 100%))',
+                color: 'white',
+                borderRadius: '50%',
+                width: '80px',
+                height: '80px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '0.75rem',
+                fontWeight: '700',
+                boxShadow: 'var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08))',
+                border: '3px solid var(--bg-primary, white)',
+                zIndex: 10
+              }}>
+                <span style={{ fontSize: '1.2rem' }}>15+</span>
+                <span style={{ fontSize: '0.65rem' }}>YEARS</span>
+              </div>
+              
+              {/* Cultural Badge */}
+              <div style={{
+                position: 'absolute',
+                bottom: '-15px',
+                left: '-20px',
+                background: 'var(--bg-primary, white)',
+                color: 'var(--primary-color, #1e293b)',
+                borderRadius: 'var(--radius-md, 12px)',
+                padding: '0.75rem 1rem',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                boxShadow: 'var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08))',
+                border: '1px solid var(--secondary-light, #94a3b8)',
+                zIndex: 10,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <span style={{ fontSize: '1.2rem' }}>🇷🇺🇮🇳</span>
+                <span>Multicultural</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Content Section */}
+          <div>
+            <h3 style={{ 
+              fontSize: '1.75rem',
+              fontWeight: '700',
+              color: 'var(--primary-color, #1e293b)',
+              marginBottom: 'var(--spacing-md, 1.5rem)',
+              fontFamily: 'var(--font-heading, Inter, sans-serif)'
+            }}>
+              Expert Translator & Cultural Bridge
+            </h3>
+            
+            <p className="text-lg" style={{ 
+              marginBottom: 'var(--spacing-md, 1.5rem)',
+              lineHeight: '1.7'
+            }}>
+              {currentLanguage === 'en' 
+                ? 'Born to a Russian mother and an Indian father, Sabrina brings unique multicultural insight to every translation project. With over 15 years of professional experience and education across Russia, Uzbekistan, and India, she specializes in bridging communication gaps between Russian-speaking countries and the global market.' 
+                : 'Рожденная от русской матери и индийского отца, Сабрина привносит уникальное мультикультурное понимание в каждый переводческий проект. Имея более 15 лет профессионального опыта и образование в России, Узбекистане и Индии, она специализируется на устранении коммуникационных барьеров между русскоговорящими странами и мировым рынком.'
+              }
+            </p>
+            
+            <p className="text-lg" style={{ 
+              marginBottom: 'var(--spacing-lg, 2rem)',
+              lineHeight: '1.7'
+            }}>
+              {currentLanguage === 'en'
+                ? 'Sabrina excels in business interpretation, legal document translation, and cultural consultation, ensuring that complex communications maintain their precision and cultural context across languages. Her commitment to excellence has earned the trust of international clients and organizations.'
+                : 'Сабрина превосходно выполняет деловые переводы, перевод юридических документов и культурные консультации, обеспечивая сохранение точности и культурного контекста сложных коммуникаций между языками. Её стремление к совершенству завоевало доверие международных клиентов и организаций.'
+              }
+            </p>
+            
+            {/* Expertise Areas */}
+            <div className="grid grid-2" style={{
+              display: 'grid',
+              gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+              gap: 'var(--spacing-md, 1.5rem)',
+              marginBottom: 'var(--spacing-lg, 2rem)'
+            }}>
+              <div className="card" style={{
+                background: 'var(--bg-primary, white)',
+                borderRadius: 'var(--radius-md, 12px)',
+                padding: 'var(--spacing-md, 1.5rem)',
+                boxShadow: 'var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05))',
+                border: '1px solid var(--secondary-light, #94a3b8)',
+                transition: 'all 0.2s ease'
+              }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  background: 'var(--gradient-primary, linear-gradient(135deg, #1e293b 0%, #334155 100%))',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 'var(--spacing-sm, 1rem)',
+                  fontSize: '1.5rem'
+                }}>
+                  📄
+                </div>
+                <h4 style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '600',
+                  color: 'var(--primary-color, #1e293b)',
+                  marginBottom: '0.5rem'
+                }}>
+                  {currentLanguage === 'en' ? 'Document Translation' : 'Перевод документов'}
+                </h4>
+                <p style={{
+                  fontSize: '0.875rem',
+                  color: 'var(--text-secondary, #475569)',
+                  margin: 0
+                }}>
+                  {currentLanguage === 'en' ? 'Legal, medical, technical documents' : 'Юридические, медицинские, технические документы'}
+                </p>
+              </div>
+              
+              <div className="card" style={{
+                background: 'var(--bg-primary, white)',
+                borderRadius: 'var(--radius-md, 12px)',
+                padding: 'var(--spacing-md, 1.5rem)',
+                boxShadow: 'var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05))',
+                border: '1px solid var(--secondary-light, #94a3b8)',
+                transition: 'all 0.2s ease'
+              }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  background: 'var(--gradient-primary, linear-gradient(135deg, #1e293b 0%, #334155 100%))',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 'var(--spacing-sm, 1rem)',
+                  fontSize: '1.5rem'
+                }}>
+                  🎯
+                </div>
+                <h4 style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '600',
+                  color: 'var(--primary-color, #1e293b)',
+                  marginBottom: '0.5rem'
+                }}>
+                  {currentLanguage === 'en' ? 'Business Interpretation' : 'Деловой перевод'}
+                </h4>
+                <p style={{
+                  fontSize: '0.875rem',
+                  color: 'var(--text-secondary, #475569)',
+                  margin: 0
+                }}>
+                  {currentLanguage === 'en' ? 'Meetings, negotiations, conferences' : 'Встречи, переговоры, конференции'}
+                </p>
+              </div>
             </div>
             
-            {/* Floating decorative elements with animations */}
-            <div style={{
-              position: 'absolute',
-              top: isMobile ? '-15px' : '-20px',
-              right: isMobile ? '-15px' : '-20px',
-              background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
-              borderRadius: '50%',
-              width: isMobile ? '70px' : '90px',
-              height: isMobile ? '70px' : '90px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: isMobile ? '1.8rem' : '2.2rem',
-              boxShadow: '0 15px 35px rgba(59,130,246,0.4)',
-              zIndex: 10,
-              border: '3px solid rgba(255,255,255,0.8)',
-              transition: 'all 0.3s ease',
-              animation: isMobile ? 'mobileFloat 2s ease-in-out infinite' : 'none'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.15) rotate(10deg)';
-              e.currentTarget.style.boxShadow = '0 20px 40px rgba(59,130,246,0.6)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
-              e.currentTarget.style.boxShadow = '0 15px 35px rgba(59,130,246,0.4)';
+            {/* Action Buttons */}
+            <div style={{ 
+              display: 'flex', 
+              gap: 'var(--spacing-md, 1.5rem)',
+              flexWrap: 'wrap'
             }}>
-              🏆
-            </div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: isMobile ? '-10px' : '-15px',
-              left: isMobile ? '-20px' : '-35px',
-              background: 'linear-gradient(135deg, white, #f8fafc)',
-              borderRadius: '20px',
-              padding: isMobile ? '1rem' : '1.5rem',
-              boxShadow: '0 15px 35px rgba(0,0,0,0.15)',
-              border: '3px solid #e2e8f0',
-              zIndex: 10,
-              transition: 'all 0.3s ease',
-              backdropFilter: 'blur(10px)',
-              animation: isMobile ? 'mobileFloat 2.5s ease-in-out infinite' : 'none'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-5px) scale(1.05)';
-              e.currentTarget.style.boxShadow = '0 20px 45px rgba(0,0,0,0.2)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0px) scale(1)';
-              e.currentTarget.style.boxShadow = '0 15px 35px rgba(0,0,0,0.15)';
-            }}>
-              <div style={{ fontWeight: '800', color: '#1e293b', fontSize: '1.1rem' }}>6+ Years</div>
-              <div style={{ color: '#3b82f6', fontSize: '0.9rem', fontWeight: '600' }}>Experience</div>
-            </div>
-            
-            {/* Additional floating element - language indicator */}
-            <div style={{
-              position: 'absolute',
-              top: isMobile ? '40%' : '50%',
-              left: isMobile ? '-30px' : '-50px',
-              background: 'linear-gradient(135deg, #2563eb, #1e40af)',
-              borderRadius: '50%',
-              width: isMobile ? '60px' : '70px',
-              height: isMobile ? '60px' : '70px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: isMobile ? '1.5rem' : '1.8rem',
-              boxShadow: '0 12px 30px rgba(239,68,68,0.4)',
-              zIndex: 10,
-              border: '3px solid rgba(255,255,255,0.9)',
-              transition: 'all 0.3s ease',
-              animation: isMobile ? 'mobileFloat 3s ease-in-out infinite' : 'none'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.2) rotate(-10deg)';
-              e.currentTarget.style.boxShadow = '0 18px 40px rgba(239,68,68,0.6)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
-              e.currentTarget.style.boxShadow = '0 12px 30px rgba(239,68,68,0.4)';
-            }}>
-              🇷🇺
+              <button 
+                className="btn btn-primary"
+                style={{
+                  background: 'var(--gradient-primary, linear-gradient(135deg, #1e293b 0%, #334155 100%))',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.875rem 2rem',
+                  borderRadius: 'var(--radius-md, 12px)',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: 'var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05))'
+                }}
+                onClick={() => { 
+                  trackEvent('click', 'quote-button', 'about', { action: 'get_quote' }); 
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); 
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = 'var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08))';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05))';
+                }}
+              >
+                {currentLanguage === 'en' ? 'GET FREE QUOTE' : 'ПОЛУЧИТЬ ЦЕНУ'}
+              </button>
+              
+              <button 
+                className="btn btn-secondary"
+                style={{
+                  background: 'var(--bg-primary, white)',
+                  color: 'var(--primary-color, #1e293b)',
+                  border: '1px solid var(--secondary-light, #94a3b8)',
+                  padding: '0.875rem 2rem',
+                  borderRadius: 'var(--radius-md, 12px)',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+                onClick={() => { 
+                  trackEvent('click', 'portfolio-button', 'about', { action: 'view_portfolio' }); 
+                  document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' }); 
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = 'var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08))';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05))';
+                }}
+              >
+                {currentLanguage === 'en' ? 'VIEW PORTFOLIO' : 'ПОРТФОЛИО'}
+              </button>
             </div>
           </div>
         </div>
+        
+        {/* Professional Stats */}
+        <div className="grid grid-4 text-center" style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+          gap: 'var(--spacing-lg, 2rem)',
+          marginTop: 'var(--spacing-xl, 3rem)',
+          padding: 'var(--spacing-lg, 2rem) 0',
+          borderTop: '1px solid var(--secondary-light, #94a3b8)'
+        }}>
+          <div>
+            <h4 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '700', 
+              color: 'var(--primary-accent, #3b82f6)', 
+              margin: '0 0 0.5rem 0' 
+            }}>
+              15+
+            </h4>
+            <p style={{ 
+              fontSize: '0.875rem', 
+              color: 'var(--text-secondary, #475569)', 
+              margin: 0 
+            }}>
+              {currentLanguage === 'en' ? 'Years Experience' : 'Лет опыта'}
+            </p>
+          </div>
+          <div>
+            <h4 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '700', 
+              color: 'var(--primary-accent, #3b82f6)', 
+              margin: '0 0 0.5rem 0' 
+            }}>
+              3
+            </h4>
+            <p style={{ 
+              fontSize: '0.875rem', 
+              color: 'var(--text-secondary, #475569)', 
+              margin: 0 
+            }}>
+              {currentLanguage === 'en' ? 'Countries Lived' : 'Страны проживания'}
+            </p>
+          </div>
+          <div>
+            <h4 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '700', 
+              color: 'var(--primary-accent, #3b82f6)', 
+              margin: '0 0 0.5rem 0' 
+            }}>
+              1000+
+            </h4>
+            <p style={{ 
+              fontSize: '0.875rem', 
+              color: 'var(--text-secondary, #475569)', 
+              margin: 0 
+            }}>
+              {currentLanguage === 'en' ? 'Projects Completed' : 'Завершённых проектов'}
+            </p>
+          </div>
+          <div>
+            <h4 style={{ 
+              fontSize: '2.5rem', 
+              fontWeight: '700', 
+              color: 'var(--primary-accent, #3b82f6)', 
+              margin: '0 0 0.5rem 0' 
+            }}>
+              24/7
+            </h4>
+            <p style={{ 
+              fontSize: '0.875rem', 
+              color: 'var(--text-secondary, #475569)', 
+              margin: 0 
+            }}>
+              {currentLanguage === 'en' ? 'Support Available' : 'Поддержка доступна'}
+            </p>
+          </div>
+        </div>
       </div>
-
-      {/* CSS Animations */}
-      <style>{`
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-10px) rotate(1deg);
-          }
-        }
-
-        @keyframes mobileImageFloat {
-          0%, 100% {
-            transform: translateY(0px) scale(1);
-          }
-          50% {
-            transform: translateY(-8px) scale(1.01);
-          }
-        }
-
-        @keyframes mobileFloat {
-          0%, 100% {
-            transform: translateY(0px) scale(1);
-          }
-          50% {
-            transform: translateY(-5px) scale(1.05);
-          }
-        }
-
-        /* Mobile image hover effect */
-        @media (max-width: 768px) {
-          .mobile-image-container:hover {
-            transform: translateY(-5px) scale(1.02) !important;
-            box-shadow: 0 30px 60px rgba(59,130,246,0.4) !important;
-          }
-          
-          /* Enhanced mobile animations */
-          .mobile-image-container {
-            animation: mobileImageFloat 4s ease-in-out infinite;
-          }
-        }
-
-        /* Responsive image sizing */
-        @media (max-width: 768px) {
-          .about-image {
-            width: 100% !important;
-            height: auto !important;
-            min-height: 400px !important;
-            max-height: 600px !important;
-            object-fit: contain !important;
-          }
-        }
-      `}</style>
     </section>
   );
 };
