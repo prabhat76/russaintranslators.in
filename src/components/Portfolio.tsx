@@ -33,6 +33,16 @@ export function Portfolio() {
       year: "2025",
       description: "Conducted Russian language and cultural training workshop at Craft Impression, fostering Indo-Russian business relationships through effective communication",
       descriptionRu: "Провела семинар по русскому языку и культуре в Craft Impression, развивая индийско-российские деловые отношения через эффективную коммуникацию"
+    },
+    {
+      id: "2",
+      imageUrl: "/portfolio/mb-patil-meeting.jpg",
+      client: "MB Patil Education - Featured in ThePrint",
+      industry: "Education Consultancy",
+      projectType: "Indo-Russian Education Partnerships",
+      year: "2025",
+      description: "Strategic meeting between MB Patil Education and RACUS to strengthen Indo-Russian education ties, making MBBS studies in Russia safer and smoother for Indian students",
+      descriptionRu: "Стратегическая встреча между MB Patil Education и RACUS для укрепления индийско-российских образовательных связей, делая обучение на медицинских факультетах в России более безопасным и комфортным для индийских студентов"
     }
   ];
 
@@ -78,9 +88,9 @@ export function Portfolio() {
           </p>
         </div>
 
-        {/* Portfolio Grid - Centered for single item */}
+        {/* Portfolio Grid - Two items centered */}
         <div className="flex justify-center">
-          <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-8 max-w-2xl w-full">
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl w-full">
             {loading ? (
               <div className="col-span-full text-center py-12">
                 <p className="text-gray-500">Loading portfolio...</p>
