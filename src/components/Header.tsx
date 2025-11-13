@@ -28,7 +28,7 @@ export function Header() {
               <img 
                 src={flagsImage} 
                 alt="India-Russia Partnership" 
-                className="relative w-16 h-12 object-cover rounded-xl shadow-lg border-2 border-red-200 group-hover:scale-105 group-hover:border-red-400 transition-all duration-300"
+                className="relative w-16 h-12 object-contain rounded-xl shadow-lg border-2 border-red-200 group-hover:scale-105 group-hover:border-red-400 transition-all duration-300"
               />
             </div>
             
