@@ -19,11 +19,11 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-md shadow-md border-b-4 border-red-700">
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4" style={{ paddingTop: '16px', paddingBottom: '16px' }}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 md:gap-6">
             {/* Flag Image with Enhanced Design */}
-            <div className="relative group p-1">
+            <div className="relative group p-2">
               <div className="absolute inset-0 bg-red-100 rounded-xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <img 
                 src={flagsImage} 
@@ -34,7 +34,7 @@ export function Header() {
             </div>
             
             {/* Decorative Divider */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 md:gap-4">
               <div className="h-12 w-px bg-gradient-to-b from-transparent via-red-300 to-transparent"></div>
               
               {/* Brand Text */}

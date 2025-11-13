@@ -26,18 +26,17 @@ export function Portfolio() {
   const fallbackItems: PortfolioItem[] = [
     {
       id: "1",
-      imageUrl: "/portfolio/sirmaxo.jpg",
+      imageUrl: "/portfolio/portfolio-1.jpg",
       client: "Sirmaxo Chemicals Pvt Ltd",
       industry: "Manufacturing",
       projectType: "Business Translation",
       year: "2020-Present",
       description: "Technical documentation and client communication for architectural glass manufacturing",
-      descriptionRu: "Техническая документация и коммуникация с клиентами для производства архитектурного стекла",
-      logoUrl: "/logos/sirmaxo.png"
+      descriptionRu: "Техническая документация и коммуникация с клиентами для производства архитектурного стекла"
     },
     {
       id: "2",
-      imageUrl: "/portfolio/sulphur.jpg",
+      imageUrl: "/portfolio/portfolio-2.jpg",
       client: "Sulphur Mills Ltd",
       industry: "Manufacturing",
       projectType: "Training & Translation",
@@ -47,7 +46,7 @@ export function Portfolio() {
     },
     {
       id: "3",
-      imageUrl: "/portfolio/kjk.jpg",
+      imageUrl: "/portfolio/portfolio-3.jpg",
       client: "KJK Diamonds",
       industry: "Retail",
       projectType: "Cultural Training",
@@ -57,7 +56,7 @@ export function Portfolio() {
     },
     {
       id: "4",
-      imageUrl: "/portfolio/fli.jpg",
+      imageUrl: "/portfolio/portfolio-4.jpg",
       client: "Foreign Language Institute",
       industry: "Education",
       projectType: "Language Training",
@@ -67,7 +66,7 @@ export function Portfolio() {
     },
     {
       id: "5",
-      imageUrl: "/portfolio/corporate.jpg",
+      imageUrl: "/portfolio/portfolio-5.jpg",
       client: "Corporate Clients",
       industry: "Various",
       projectType: "Business Translation",
@@ -77,7 +76,7 @@ export function Portfolio() {
     },
     {
       id: "6",
-      imageUrl: "/portfolio/education.jpg",
+      imageUrl: "/portfolio/portfolio-6.jpg",
       client: "Educational Institutions",
       industry: "Education",
       projectType: "Academic Translation",
