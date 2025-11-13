@@ -88,10 +88,12 @@ export function ExperienceTimeline() {
     ];
 
     const width = containerRef.current.clientWidth;
-    const height = 700;
+    const height = window.innerWidth < 768 ? 500 : 700;
     const centerX = width / 2;
     const centerY = height / 2;
-    const radius = Math.min(width, height) / 3;
+    const baseRadius = Math.min(width, height) / 3;
+    const radius = window.innerWidth < 768 ? baseRadius * 0.7 : baseRadius;
+    const isMobile = window.innerWidth < 768;
 
     // Clear previous content
     d3.select(svgRef.current).selectAll("*").remove();
@@ -157,7 +159,7 @@ export function ExperienceTimeline() {
         .transition()
         .duration(800)
         .delay(i * 100 + 200)
-        .attr("r", 45);
+        .attr("r", isMobile ? 32 : 45);
 
       // Draw main circle
       g.append("circle")
@@ -171,14 +173,14 @@ export function ExperienceTimeline() {
         .transition()
         .duration(600)
         .delay(i * 100 + 400)
-        .attr("r", 35);
+        .attr("r", isMobile ? 25 : 35);
 
       // Add icon/emoji
       g.append("text")
         .attr("x", x)
         .attr("y", y + 5)
         .attr("text-anchor", "middle")
-        .attr("font-size", "24px")
+        .attr("font-size", isMobile ? "18px" : "24px")
         .attr("opacity", 0)
         .text(exp.icon)
         .transition()
@@ -187,7 +189,7 @@ export function ExperienceTimeline() {
         .attr("opacity", 1);
 
       // Add company name
-      const textRadius = radius + 60;
+      const textRadius = radius + (isMobile ? 45 : 60);
       const textX = centerX + textRadius * Math.cos(angle);
       const textY = centerY + textRadius * Math.sin(angle);
 
@@ -197,7 +199,7 @@ export function ExperienceTimeline() {
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
         .attr("fill", "#374151")
-        .attr("font-size", "13px")
+        .attr("font-size", isMobile ? "10px" : "13px")
         .attr("font-weight", "700")
         .attr("opacity", 0)
         .text(exp.company)
@@ -209,10 +211,10 @@ export function ExperienceTimeline() {
       // Add duration below company
       g.append("text")
         .attr("x", textX)
-        .attr("y", textY + 16)
+        .attr("y", textY + (isMobile ? 12 : 16))
         .attr("text-anchor", "middle")
         .attr("fill", "#6b7280")
-        .attr("font-size", "11px")
+        .attr("font-size", isMobile ? "9px" : "11px")
         .attr("opacity", 0)
         .text(exp.duration)
         .transition()
@@ -230,7 +232,7 @@ export function ExperienceTimeline() {
       .attr("opacity", 0.1)
       .transition()
       .duration(1000)
-      .attr("r", 80);
+      .attr("r", isMobile ? 60 : 80);
 
     svg.append("circle")
       .attr("cx", centerX)
@@ -243,14 +245,14 @@ export function ExperienceTimeline() {
       .transition()
       .duration(800)
       .delay(200)
-      .attr("r", 60);
+      .attr("r", isMobile ? 45 : 60);
 
     svg.append("text")
       .attr("x", centerX)
-      .attr("y", centerY - 10)
+      .attr("y", centerY - (isMobile ? 8 : 10))
       .attr("text-anchor", "middle")
       .attr("fill", "#dc2626")
-      .attr("font-size", "16px")
+      .attr("font-size", isMobile ? "12px" : "16px")
       .attr("font-weight", "700")
       .attr("opacity", 0)
       .text("Language")
@@ -261,10 +263,10 @@ export function ExperienceTimeline() {
 
     svg.append("text")
       .attr("x", centerX)
-      .attr("y", centerY + 10)
+      .attr("y", centerY + (isMobile ? 8 : 10))
       .attr("text-anchor", "middle")
       .attr("fill", "#dc2626")
-      .attr("font-size", "16px")
+      .attr("font-size", isMobile ? "12px" : "16px")
       .attr("font-weight", "700")
       .attr("opacity", 0)
       .text("Liberty")
@@ -275,10 +277,10 @@ export function ExperienceTimeline() {
 
     svg.append("text")
       .attr("x", centerX)
-      .attr("y", centerY + 28)
+      .attr("y", centerY + (isMobile ? 22 : 28))
       .attr("text-anchor", "middle")
       .attr("fill", "#9ca3af")
-      .attr("font-size", "11px")
+      .attr("font-size", isMobile ? "9px" : "11px")
       .attr("opacity", 0)
       .text("Est. 2020")
       .transition()
@@ -353,16 +355,16 @@ export function ExperienceTimeline() {
 
   return (
     <div ref={containerRef} className="w-full">
-      <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-xl p-8 border border-gray-100">
+      <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-100">
         <svg ref={svgRef} className="w-full"></svg>
       </div>
       
       {/* Experience Cards */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 mt-8 sm:mt-12">
         {experiences.map((exp, index) => (
           <div
             key={index}
-            className={`group relative p-6 rounded-xl bg-white border-2 transition-all duration-300 ${
+            className={`group relative p-4 sm:p-6 rounded-xl bg-white border-2 transition-all duration-300 ${
               hoveredIndex === index 
                 ? 'shadow-2xl -translate-y-2 scale-105' 
                 : 'shadow-md hover:shadow-xl hover:-translate-y-1'
@@ -371,32 +373,32 @@ export function ExperienceTimeline() {
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3 sm:gap-4">
               <div 
-                className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-2xl"
+                className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xl sm:text-2xl"
                 style={{ backgroundColor: exp.color + '20' }}
               >
                 {exp.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-bold text-gray-900 mb-1 truncate" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h4 className="font-bold text-gray-900 mb-1 text-sm sm:text-base truncate" style={{ fontFamily: 'Playfair Display, serif' }}>
                   {exp.company}
                 </h4>
-                <p className="text-sm text-gray-700 font-medium mb-2">{exp.role}</p>
-                <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                <p className="text-xs sm:text-sm text-gray-700 font-medium mb-2">{exp.role}</p>
+                <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs text-gray-500 mb-2 sm:mb-3">
                   <Calendar className="w-3 h-3" />
-                  <span>{exp.start} - {exp.end}</span>
+                  <span className="text-xs">{exp.start} - {exp.end}</span>
                   <span className="w-1 h-1 rounded-full bg-gray-300"></span>
                   <Clock className="w-3 h-3" />
-                  <span>{exp.duration}</span>
+                  <span className="text-xs">{exp.duration}</span>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-gray-500 mb-3">
+                <div className="flex items-center gap-1 text-xs text-gray-500 mb-2 sm:mb-3">
                   <MapPin className="w-3 h-3" />
                   <span>{exp.location}</span>
                 </div>
-                <p className="text-xs text-gray-600 leading-relaxed">{exp.description}</p>
+                <p className="text-xs text-gray-600 leading-relaxed line-clamp-3">{exp.description}</p>
                 <span 
-                  className="inline-block mt-3 px-3 py-1 rounded-full text-xs font-medium"
+                  className="inline-block mt-2 sm:mt-3 px-2 sm:px-3 py-1 rounded-full text-xs font-medium"
                   style={{ 
                     backgroundColor: exp.color + '20',
                     color: exp.color

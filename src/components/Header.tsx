@@ -1,7 +1,7 @@
 import { Languages } from "lucide-react";
 import { Button } from "./ui/button";
 import { useLanguage } from "../context/LanguageContext";
-import flagsImage from "figma:asset/ef9e02fa22c0907cb0e03f86b7c3180828061600.png";
+import flagsImage from "../assets/download.jpg";
 
 export function Header() {
   const { language, setLanguage, t } = useLanguage();
