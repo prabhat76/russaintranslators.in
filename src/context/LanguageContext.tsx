@@ -84,6 +84,25 @@ const translations = {
     "clients.stat4.value": "15+",
     "clients.stat4.label": "Industry Sectors",
     
+    // Portfolio
+    "portfolio.badge": "Our Work",
+    "portfolio.title": "Portfolio",
+    "portfolio.subtitle": "Showcasing successful translation projects across diverse industries",
+    "portfolio.item1.desc": "Technical documentation and client communication for architectural glass manufacturing",
+    "portfolio.item2.desc": "Industrial documentation and technical specifications for sulphur processing",
+    "portfolio.item3.desc": "Corporate communications and business proposals for diamond trading",
+    "portfolio.item4.desc": "Educational materials and student communication for language institute",
+    "portfolio.item5.desc": "Business contracts and corporate documentation translation",
+    "portfolio.item6.desc": "Academic materials and institutional documentation translation",
+    "portfolio.stat1.value": "50+",
+    "portfolio.stat1.label": "Projects Completed",
+    "portfolio.stat2.value": "15",
+    "portfolio.stat2.label": "Industries Served",
+    "portfolio.stat3.value": "10,000+",
+    "portfolio.stat3.label": "Pages Translated",
+    "portfolio.stat4.value": "100%",
+    "portfolio.stat4.label": "Client Satisfaction",
+    
     // Experience Timeline
     "experience.title": "Professional Experience",
     "experience.subtitle": "A comprehensive journey of language education, translation, and cultural bridging",
@@ -215,6 +234,25 @@ const translations = {
     "clients.stat3.label": "Удовлетворенность клиентов",
     "clients.stat4.value": "15+",
     "clients.stat4.label": "Отраслей промышленности",
+    
+    // Portfolio
+    "portfolio.badge": "Наша работа",
+    "portfolio.title": "Портфолио",
+    "portfolio.subtitle": "Демонстрация успешных проектов перевода в различных отраслях",
+    "portfolio.item1.desc": "Техническая документация и коммуникация с клиентами для производства архитектурного стекла",
+    "portfolio.item2.desc": "Промышленная документация и технические спецификации для переработки серы",
+    "portfolio.item3.desc": "Корпоративные коммуникации и бизнес-предложения для торговли алмазами",
+    "portfolio.item4.desc": "Образовательные материалы и коммуникация со студентами языкового института",
+    "portfolio.item5.desc": "Перевод деловых контрактов и корпоративной документации",
+    "portfolio.item6.desc": "Перевод академических материалов и институциональной документации",
+    "portfolio.stat1.value": "50+",
+    "portfolio.stat1.label": "Завершенных проектов",
+    "portfolio.stat2.value": "15",
+    "portfolio.stat2.label": "Обслуженных отраслей",
+    "portfolio.stat3.value": "10,000+",
+    "portfolio.stat3.label": "Переведенных страниц",
+    "portfolio.stat4.value": "100%",
+    "portfolio.stat4.label": "Удовлетворенность клиентов",
     
     // Experience Timeline
     "experience.title": "Профессиональный опыт",
