@@ -1,7 +1,8 @@
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Heart, Globe2, Award } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
-import flagsImage from "figma:asset/ef9e02fa22c0907cb0e03f86b7c3180828061600.png";
+import flagsImage from "../assets/download.jpg";
+import sabrinaPhoto from "../assets/sabrina-photo.jpg";
 
 export function About() {
   const { t } = useLanguage();
@@ -12,9 +13,9 @@ export function About() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="relative">
             <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1674049406406-bb7198529dfa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjB3b21hbiUyMHRyYW5zbGF0b3J8ZW58MXx8fHwxNzYxODkwOTk0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Professional Translator"
+              <img
+                src={sabrinaPhoto}
+                alt="Sabrina Bhatt - Professional Russian Translator"
                 className="w-full h-full object-cover"
               />
             </div>
