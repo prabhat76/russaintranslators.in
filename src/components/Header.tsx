@@ -19,16 +19,17 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-md shadow-md border-b-4 border-red-700">
-      <div className="container mx-auto px-4 py-3">
+      <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             {/* Flag Image with Enhanced Design */}
-            <div className="relative group">
+            <div className="relative group p-1">
               <div className="absolute inset-0 bg-red-100 rounded-xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <img 
                 src={flagsImage} 
                 alt="India-Russia Partnership" 
-                className="relative w-16 h-12 object-contain rounded-xl shadow-lg border-2 border-red-200 group-hover:scale-105 group-hover:border-red-400 transition-all duration-300"
+                className="relative w-16 h-12 object-contain object-center rounded-xl shadow-lg border-2 border-red-200 group-hover:scale-105 group-hover:border-red-400 transition-all duration-300"
+                style={{ objectPosition: 'center' }}
               />
             </div>
             
