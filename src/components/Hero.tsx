@@ -14,7 +14,7 @@ export function Hero() {
   };
 
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative h-screen flex items-center justify-center overflow-hidden pt-20">
       <div className="absolute inset-0 z-0">
         {/* Crystal Clear Flag Background - Full Screen */}
         <div className="absolute inset-0">
