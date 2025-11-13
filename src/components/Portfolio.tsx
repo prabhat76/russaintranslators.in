@@ -26,63 +26,13 @@ export function Portfolio() {
   const fallbackItems: PortfolioItem[] = [
     {
       id: "1",
-      imageUrl: "/portfolio/portfolio-1.jpg",
-      client: "Sirmaxo Chemicals Pvt Ltd",
-      industry: "Manufacturing",
-      projectType: "Business Translation",
-      year: "2020-Present",
-      description: "Technical documentation and client communication for architectural glass manufacturing",
-      descriptionRu: "Техническая документация и коммуникация с клиентами для производства архитектурного стекла"
-    },
-    {
-      id: "2",
-      imageUrl: "/portfolio/portfolio-2.jpg",
-      client: "Sulphur Mills Ltd",
-      industry: "Manufacturing",
-      projectType: "Training & Translation",
-      year: "2020-Present",
-      description: "Industrial documentation and technical specifications for sulphur processing",
-      descriptionRu: "Промышленная документация и технические спецификации для переработки серы"
-    },
-    {
-      id: "3",
-      imageUrl: "/portfolio/portfolio-3.jpg",
-      client: "KJK Diamonds",
-      industry: "Retail",
-      projectType: "Cultural Training",
-      year: "2021",
-      description: "Corporate communications and business proposals for diamond trading",
-      descriptionRu: "Корпоративные коммуникации и бизнес-предложения для торговли алмазами"
-    },
-    {
-      id: "4",
-      imageUrl: "/portfolio/portfolio-4.jpg",
-      client: "Foreign Language Institute",
-      industry: "Education",
-      projectType: "Language Training",
-      year: "2019-Present",
-      description: "Educational materials and student communication for language institute",
-      descriptionRu: "Образовательные материалы и коммуникация со студентами языкового института"
-    },
-    {
-      id: "5",
-      imageUrl: "/portfolio/portfolio-5.jpg",
-      client: "Corporate Clients",
-      industry: "Various",
-      projectType: "Business Translation",
-      year: "2020-Present",
-      description: "Business contracts and corporate documentation translation",
-      descriptionRu: "Перевод деловых контрактов и корпоративной документации"
-    },
-    {
-      id: "6",
-      imageUrl: "/portfolio/portfolio-6.jpg",
-      client: "Educational Institutions",
-      industry: "Education",
-      projectType: "Academic Translation",
-      year: "2019-Present",
-      description: "Academic materials and institutional documentation translation",
-      descriptionRu: "Перевод академических материалов и институциональной документации"
+      imageUrl: "/portfolio/craft-workshop.jpg",
+      client: "Craft Impression Workshop",
+      industry: "Cultural Training",
+      projectType: "Language & Cultural Training",
+      year: "2025",
+      description: "Conducted Russian language and cultural training workshop at Craft Impression, fostering Indo-Russian business relationships through effective communication",
+      descriptionRu: "Провела семинар по русскому языку и культуре в Craft Impression, развивая индийско-российские деловые отношения через эффективную коммуникацию"
     }
   ];
 
@@ -128,19 +78,20 @@ export function Portfolio() {
           </p>
         </div>
 
-        {/* Portfolio Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {loading ? (
-            <div className="col-span-full text-center py-12">
-              <p className="text-gray-500">Loading portfolio...</p>
-            </div>
-          ) : (
-            portfolioItems.map((item) => (
-              <div
-                key={item.id}
-                className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
-              >
-                {/* Image */}
+        {/* Portfolio Grid - Centered for single item */}
+        <div className="flex justify-center">
+          <div className="grid md:grid-cols-1 lg:grid-cols-1 gap-8 max-w-2xl w-full">
+            {loading ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500">Loading portfolio...</p>
+              </div>
+            ) : (
+              portfolioItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                >
+                  {/* Image */}
                 <div className="relative h-64 overflow-hidden bg-gray-200">
                   <img
                     src={item.imageUrl}
@@ -197,6 +148,7 @@ export function Portfolio() {
               </div>
             ))
           )}
+          </div>
         </div>
 
         {/* Statistics */}
