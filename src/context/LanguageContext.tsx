@@ -84,6 +84,23 @@ const translations = {
     "clients.stat4.value": "15+",
     "clients.stat4.label": "Industry Sectors",
     
+    // Experience Timeline
+    "experience.title": "Professional Experience",
+    "experience.subtitle": "A comprehensive journey of language education, translation, and cultural bridging",
+    "experience.present": "Present",
+    "experience.ll.role1": "Russian Translator & Interpreter",
+    "experience.ll.desc1": "Holistic Russian language learning and grooming. Level based courses as per requirement. Design course structure as per pedagogy.",
+    "experience.ll.role2": "Founder",
+    "experience.ll.desc2": "Founded Language Liberty to provide professional Russian translation and interpretation services. Trained 100+ students globally.",
+    "experience.sirmaxo.role": "Facilitator for Russian Client Acquisitions",
+    "experience.sirmaxo.desc": "Official translator for Russian client meetings. Product pitching and proposal discussions. Translating official documents.",
+    "experience.sulphur.role": "Language & Cultural Trainer",
+    "experience.sulphur.desc": "Russian language training for workforce. Product pitching and client meetings. Official document translation.",
+    "experience.fli.role": "Language Trainer",
+    "experience.fli.desc": "Teaching Russian language and cultural nuances to students and professionals.",
+    "experience.kjk.role": "Language & Cultural Trainer",
+    "experience.kjk.desc": "Russian language training for workforce. Product pitching and official translation services.",
+    
     // Indo-Russian Relations
     "relations.badge": "Cultural Bridge",
     "relations.title": "Indo-Russian Relations",
@@ -198,6 +215,23 @@ const translations = {
     "clients.stat3.label": "Удовлетворенность клиентов",
     "clients.stat4.value": "15+",
     "clients.stat4.label": "Отраслей промышленности",
+    
+    // Experience Timeline
+    "experience.title": "Профессиональный опыт",
+    "experience.subtitle": "Полный путь языкового образования, перевода и культурного объединения",
+    "experience.present": "Настоящее время",
+    "experience.ll.role1": "Переводчик и устный переводчик русского языка",
+    "experience.ll.desc1": "Комплексное обучение русскому языку и развитие. Курсы по уровням в соответствии с требованиями. Разработка структуры курса согласно педагогике.",
+    "experience.ll.role2": "Основатель",
+    "experience.ll.desc2": "Основала Language Liberty для предоставления профессиональных услуг перевода и устного перевода. Обучила более 100 студентов по всему миру.",
+    "experience.sirmaxo.role": "Фасилитатор по привлечению российских клиентов",
+    "experience.sirmaxo.desc": "Официальный переводчик на встречах с российскими клиентами. Презентация продукции и обсуждение предложений. Перевод официальных документов.",
+    "experience.sulphur.role": "Тренер по языку и культуре",
+    "experience.sulphur.desc": "Обучение русскому языку сотрудников. Презентация продукции и встречи с клиентами. Перевод официальных документов.",
+    "experience.fli.role": "Языковой тренер",
+    "experience.fli.desc": "Обучение русскому языку и культурным нюансам студентов и профессионалов.",
+    "experience.kjk.role": "Тренер по языку и культуре",
+    "experience.kjk.desc": "Обучение русскому языку сотрудников. Презентация продукции и официальные переводческие услуги.",
     
     // Indo-Russian Relations
     "relations.badge": "Культурный мост",

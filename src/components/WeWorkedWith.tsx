@@ -1,5 +1,6 @@
 import { useLanguage } from "../context/LanguageContext";
 import { Building2, Factory, Briefcase, GraduationCap, Ship, Heart } from "lucide-react";
+import { ExperienceTimeline } from "./ExperienceTimeline";
 
 export function WeWorkedWith() {
   const { t } = useLanguage();
@@ -120,6 +121,19 @@ export function WeWorkedWith() {
             </div>
             <div className="text-sm text-gray-600">{t("clients.stat4.label")}</div>
           </div>
+        </div>
+
+        {/* Professional Experience Timeline */}
+        <div className="mt-20">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+              {t("experience.title")}
+            </h3>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              {t("experience.subtitle")}
+            </p>
+          </div>
+          <ExperienceTimeline />
         </div>
       </div>
     </section>
