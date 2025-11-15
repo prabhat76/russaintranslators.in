@@ -81,47 +81,27 @@ export function Header() {
               {t("nav.contact")}
             </Button>
             
-            {/* Language Toggle Switch - Modern Design */}
+            {/* Language Toggle with Flags */}
             <button
               onClick={toggleLanguage}
-              className="relative inline-flex items-center bg-gradient-to-r from-gray-100 to-gray-200 rounded-full p-2 shadow-inner hover:shadow-lg transition-all duration-300"
-              style={{ width: '200px', height: '70px' }}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 border border-red-200 transition-all"
               title={language === "en" ? "Switch to Russian - Переключиться на русский" : "Switch to English - Переключиться на английский"}
             >
-              {/* Sliding White Background Circle */}
-              <div
-                className={`absolute top-2 bottom-2 bg-white rounded-full shadow-lg transition-all duration-500 ease-in-out ${
-                  language === "en" ? "left-2 right-[102px]" : "left-[102px] right-2"
-                }`}
-              />
-              
-              {/* EN Section */}
-              <div className={`relative z-10 flex flex-col items-center justify-center flex-1 transition-all duration-300 ${
-                language === "en" ? "scale-110" : "scale-90 opacity-40"
-              }`}>
-                <div className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 ${
-                  language === "en" ? "bg-white shadow-md" : "bg-transparent"
-                }`}>
-                  <span className="text-3xl">🇮🇳</span>
-                </div>
-                <span className={`text-base font-bold mt-1 transition-all duration-300 ${
-                  language === "en" ? "text-gray-800" : "text-gray-400"
-                }`}>EN</span>
-              </div>
-              
-              {/* RU Section */}
-              <div className={`relative z-10 flex flex-col items-center justify-center flex-1 transition-all duration-300 ${
-                language === "ru" ? "scale-110" : "scale-90 opacity-40"
-              }`}>
-                <div className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 ${
-                  language === "ru" ? "bg-white shadow-md" : "bg-transparent"
-                }`}>
-                  <span className="text-3xl">🇷🇺</span>
-                </div>
-                <span className={`text-base font-bold mt-1 transition-all duration-300 ${
-                  language === "ru" ? "text-gray-800" : "text-gray-400"
-                }`}>RU</span>
-              </div>
+              {language === "en" ? (
+                <>
+                  <span className="text-lg">🇮🇳</span>
+                  <span className="text-sm text-red-700">EN</span>
+                  <span className="text-xs text-gray-300">|</span>
+                  <span className="text-sm text-gray-500">RU</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-lg">🇷🇺</span>
+                  <span className="text-sm text-red-700">RU</span>
+                  <span className="text-xs text-gray-300">|</span>
+                  <span className="text-sm text-gray-500">EN</span>
+                </>
+              )}
             </button>
           </nav>
         </div>
