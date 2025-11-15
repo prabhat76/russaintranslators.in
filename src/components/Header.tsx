@@ -81,27 +81,35 @@ export function Header() {
               {t("nav.contact")}
             </Button>
             
-            {/* Language Toggle with Flags */}
+            {/* Language Toggle Switch */}
             <button
               onClick={toggleLanguage}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-50 hover:bg-red-100 border border-red-200 transition-all"
+              className="relative inline-flex items-center bg-gray-200 rounded-full p-1 transition-all duration-300 hover:shadow-lg"
+              style={{ width: '140px', height: '50px' }}
               title={language === "en" ? "Switch to Russian - Переключиться на русский" : "Switch to English - Переключиться на английский"}
             >
-              {language === "en" ? (
-                <>
-                  <span className="text-lg">🇮🇳</span>
-                  <span className="text-sm text-red-700">EN</span>
-                  <span className="text-xs text-gray-300">|</span>
-                  <span className="text-sm text-gray-500">RU</span>
-                </>
-              ) : (
-                <>
-                  <span className="text-lg">🇷🇺</span>
-                  <span className="text-sm text-red-700">RU</span>
-                  <span className="text-xs text-gray-300">|</span>
-                  <span className="text-sm text-gray-500">EN</span>
-                </>
-              )}
+              {/* Sliding Background */}
+              <div
+                className={`absolute top-1 bottom-1 w-[68px] bg-white rounded-full shadow-md transition-all duration-300 ${
+                  language === "en" ? "left-1" : "left-[69px]"
+                }`}
+              />
+              
+              {/* EN Flag and Text */}
+              <div className={`relative z-10 flex items-center justify-center gap-1.5 flex-1 transition-all duration-300 ${
+                language === "en" ? "opacity-100" : "opacity-50"
+              }`}>
+                <span className="text-2xl">🇮🇳</span>
+                <span className={`text-sm font-bold ${language === "en" ? "text-gray-700" : "text-gray-500"}`}>EN</span>
+              </div>
+              
+              {/* RU Flag and Text */}
+              <div className={`relative z-10 flex items-center justify-center gap-1.5 flex-1 transition-all duration-300 ${
+                language === "ru" ? "opacity-100" : "opacity-50"
+              }`}>
+                <span className="text-2xl">🇷🇺</span>
+                <span className={`text-sm font-bold ${language === "ru" ? "text-gray-700" : "text-gray-500"}`}>RU</span>
+              </div>
             </button>
           </nav>
         </div>
