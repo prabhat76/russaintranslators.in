@@ -2,7 +2,7 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Heart, Globe2, Award } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 import flagsImage from "../assets/download.jpg";
-import sabrinaPhoto from "../assets/sabrina-photo.jpg";
+import sabrinaMeeting from "../assets/image.png";
 
 export function About() {
   const { t } = useLanguage();
@@ -12,11 +12,11 @@ export function About() {
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="relative">
-            <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl">
+            <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
               <img
-                src={sabrinaPhoto}
-                alt="Sabrina Bhatt - Professional Russian Translator"
-                className="w-full h-full object-cover"
+                src={sabrinaMeeting}
+                alt="Sabrina Bhatt with Russian and Indian officials"
+                className="w-full h-full object-cover bg-gray-50"
               />
             </div>
             

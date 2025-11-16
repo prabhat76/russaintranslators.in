@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 type Language = "en" | "ru";
 
@@ -22,7 +22,7 @@ const translations = {
     "nav.contact": "Contact",
     
     // Hero
-    "hero.badge": "Bridging India & Russia Through Language",
+    //" hero.badge ": "Bridging India & Russia Through Language",
     "hero.title": "Language Liberty",
     "hero.subtitle": "Professional Russian Translation Services with a Deep Understanding of Indo-Russian Cultural Nuances",
     "hero.cta": "Get Started",
@@ -316,14 +316,36 @@ const translations = {
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>("en");
+  const [language, setLanguage] = useState<Language>(() => {
+    // Try to get saved language from localStorage
+    try {
+      const saved = localStorage.getItem('language-liberty-lang');
+      return (saved === 'en' || saved === 'ru') ? saved : 'en';
+    } catch {
+      return 'en';
+    }
+  });
+
+  const handleSetLanguage = (lang: Language) => {
+    try {
+      setLanguage(lang);
+      localStorage.setItem('language-liberty-lang', lang);
+    } catch (error) {
+      console.warn('Failed to save language preference:', error);
+      setLanguage(lang); // Still update state even if localStorage fails
+    }
+  };
 
   const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations.en] || key;
+    try {
+      return translations[language][key as keyof typeof translations.en] || key;
+    } catch {
+      return key;
+    }
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );

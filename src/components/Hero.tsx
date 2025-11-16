@@ -21,11 +21,9 @@ export function Hero() {
           <img 
             src={flagsImage} 
             alt="India-Russia Partnership" 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             style={{
-              imageRendering: '-webkit-optimize-contrast',
-              transform: 'scale(1.15)',
-              transformOrigin: 'center center'
+              imageRendering: '-webkit-optimize-contrast'
             }}
           />
         </div>
@@ -45,11 +43,11 @@ export function Hero() {
       <div className="container mx-auto px-4 z-10">
         <div className="max-w-2xl text-white ml-8 md:ml-16" style={{ marginTop: '-222px' }}>
           {/* Clean Badge */}
-          <div className="inline-flex items-center gap-3 px-5 py-3 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl mb-8 border border-red-100">
+          {/* <div className="inline-flex items-center gap-3 px-5 py-3 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl mb-8 border border-red-100">
             <p className="text-sm text-[#D52B1E]" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>
               {t("hero.badge")}
             </p>
-          </div>
+          </div> */}
 
           <h1 className="text-5xl md:text-7xl mb-6 text-white" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 700, letterSpacing: '-0.02em' }}>{t("hero.title")}</h1>
           <p className="text-xl md:text-2xl mb-8 text-gray-200" style={{ fontFamily: 'Inter, sans-serif', lineHeight: '1.6' }}>
