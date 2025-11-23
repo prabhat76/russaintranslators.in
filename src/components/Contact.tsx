@@ -23,7 +23,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 bg-gradient-to-b from-white to-gray-50">
+    <section id="contact" className="py-24 bg-gradient-to-b from-red-50 to-white">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <div className="inline-block px-4 py-2 bg-gradient-to-r from-red-50 to-orange-50 text-[#D52B1E] rounded-full mb-4 border border-red-100">
